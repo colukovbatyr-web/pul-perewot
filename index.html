@@ -1,0 +1,1661 @@
+<!DOCTYPE html>
+<html lang="tk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Pul Perewot — Ynamly we Çalt</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+    --bg:#070b12;
+    --panel:#0d131d;
+    --panel2:#111923;
+    --border:rgba(255,255,255,.08);
+    --text:#f5f7fa;
+    --muted:#8b96a7;
+    --green:#20e58a;
+    --green2:#0fcf77;
+    --red:#ff5571;
+    --blue:#4f8cff;
+    --yellow:#ffc857;
+}
+
+body{
+    font-family:"Inter",sans-serif;
+    background:
+        radial-gradient(circle at 20% 0%,rgba(32,229,138,.08),transparent 30%),
+        radial-gradient(circle at 90% 10%,rgba(79,140,255,.08),transparent 30%),
+        var(--bg);
+    color:var(--text);
+    min-height:100vh;
+}
+
+button,
+input{
+    font-family:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+/* =========================
+   LANDING
+========================= */
+
+#landing{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+}
+
+.navbar{
+    width:100%;
+    max-width:1200px;
+    margin:auto;
+    padding:24px 25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-size:20px;
+    font-weight:800;
+}
+
+.logo-icon{
+    width:38px;
+    height:38px;
+    border-radius:12px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,var(--green),#0a8fbd);
+    color:#03130d;
+    font-weight:900;
+    box-shadow:0 0 30px rgba(32,229,138,.2);
+}
+
+.live-pill{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    border:1px solid rgba(32,229,138,.2);
+    background:rgba(32,229,138,.06);
+    padding:8px 13px;
+    border-radius:999px;
+    color:#b7c5d5;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.5px;
+}
+
+.live-dot{
+    width:7px;
+    height:7px;
+    background:var(--green);
+    border-radius:50%;
+    box-shadow:0 0 12px var(--green);
+    animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+    0%,100%{opacity:1;transform:scale(1)}
+    50%{opacity:.45;transform:scale(.75)}
+}
+
+.hero{
+    width:100%;
+    max-width:1200px;
+    margin:auto;
+    padding:80px 25px 50px;
+    display:grid;
+    grid-template-columns:1.2fr .8fr;
+    gap:60px;
+    align-items:center;
+}
+
+.hero h1{
+    font-size:clamp(42px,6vw,76px);
+    line-height:1.02;
+    letter-spacing:-3px;
+    max-width:780px;
+}
+
+.hero h1 span{
+    color:var(--green);
+}
+
+.hero p{
+    margin-top:25px;
+    color:var(--muted);
+    font-size:17px;
+    line-height:1.7;
+    max-width:620px;
+}
+
+.hero-buttons{
+    display:flex;
+    gap:12px;
+    margin-top:35px;
+    flex-wrap:wrap;
+}
+
+.primary-btn{
+    border:none;
+    background:var(--green);
+    color:#04140d;
+    font-weight:800;
+    padding:16px 22px;
+    border-radius:13px;
+    transition:.25s;
+}
+
+.primary-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 12px 35px rgba(32,229,138,.2);
+}
+
+.secondary-btn{
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.03);
+    color:var(--text);
+    padding:16px 22px;
+    border-radius:13px;
+    font-weight:700;
+}
+
+.hero-card{
+    background:
+        linear-gradient(145deg,rgba(255,255,255,.06),rgba(255,255,255,.015));
+    border:1px solid var(--border);
+    border-radius:25px;
+    padding:25px;
+    box-shadow:0 30px 100px rgba(0,0,0,.35);
+}
+
+.hero-card-top{
+    display:flex;
+    justify-content:space-between;
+    color:var(--muted);
+    font-size:12px;
+    margin-bottom:25px;
+}
+
+.hero-rate{
+    font-size:45px;
+    font-weight:800;
+}
+
+.hero-rate small{
+    font-size:15px;
+    color:var(--muted);
+}
+
+.chart-line{
+    height:130px;
+    position:relative;
+    overflow:hidden;
+    margin-top:20px;
+}
+
+.chart-line svg{
+    width:100%;
+    height:100%;
+}
+
+.features{
+    max-width:1200px;
+    width:100%;
+    margin:auto;
+    padding:25px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.feature{
+    padding:22px;
+    background:rgba(255,255,255,.025);
+    border:1px solid var(--border);
+    border-radius:18px;
+}
+
+.feature-icon{
+    font-size:23px;
+    margin-bottom:15px;
+}
+
+.feature h3{
+    font-size:15px;
+    margin-bottom:8px;
+}
+
+.feature p{
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.6;
+}
+
+/* =========================
+   APP
+========================= */
+
+#app{
+    display:none;
+    min-height:100vh;
+}
+
+.app-container{
+    max-width:1250px;
+    margin:auto;
+    padding:25px;
+}
+
+.app-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.back-btn{
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.03);
+    color:var(--muted);
+    padding:10px 15px;
+    border-radius:10px;
+}
+
+.dashboard{
+    display:grid;
+    grid-template-columns:390px 1fr;
+    gap:18px;
+}
+
+.panel{
+    background:
+        linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.015));
+    border:1px solid var(--border);
+    border-radius:22px;
+    padding:24px;
+}
+
+.panel-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.panel-title h2{
+    font-size:19px;
+}
+
+.status{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    font-size:11px;
+    font-weight:800;
+    color:var(--green);
+}
+
+.status-dot{
+    width:7px;
+    height:7px;
+    background:var(--green);
+    border-radius:50%;
+    box-shadow:0 0 10px var(--green);
+}
+
+.currency-tabs{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:6px;
+    background:#080d14;
+    padding:5px;
+    border-radius:12px;
+    margin-bottom:22px;
+}
+
+.currency-tabs button{
+    border:none;
+    background:transparent;
+    color:var(--muted);
+    padding:12px 5px;
+    border-radius:8px;
+    font-weight:700;
+}
+
+.currency-tabs button.active{
+    background:#18232f;
+    color:var(--text);
+}
+
+.input-label{
+    color:var(--muted);
+    font-size:12px;
+    margin-bottom:8px;
+    display:block;
+}
+
+.amount-input{
+    width:100%;
+    background:#080d14;
+    border:1px solid var(--border);
+    color:white;
+    padding:17px;
+    border-radius:12px;
+    outline:none;
+    font-size:22px;
+    font-weight:700;
+}
+
+.amount-input:focus{
+    border-color:rgba(32,229,138,.5);
+}
+
+.quote-box{
+    margin-top:18px;
+    padding:20px;
+    border-radius:16px;
+    background:
+        linear-gradient(135deg,rgba(32,229,138,.08),rgba(32,229,138,.015));
+    border:1px solid rgba(32,229,138,.12);
+}
+
+.quote-label{
+    color:var(--muted);
+    font-size:11px;
+    margin-bottom:8px;
+}
+
+.quote-result{
+    font-size:34px;
+    font-weight:800;
+}
+
+.quote-result span{
+    color:var(--green);
+}
+
+.rate-info{
+    margin-top:15px;
+    display:flex;
+    justify-content:space-between;
+    color:var(--muted);
+    font-size:11px;
+}
+
+.wa-btn{
+    width:100%;
+    margin-top:18px;
+    border:none;
+    background:#20c76d;
+    color:white;
+    padding:16px;
+    border-radius:13px;
+    font-weight:800;
+    font-size:14px;
+}
+
+.wa-btn:hover{
+    filter:brightness(1.1);
+}
+
+.right-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:18px;
+}
+
+.market-card{
+    padding:20px;
+}
+
+.market-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.market-title{
+    font-size:16px;
+    font-weight:700;
+}
+
+.market-sub{
+    color:var(--muted);
+    font-size:11px;
+    margin-top:4px;
+}
+
+.market-price{
+    font-size:28px;
+    font-weight:800;
+}
+
+.market-change{
+    color:var(--green);
+    font-size:11px;
+    margin-top:4px;
+    text-align:right;
+}
+
+.chart-panel{
+    min-height:400px;
+}
+
+.chart-controls{
+    display:flex;
+    gap:7px;
+}
+
+.chart-controls button{
+    background:rgba(255,255,255,.04);
+    color:var(--muted);
+    border:1px solid var(--border);
+    padding:7px 10px;
+    border-radius:8px;
+    font-size:11px;
+    font-weight:700;
+}
+
+.chart-controls button.active{
+    background:rgba(32,229,138,.1);
+    color:var(--green);
+    border-color:rgba(32,229,138,.2);
+}
+
+.chart-wrap{
+    height:320px;
+}
+
+.last-update{
+    margin-top:12px;
+    color:var(--muted);
+    font-size:10px;
+    text-align:right;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer{
+    max-width:1200px;
+    margin:40px auto 0;
+    padding:25px;
+    color:#657083;
+    font-size:11px;
+    display:flex;
+    justify-content:space-between;
+    border-top:1px solid var(--border);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:900px){
+
+    .hero{
+        grid-template-columns:1fr;
+        padding-top:50px;
+    }
+
+    .features{
+        grid-template-columns:1fr;
+    }
+
+    .dashboard{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:600px){
+
+    .navbar{
+        padding:18px;
+    }
+
+    .live-pill{
+        font-size:9px;
+    }
+
+    .hero{
+        padding:45px 18px 35px;
+        gap:35px;
+    }
+
+    .hero h1{
+        font-size:45px;
+        letter-spacing:-2px;
+    }
+
+    .hero p{
+        font-size:14px;
+    }
+
+    .features{
+        padding:18px;
+    }
+
+    .app-container{
+        padding:15px;
+    }
+
+    .app-header{
+        margin-bottom:15px;
+    }
+
+    .panel{
+        padding:18px;
+    }
+
+    .footer{
+        margin-top:25px;
+        padding:20px 15px;
+        flex-direction:column;
+        gap:10px;
+    }
+
+}
+
+/* =========================
+   ANIMATION
+========================= */
+
+.fade-in{
+    animation:fadeIn .45s ease;
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(10px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================
+     LANDING PAGE
+===================================================== -->
+
+<section id="landing">
+
+    <nav class="navbar">
+
+        <div class="logo">
+            <div class="logo-icon">P</div>
+            <span>Pul Perewot</span>
+        </div>
+
+        <div class="live-pill">
+            <div class="live-dot"></div>
+            LIVE EXCHANGE • HOWPSUZ WE ÇALT
+        </div>
+
+    </nav>
+
+
+    <main class="hero">
+
+        <div>
+
+            <div class="live-pill" style="width:max-content;margin-bottom:20px;">
+                <div class="live-dot"></div>
+                CANLI KURLAR
+            </div>
+
+            <h1>
+                Sevdiklerine
+                <span>ynamly</span>
+                we çalt köpri.
+            </h1>
+
+            <p>
+                Pul Perewot bilen walýuta kurslaryny
+                göni wagtda gör, mukdaryny hasapla
+                we çalt aragatnaşyga geç.
+            </p>
+
+            <div class="hero-buttons">
+
+                <button class="primary-btn" onclick="goToApp()">
+                    Pul Perewot-a gir →
+                </button>
+
+                <button class="secondary-btn" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">
+                    Giňişleýin maglumat
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="hero-card">
+
+            <div class="hero-card-top">
+                <span>USD / RUB</span>
+
+                <span style="color:var(--green)">
+                    ● LIVE
+                </span>
+            </div>
+
+            <div class="hero-rate">
+                <span id="heroRate">82.50</span>
+                <small> RUB</small>
+            </div>
+
+            <div class="chart-line">
+
+                <svg viewBox="0 0 500 150" preserveAspectRatio="none">
+
+                    <defs>
+
+                        <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
+
+                            <stop offset="0%" stop-color="#20e58a" stop-opacity=".25"/>
+                            <stop offset="100%" stop-color="#20e58a" stop-opacity="0"/>
+
+                        </linearGradient>
+
+                    </defs>
+
+                    <path
+                        d="M0,115
+                           C35,105 45,112 70,92
+                           S110,80 140,98
+                           S170,105 200,70
+                           S240,50 270,74
+                           S310,85 340,52
+                           S390,40 420,60
+                           S455,48 500,20
+                           L500,150
+                           L0,150 Z"
+                        fill="url(#areaGradient)"
+                    />
+
+                    <path
+                        d="M0,115
+                           C35,105 45,112 70,92
+                           S110,80 140,98
+                           S170,105 200,70
+                           S240,50 270,74
+                           S310,85 340,52
+                           S390,40 420,60
+                           S455,48 500,20"
+                        fill="none"
+                        stroke="#20e58a"
+                        stroke-width="3"
+                    />
+
+                </svg>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <section class="features" id="features">
+
+        <div class="feature">
+
+            <div class="feature-icon">⚡</div>
+
+            <h3>Canlı kurslar</h3>
+
+            <p>
+                USD, EUR we TRY kurslaryny
+                göni wagtda görüp bilersiňiz.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">◈</div>
+
+            <h3>Çalt hasaplama</h3>
+
+            <p>
+                Gönderjek mukdaryňyzy giriziň
+                we RUB boýunça netijäni derrew görüň.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">✓</div>
+
+            <h3>Ýönekeý aragatnaşyk</h3>
+
+            <p>
+                Hasaplamadan soň WhatsApp arkaly
+                göni habarlaşyp bilersiňiz.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <footer class="footer">
+
+        <span>© 2026 Pul Perewot</span>
+
+        <span>Ynamly • Çalt • Ýönekeý</span>
+
+    </footer>
+
+</section>
+
+
+<!-- =====================================================
+     APP PAGE
+===================================================== -->
+
+<section id="app">
+
+    <div class="app-container">
+
+        <header class="app-header">
+
+            <div class="logo">
+
+                <div class="logo-icon">P</div>
+
+                <span>Pul Perewot</span>
+
+            </div>
+
+            <button class="back-btn" onclick="goToLanding()">
+                ← Yza
+            </button>
+
+        </header>
+
+
+        <div class="dashboard">
+
+
+            <!-- LEFT EXCHANGE PANEL -->
+
+            <div class="panel fade-in">
+
+                <div class="panel-title">
+
+                    <h2>Walýuta hasaplaýjy</h2>
+
+                    <div class="status">
+
+                        <div class="status-dot"></div>
+
+                        CANLI
+
+                    </div>
+
+                </div>
+
+
+                <div class="currency-tabs">
+
+                    <button
+                        id="usdBtn"
+                        class="active"
+                        onclick="selectCurrency('USD')">
+                        USD
+                    </button>
+
+                    <button
+                        id="eurBtn"
+                        onclick="selectCurrency('EUR')">
+                        EUR
+                    </button>
+
+                    <button
+                        id="tryBtn"
+                        onclick="selectCurrency('TRY')">
+                        TRY
+                    </button>
+
+                </div>
+
+
+                <label class="input-label">
+                    Mukdar
+                </label>
+
+                <input
+                    id="amount"
+                    class="amount-input"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value="100"
+                    placeholder="100"
+                    oninput="paint()"
+                >
+
+
+                <div class="quote-box">
+
+                    <div class="quote-label">
+                        Siz alarsyňyz
+                    </div>
+
+                    <div class="quote-result">
+
+                        <span id="result">
+                            8 580.00
+                        </span>
+
+                        RUB
+
+                    </div>
+
+
+                    <div class="rate-info">
+
+                        <span>
+                            Kurs
+                        </span>
+
+                        <span id="currentRate">
+                            85.80 RUB
+                        </span>
+
+                    </div>
+
+
+                    <div class="rate-info">
+
+                        <span>
+                            Komissiýa / margin
+                        </span>
+
+                        <span>
+                            4%
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    id="wa-btn"
+                    class="wa-btn">
+
+                    WhatsApp arkaly habarlaş
+                </button>
+
+            </div>
+
+
+            <!-- RIGHT SIDE -->
+
+            <div class="right-grid">
+
+
+                <!-- MARKET CARD -->
+
+                <div class="panel market-card">
+
+                    <div class="market-head">
+
+                        <div>
+
+                            <div class="market-title">
+                                USD / RUB
+                            </div>
+
+                            <div class="market-sub">
+                                Real-time exchange rate
+                            </div>
+
+                        </div>
+
+
+                        <div>
+
+                            <div
+                                class="market-price"
+                                id="marketPrice">
+                                82.50
+                            </div>
+
+                            <div class="market-change">
+                                LIVE
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CHART -->
+
+                <div class="panel chart-panel">
+
+                    <div class="panel-title">
+
+                        <div>
+
+                            <h2>Kurs grafigi</h2>
+
+                            <div class="market-sub">
+                                Soňky 14 gün
+                            </div>
+
+                        </div>
+
+
+                        <div class="chart-controls">
+
+                            <button
+                                id="chartUSD"
+                                class="active"
+                                onclick="changeChart('USD')">
+                                USD
+                            </button>
+
+                            <button
+                                id="chartEUR"
+                                onclick="changeChart('EUR')">
+                                EUR
+                            </button>
+
+                            <button
+                                id="chartTRY"
+                                onclick="changeChart('TRY')">
+                                TRY
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="chart-wrap">
+
+                        <canvas id="rateChart"></canvas>
+
+                    </div>
+
+
+                    <div
+                        class="last-update"
+                        id="lastUpdate">
+                        Kurslar ýüklenýär...
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <footer class="footer">
+
+            <span>
+                © 2026 Pul Perewot
+            </span>
+
+            <span>
+                WhatsApp: +7 903 015 64 03
+            </span>
+
+        </footer>
+
+    </div>
+
+</section>
+
+
+<script>
+
+/* =====================================================
+   API
+===================================================== */
+
+const API_KEY = "97fbf708b5e14fe1b968f87f7f0763de";
+
+const MARGIN = 0.04;
+
+
+/* =====================================================
+   FALLBACK RATES
+===================================================== */
+
+const FALLBACK_RATES = {
+
+    USD: 82.5,
+
+    EUR: 89.0,
+
+    TRY: 2.55
+
+};
+
+
+/* =====================================================
+   VARIABLES
+===================================================== */
+
+let rates = {
+    USD: FALLBACK_RATES.USD,
+    EUR: FALLBACK_RATES.EUR,
+    TRY: FALLBACK_RATES.TRY
+};
+
+let selectedCurrency = "USD";
+
+let chartCurrency = "USD";
+
+let rateChart = null;
+
+
+/* =====================================================
+   LANDING → APP
+===================================================== */
+
+function goToApp(){
+
+    document.getElementById("landing").style.display = "none";
+
+    document.getElementById("app").style.display = "block";
+
+    window.scrollTo({
+        top:0,
+        behavior:"instant"
+    });
+
+    paint();
+
+    loadChart(chartCurrency);
+
+}
+
+
+/* =====================================================
+   APP → LANDING
+===================================================== */
+
+function goToLanding(){
+
+    document.getElementById("app").style.display = "none";
+
+    document.getElementById("landing").style.display = "flex";
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =====================================================
+   SELECT CURRENCY
+===================================================== */
+
+function selectCurrency(currency){
+
+    selectedCurrency = currency;
+
+    document
+        .querySelectorAll(".currency-tabs button")
+        .forEach(btn => btn.classList.remove("active"));
+
+
+    if(currency === "USD"){
+        document.getElementById("usdBtn").classList.add("active");
+    }
+
+    if(currency === "EUR"){
+        document.getElementById("eurBtn").classList.add("active");
+    }
+
+    if(currency === "TRY"){
+        document.getElementById("tryBtn").classList.add("active");
+    }
+
+    paint();
+
+}
+
+
+/* =====================================================
+   CALCULATE
+===================================================== */
+
+function calc(){
+
+    const amount =
+        parseFloat(
+            document.getElementById("amount").value
+        ) || 0;
+
+
+    const marketRate =
+        rates[selectedCurrency];
+
+
+    /*
+       4% KOMISSIÝA / MARGIN
+
+       ÖRNÄK:
+
+       USD market = 82.50
+
+       82.50 × 1.04 = 85.80
+
+       Bu ýerde siziň 4% marginňiz saklanýar.
+    */
+
+    const finalRate =
+        marketRate * (1 + MARGIN);
+
+
+    const result =
+        amount * finalRate;
+
+
+    return {
+
+        amount: amount,
+
+        marketRate: marketRate,
+
+        finalRate: finalRate,
+
+        result: result
+
+    };
+
+}
+
+
+/* =====================================================
+   PAINT
+===================================================== */
+
+function paint(){
+
+    const q = calc();
+
+
+    document.getElementById("result").textContent =
+        q.result.toLocaleString(
+            "en-US",
+            {
+                minimumFractionDigits:2,
+                maximumFractionDigits:2
+            }
+        );
+
+
+    document.getElementById("currentRate").textContent =
+        q.finalRate.toFixed(2) + " RUB";
+
+
+    document.getElementById("marketPrice").textContent =
+        q.marketRate.toFixed(2);
+
+
+    document.getElementById("heroRate").textContent =
+        rates.USD.toFixed(2);
+
+}
+
+
+/* =====================================================
+   FETCH LIVE RATES
+===================================================== */
+
+async function fetchOneRate(symbol){
+
+    try{
+
+        const url =
+            `https://api.twelvedata.com/exchange_rate?symbol=${symbol}/RUB&apikey=${API_KEY}`;
+
+
+        const response =
+            await fetch(url);
+
+
+        const data =
+            await response.json();
+
+
+        if(
+            data &&
+            data.rate &&
+            !isNaN(parseFloat(data.rate))
+        ){
+
+            return parseFloat(data.rate);
+
+        }
+
+    }catch(error){
+
+        console.log(
+            "Rate error:",
+            symbol,
+            error
+        );
+
+    }
+
+
+    return null;
+
+}
+
+
+async function fetchRates(){
+
+    const usd =
+        await fetchOneRate("USD");
+
+
+    const eur =
+        await fetchOneRate("EUR");
+
+
+    const trY =
+        await fetchOneRate("TRY");
+
+
+    if(usd !== null){
+        rates.USD = usd;
+    }
+
+    if(eur !== null){
+        rates.EUR = eur;
+    }
+
+    if(trY !== null){
+        rates.TRY = trY;
+    }
+
+
+    paint();
+
+
+    document.getElementById("lastUpdate").textContent =
+        "Soňky täzelenme: " +
+        new Date().toLocaleTimeString();
+
+
+    if(
+        document.getElementById("app").style.display !== "none"
+    ){
+
+        loadChart(chartCurrency);
+
+    }
+
+}
+
+
+/* =====================================================
+   CHART
+===================================================== */
+
+async function loadChart(currency){
+
+    chartCurrency = currency;
+
+
+    let labels = [];
+
+    let values = [];
+
+
+    try{
+
+        const url =
+            `https://api.twelvedata.com/time_series?symbol=${currency}/RUB&interval=1day&outputsize=14&apikey=${API_KEY}`;
+
+
+        const response =
+            await fetch(url);
+
+
+        const data =
+            await response.json();
+
+
+        if(
+            data &&
+            data.values &&
+            Array.isArray(data.values)
+        ){
+
+            const arr =
+                [...data.values].reverse();
+
+
+            labels =
+                arr.map(
+                    item => item.datetime
+                );
+
+
+            values =
+                arr.map(
+                    item => parseFloat(item.close)
+                );
+
+        }
+
+    }catch(error){
+
+        console.log(
+            "Chart error:",
+            error
+        );
+
+    }
+
+
+    /*
+       If API does not return chart data,
+       use a simple fallback based on current rate.
+    */
+
+    if(values.length === 0){
+
+        const base =
+            rates[currency];
+
+
+        for(let i=13;i>=0;i--){
+
+            labels.push(
+                `${14-i}. gün`
+            );
+
+
+            const movement =
+                1 +
+                (
+                    Math.sin(i * 0.75) * 0.006
+                );
+
+
+            values.push(
+                base * movement
+            );
+
+        }
+
+    }
+
+
+    const ctx =
+        document
+            .getElementById("rateChart")
+            .getContext("2d");
+
+
+    if(rateChart){
+
+        rateChart.destroy();
+
+    }
+
+
+    rateChart =
+        new Chart(
+            ctx,
+            {
+
+                type:"line",
+
+                data:{
+
+                    labels:labels,
+
+                    datasets:[
+                        {
+
+                            label:
+                                currency +
+                                " / RUB",
+
+                            data:values,
+
+                            borderColor:
+                                "#20e58a",
+
+                            backgroundColor:
+                                "rgba(32,229,138,.08)",
+
+                            borderWidth:2,
+
+                            fill:true,
+
+                            tension:.35,
+
+                            pointRadius:0,
+
+                            pointHoverRadius:4
+
+                        }
+                    ]
+
+                },
+
+                options:{
+
+                    responsive:true,
+
+                    maintainAspectRatio:false,
+
+                    interaction:{
+                        intersect:false,
+                        mode:"index"
+                    },
+
+                    plugins:{
+
+                        legend:{
+                            display:false
+                        }
+
+                    },
+
+                    scales:{
+
+                        x:{
+                            grid:{
+                                color:
+                                    "rgba(255,255,255,.04)"
+                            },
+
+                            ticks:{
+                                color:"#687486",
+                                maxTicksLimit:7,
+                                font:{
+                                    size:9
+                                }
+                            }
+
+                        },
+
+                        y:{
+
+                            grid:{
+                                color:
+                                    "rgba(255,255,255,.04)"
+                            },
+
+                            ticks:{
+                                color:"#687486",
+                                font:{
+                                    size:9
+                                }
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+        );
+
+}
+
+
+/* =====================================================
+   CHART CURRENCY
+===================================================== */
+
+function changeChart(currency){
+
+    chartCurrency = currency;
+
+
+    document
+        .querySelectorAll(".chart-controls button")
+        .forEach(btn =>
+            btn.classList.remove("active")
+        );
+
+
+    if(currency === "USD"){
+        document
+            .getElementById("chartUSD")
+            .classList.add("active");
+    }
+
+    if(currency === "EUR"){
+        document
+            .getElementById("chartEUR")
+            .classList.add("active");
+    }
+
+    if(currency === "TRY"){
+        document
+            .getElementById("chartTRY")
+            .classList.add("active");
+    }
+
+
+    loadChart(currency);
+
+}
+
+
+/* =====================================================
+   WHATSAPP
+===================================================== */
+
+document
+    .getElementById("wa-btn")
+    .onclick = function(){
+
+        const q = calc();
+
+
+        if(q.amount <= 0){
+
+            alert(
+                "Ilki mukdary giriziň."
+            );
+
+            return;
+
+        }
+
+
+        const message =
+            `Salam, Pul Perewot barada maglumat almak isleýärin.%0A%0A` +
+            `Walýuta: ${selectedCurrency}%0A` +
+            `Mukdar: ${q.amount}%0A` +
+            `Kurs: ${q.finalRate.toFixed(2)} RUB%0A` +
+            `Jemi: ${q.result.toFixed(2)} RUB`;
+
+
+        window.open(
+            `https://wa.me/79030156403?text=${message}`,
+            "_blank"
+        );
+
+    };
+
+
+/* =====================================================
+   INITIAL
+===================================================== */
+
+paint();
+
+
+/*
+   İlk açylanda kurslary al.
+*/
+
+fetchRates();
+
+
+/*
+   Her 30 sekuntda kurslary täzele.
+*/
+
+setInterval(
+    fetchRates,
+    30000
+);
+
+</script>
+
+</body>
+</html>
