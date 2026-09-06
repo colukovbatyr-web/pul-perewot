@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="tk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pul Perewot</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: #0b0f0e; color: #f3f4f6; display: flex; justify-content: center; min-height: 100vh; padding: 16px; }
+        .container { width: 100%; max-width: 440px; display: flex; flex-direction: column; gap: 16px; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 8px 4px; }
+        .logo-area { display: flex; align-items: center; gap: 10px; }
+        .logo-icon { background: linear-gradient(135deg, #10b981, #047857); width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #fff; font-size: 18px; }
+        .logo-text { font-size: 18px; font-weight: 700; color: #fff; letter-spacing: -0.5px; }
+        .badge-live { background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; display: flex; align-items: center; gap: 5px; cursor: pointer; border: none; transition: 0.2s; }
+        .badge-live:active { transform: scale(0.95); }
+        .card { background: #131b18; border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 20px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .card-title { font-size: 18px; font-weight: 600; color: #fff; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+        .tabs { display: flex; background: #0b0f0e; border-radius: 12px; padding: 4px; gap: 4px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.04); }
+        .tab { flex: 1; padding: 10px; text-align: center; background: transparent; border: none; color: #9ca3af; font-weight: 600; font-size: 14px; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+        .tab.active { background: #1f2937; color: #fff; }
+        .input-group { margin-bottom: 16px; }
+        .label { font-size: 13px; color: #9ca3af; margin-bottom: 8px; display: block; }
+        .input-box { width: 100%; background: #0b0f0e; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px 16px; color: #fff; font-size: 22px; font-weight: 600; outline: none; transition: 0.2s; }
+        .input-box:focus { border-color: #10b981; }
+        .result-box { background: rgba(19, 27, 24, 0.7); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 14px; padding: 16px; margin-bottom: 20px; }
+        .result-label { font-size: 12px; color: #9ca3af; margin-bottom: 4px; }
+        .result-value { font-size: 26px; font-weight: 700; color: #10b981; }
+        .rate-info { font-size: 12px; color: #6b7280; margin-top: 6px; display: flex; justify-content: space-between; }
+        .btn-whatsapp { width: 100%; background: #10b981; color: #000; border: none; border-radius: 14px; padding: 15px; font-size: 15px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; text-decoration: none; }
+        .btn-whatsapp:active { transform: scale(0.98); background: #059669; color: #fff; }
+        .market-card { background: #131b18; border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 16px; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .market-left .pair { font-size: 15px; font-weight: 600; color: #fff; }
+        .market-left .desc { font-size: 12px; color: #9ca3af; margin-top: 2px; }
+        .market-right { text-align: right; }
+        .market-right .price { font-size: 18px; font-weight: 700; color: #fff; }
+        .market-right .status { font-size: 11px; color: #10b981; font-weight: 600; }
+        .chart-container { background: #131b18; border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 20px; padding: 16px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-area">
+                <div class="logo-icon">P</div>
+                <div class="logo-text">Pul Perewot</div>
+            </div>
+            <button class="badge-live" onclick="fetchRates()">
+                <span id="live-dot" style="width: 6px; height: 6px; background: #10b981; border-radius: 50%;"></span> 
+                <span id="btn-text">Kury Yenile</span>
+            </button>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Walýuta hasaplaýjy</div>
+            <div class="tabs">
+                <button class="tab active" onclick="setCurrency('USD')">USD</button>
+                <button class="tab" onclick="setCurrency('EUR')">EUR</button>
+                <button class="tab" onclick="setCurrency('TRY')">TRY</button>
+            </div>
+            <div class="input-group">
+                <label class="label">Mukdar</label>
+                <input type="number" id="amount" class="input-box" value="100" oninput="calculate()">
+            </div>
+            <div class="result-box">
+                <div class="result-label">Siz alarsyňyz</div>
+                <div class="result-value" id="resultText">0.00 RUB</div>
+                <div class="rate-info">
+                    <span id="rateText">Kurs: --</span>
+                </div>
+            </div>
+            <a id="whatsappBtn" href="#" target="_blank" class="btn-whatsapp">
+                WhatsApp arkaly Ugrat
+            </a>
+        </div>
+
+        <div class="market-card">
+            <div class="market-left">
+                <div class="pair" id="marketPairText">USD / RUB</div>
+                <div class="desc">Real-time exchange rate</div>
+            </div>
+            <div class="market-right">
+                <div class="price" id="marketPrice">--</div>
+                <div class="status">LIVE</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div class="card-title" style="font-size: 15px; margin-bottom: 12px;">Kurs grafigi</div>
+            <canvas id="rateChart" height="110"></canvas>
+        </div>
+    </div>
+
+    <script>
+        let currentCurrency = 'USD';
+        let rates = { USD: 86.56, EUR: 94.20, TRY: 2.65 };
+        const COMMISSION = 1.03;
+
+        let chart;
+        function initChart() {
+            const ctx = document.getElementById('rateChart').getContext('2d');
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['01', '03', '05', '07', '09', '11', '13'],
+                    datasets: [{
+                        data: [86.2, 86.4, 86.3, 86.5, 86.4, 86.7, 86.56],
+                        borderColor: '#10b981',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        pointRadius: 3,
+                        pointBackgroundColor: '#10b981',
+                        fill: true,
+                        backgroundColor: function(context) {
+                            const chart = context.chart;
+                            const {ctx, chartArea} = chart;
+                            if (!chartArea) return null;
+                            const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+                            gradient.addColorStop(0, 'rgba(16, 185, 129, 0)');
+                            gradient.addColorStop(1, 'rgba(16, 185, 129, 0.2)');
+                            return gradient;
+                        }
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { color: '#6b7280', font: { size: 10 } } },
+                        y: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#6b7280', font: { size: 10 } } }
+                    }
+                }
+            });
+        }
+
+        async function fetchRates() {
+            const btnText = document.getElementById('btn-text');
+            btnText.innerText = "Täzelenýär...";
+            try {
+                const response = await fetch('https://open.er-api.com/v6/latest/USD');
+                const data = await response.json();
+                if (data && data.rates) {
+                    rates.USD = data.rates.RUB;
+                    rates.EUR = data.rates.RUB / data.rates.EUR;
+                    rates.TRY = data.rates.RUB / data.rates.TRY;
+                }
+            } catch (e) {
+                console.log("Canlı kur alınamadı");
+            }
+            btnText.innerText = "Kury Yenile";
+            calculate();
+        }
+
+        function setCurrency(curr) {
+            currentCurrency = curr;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            calculate();
+        }
+
+        function calculate() {
+            const amount = parseFloat(document.getElementById('amount').value) || 0;
+            const rawRate = rates[currentCurrency];
+            const finalRate = rawRate * COMMISSION;
+            const total = amount * finalRate;
+
+            document.getElementById('resultText').innerText = total.toFixed(2) + " RUB";
+            document.getElementById('rateText').innerText = `Kurs: ${finalRate.toFixed(2)} RUB`;
+            
+            document.getElementById('marketPairText').innerText = `${currentCurrency} / RUB`;
+            document.getElementById('marketPrice').innerText = finalRate.toFixed(2);
+
+            const phone = "99360000000";
+            const message = `Walýuta: ${currentCurrency}%0AMukdar: ${amount}%0AKurs: ${finalRate.toFixed(2)} RUB%0AJemi: ${total.toFixed(2)} RUB`;
+            document.getElementById('whatsappBtn').href = `https://wa.me/${phone}?text=${message}`;
+        }
+
+        window.onload = () => {
+            initChart();
+            calculate();
+        };
+    </script>
+</body>
+</html>
