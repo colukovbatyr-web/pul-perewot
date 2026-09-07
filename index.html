@@ -1,0 +1,3375 @@
+<!DOCTYPE html>
+<html lang="tk">
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0,
+      maximum-scale=1.0, user-scalable=no,
+      viewport-fit=cover">
+
+<meta name="theme-color" content="#08090a">
+
+<title>Pul Perewot</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+
+    -webkit-tap-highlight-color:transparent;
+}
+
+html,
+body{
+    touch-action:manipulation;
+    overscroll-behavior:none;
+}
+
+body{
+    min-height:100vh;
+    min-height:100dvh;
+
+    background:
+        radial-gradient(
+            650px 430px at 50% -12%,
+            rgba(255,190,115,.095),
+            transparent 62%
+        ),
+        radial-gradient(
+            500px 420px at 110% 55%,
+            rgba(214,82,94,.075),
+            transparent 68%
+        ),
+        radial-gradient(
+            450px 350px at -10% 80%,
+            rgba(80,150,120,.045),
+            transparent 68%
+        ),
+        #070809;
+
+    color:#f6f6f6;
+
+    display:flex;
+    justify-content:center;
+
+    padding:
+        max(14px, env(safe-area-inset-top))
+        14px
+        max(28px, env(safe-area-inset-bottom));
+}
+
+button,
+input{
+    font:inherit;
+}
+
+button,
+a{
+    touch-action:manipulation;
+}
+
+button{
+    -webkit-appearance:none;
+}
+
+.container{
+    width:100%;
+    max-width:430px;
+
+    display:flex;
+    flex-direction:column;
+}
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.page{
+    display:none;
+    flex-direction:column;
+    gap:14px;
+    width:100%;
+
+    opacity:0;
+    transform:
+        translateY(14px)
+        scale(.985);
+}
+
+.page.active{
+    display:flex;
+
+    animation:
+        pageIn .48s
+        cubic-bezier(.16,1,.3,1)
+        forwards;
+}
+
+@keyframes pageIn{
+
+    to{
+        opacity:1;
+        transform:none;
+    }
+
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:
+        3px
+        2px
+        5px;
+}
+
+.logo-area{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+
+/* =========================================================
+   CUSTOM P LOGO
+========================================================= */
+
+.logo-mark{
+    width:42px;
+    height:42px;
+
+    border-radius:14px;
+
+    display:grid;
+    place-items:center;
+
+    background:
+        linear-gradient(
+            145deg,
+            #252525,
+            #111213 70%
+        );
+
+    border:
+        1px solid
+        rgba(255,255,255,.11);
+
+    box-shadow:
+        inset 0 1px rgba(255,255,255,.09),
+        0 9px 28px rgba(0,0,0,.46),
+        0 0 25px rgba(255,187,113,.045);
+
+    position:relative;
+    overflow:hidden;
+}
+
+.logo-mark::before{
+    content:"";
+
+    position:absolute;
+
+    width:29px;
+    height:29px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,190,120,.38),
+            transparent 68%
+        );
+
+    animation:
+        logoLight 3s
+        ease-in-out
+        infinite;
+}
+
+.logo-svg{
+    width:25px;
+    height:25px;
+
+    position:relative;
+    z-index:2;
+
+    filter:
+        drop-shadow(
+            0 0 7px
+            rgba(255,196,130,.22)
+        );
+}
+
+@keyframes logoLight{
+
+    0%,
+    100%{
+        transform:scale(.82);
+        opacity:.65;
+    }
+
+    50%{
+        transform:scale(1.35);
+        opacity:1;
+    }
+
+}
+
+.logo-text{
+    font-size:17px;
+    font-weight:800;
+
+    letter-spacing:-.45px;
+}
+
+.live{
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    background:
+        rgba(255,255,255,.035);
+
+    color:#c2c5c5;
+
+    border-radius:999px;
+
+    padding:
+        8px
+        11px;
+
+    display:flex;
+    align-items:center;
+
+    gap:7px;
+
+    font-size:10px;
+    font-weight:800;
+
+    cursor:pointer;
+
+    transition:.25s ease;
+
+    backdrop-filter:blur(10px);
+}
+
+.live:active{
+    transform:scale(.95);
+    background:rgba(255,255,255,.075);
+}
+
+.live-dot{
+    width:7px;
+    height:7px;
+
+    border-radius:50%;
+
+    background:#68dda3;
+
+    box-shadow:
+        0 0 0 0
+        rgba(104,221,163,.55);
+
+    animation:
+        livePulse 1.8s infinite;
+}
+
+@keyframes livePulse{
+
+    70%{
+        box-shadow:
+            0 0 0 7px
+            rgba(104,221,163,0);
+    }
+
+    100%{
+        box-shadow:
+            0 0 0 0
+            rgba(104,221,163,0);
+    }
+
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+    position:relative;
+    overflow:hidden;
+
+    text-align:center;
+
+    padding:
+        26px
+        18px
+        21px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.075);
+
+    border-radius:30px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #171819,
+            #101112 60%,
+            #0b0c0d
+        );
+
+    box-shadow:
+        0 24px 65px
+        rgba(0,0,0,.50),
+
+        inset
+        0 1px
+        rgba(255,255,255,.045);
+}
+
+.hero::before{
+    content:"";
+
+    position:absolute;
+
+    width:360px;
+    height:250px;
+
+    left:50%;
+    top:-150px;
+
+    transform:
+        translateX(-50%);
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,192,121,.22),
+            rgba(211,91,99,.08) 40%,
+            transparent 70%
+        );
+
+    filter:blur(5px);
+
+    pointer-events:none;
+}
+
+.hero::after{
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+        linear-gradient(
+            110deg,
+            transparent 15%,
+            rgba(255,255,255,.035) 48%,
+            transparent 78%
+        );
+
+    transform:
+        translateX(-120%);
+
+    animation:
+        sheen 7s
+        ease-in-out
+        infinite;
+
+    pointer-events:none;
+}
+
+@keyframes sheen{
+
+    45%,
+    100%{
+        transform:translateX(120%);
+    }
+
+}
+
+.hero-logo{
+    position:relative;
+
+    margin:
+        0 auto
+        17px;
+
+    width:76px;
+    height:76px;
+
+    border-radius:24px;
+
+    display:grid;
+    place-items:center;
+
+    background:
+        linear-gradient(
+            145deg,
+            #282827,
+            #111213
+        );
+
+    border:
+        1px solid
+        rgba(255,255,255,.12);
+
+    box-shadow:
+        0 18px 45px
+        rgba(0,0,0,.52),
+
+        0 0 38px
+        rgba(255,181,105,.08);
+
+    animation:
+        heroLogoFloat 4s
+        ease-in-out
+        infinite;
+}
+
+.hero-logo::before{
+    content:"";
+
+    position:absolute;
+
+    inset:9px;
+
+    border-radius:18px;
+
+    border:
+        1px solid
+        rgba(255,193,125,.28);
+
+    animation:
+        logoRing 3s
+        ease-in-out
+        infinite;
+}
+
+.hero-logo svg{
+    width:43px;
+    height:43px;
+
+    position:relative;
+    z-index:2;
+
+    filter:
+        drop-shadow(
+            0 0 12px
+            rgba(255,191,119,.22)
+        );
+}
+
+@keyframes heroLogoFloat{
+
+    0%,
+    100%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-4px);
+    }
+
+}
+
+@keyframes logoRing{
+
+    50%{
+        transform:scale(1.08);
+        opacity:.55;
+    }
+
+}
+
+.hero-kicker{
+    position:relative;
+
+    font-size:10px;
+
+    text-transform:uppercase;
+
+    letter-spacing:1.8px;
+
+    color:#777b7c;
+
+    font-weight:800;
+
+    margin-bottom:9px;
+}
+
+.hero-title{
+    position:relative;
+
+    font-size:29px;
+
+    line-height:1.11;
+
+    font-weight:900;
+
+    letter-spacing:-1.3px;
+}
+
+.hero-title span{
+    background:
+        linear-gradient(
+            90deg,
+            #ffd58f,
+            #f49b7e
+        );
+
+    -webkit-background-clip:text;
+    background-clip:text;
+
+    color:transparent;
+}
+
+.hero-desc{
+    position:relative;
+
+    color:#888c8d;
+
+    font-size:13px;
+
+    line-height:1.55;
+
+    max-width:325px;
+
+    margin:
+        11px auto
+        19px;
+}
+
+
+/* =========================================================
+   FEATURES
+========================================================= */
+
+.feature-list{
+    display:flex;
+
+    gap:8px;
+
+    margin:
+        0
+        0
+        17px;
+
+    position:relative;
+}
+
+.feature{
+    flex:1;
+
+    min-width:0;
+
+    padding:
+        12px
+        7px;
+
+    border-radius:15px;
+
+    background:
+        rgba(255,255,255,.028);
+
+    border:
+        1px solid
+        rgba(255,255,255,.055);
+
+    transition:
+        transform .25s ease,
+        background .25s ease;
+}
+
+.feature:active{
+    transform:scale(.96);
+    background:rgba(255,255,255,.055);
+}
+
+.feature-icon{
+    width:28px;
+    height:28px;
+
+    margin:
+        0 auto
+        7px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:9px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #252322,
+            #151617
+        );
+
+    border:
+        1px solid
+        rgba(255,255,255,.07);
+
+    color:#f4c88e;
+
+    font-size:13px;
+}
+
+.feature-text{
+    font-size:9px;
+
+    line-height:1.3;
+
+    color:#a0a3a4;
+
+    font-weight:700;
+}
+
+
+/* =========================================================
+   PRIMARY BUTTON
+========================================================= */
+
+.primary-btn,
+.whatsapp-btn{
+
+    width:100%;
+
+    border:0;
+
+    border-radius:17px;
+
+    padding:
+        16px
+        18px;
+
+    font-weight:850;
+
+    font-size:14px;
+
+    cursor:pointer;
+
+    text-decoration:none;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:9px;
+
+    transition:
+        transform .25s ease,
+        filter .25s ease,
+        box-shadow .25s ease;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.primary-btn::after,
+.whatsapp-btn::after{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    bottom:0;
+
+    width:80px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.28),
+            transparent
+        );
+
+    transform:
+        translateX(-150px);
+
+    animation:
+        buttonShine 4.5s
+        ease-in-out
+        infinite;
+}
+
+@keyframes buttonShine{
+
+    50%{
+        transform:translateX(500px);
+    }
+
+    100%{
+        transform:translateX(500px);
+    }
+
+}
+
+.primary-btn{
+
+    color:#17120d;
+
+    background:
+        linear-gradient(
+            100deg,
+            #ffd995,
+            #ffb76e
+        );
+
+    box-shadow:
+        0 11px 30px
+        rgba(255,184,111,.20);
+}
+
+.primary-btn:active,
+.whatsapp-btn:active{
+
+    transform:scale(.975);
+
+    filter:brightness(1.06);
+}
+
+
+/* =========================================================
+   EXCHANGE CARD
+========================================================= */
+
+.exchange-card{
+
+    border:
+        1px solid
+        rgba(255,255,255,.075);
+
+    border-radius:27px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #171819,
+            #101112
+        );
+
+    padding:16px;
+
+    box-shadow:
+        0 21px 57px
+        rgba(0,0,0,.46),
+
+        inset
+        0 1px
+        rgba(255,255,255,.035);
+}
+
+.section-head{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:12px;
+}
+
+.section-title{
+
+    font-size:15px;
+
+    font-weight:800;
+
+    letter-spacing:-.25px;
+}
+
+.section-note{
+
+    font-size:9px;
+
+    color:#686c6d;
+
+    text-transform:uppercase;
+
+    letter-spacing:.8px;
+}
+
+
+/* =========================================================
+   CURRENCY TABS
+========================================================= */
+
+.tabs{
+
+    display:flex;
+
+    gap:5px;
+
+    padding:5px;
+
+    border-radius:18px;
+
+    background:#0a0b0c;
+
+    border:
+        1px solid
+        rgba(255,255,255,.055);
+
+    position:relative;
+
+    overflow:hidden;
+
+    margin-bottom:14px;
+}
+
+.tab-indicator{
+
+    position:absolute;
+
+    top:5px;
+    bottom:5px;
+
+    left:5px;
+
+    width:
+        calc(33.333% - 3.333px);
+
+    border-radius:13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2b2a28,
+            #1a1b1c
+        );
+
+    border:
+        1px solid
+        rgba(255,255,255,.105);
+
+    box-shadow:
+        0 6px 19px
+        rgba(0,0,0,.40);
+
+    transition:
+        transform .5s
+        cubic-bezier(.34,1.56,.64,1);
+}
+
+.tab{
+
+    position:relative;
+
+    z-index:2;
+
+    flex:1;
+
+    border:0;
+
+    background:transparent;
+
+    color:#747879;
+
+    padding:
+        10px
+        5px;
+
+    border-radius:13px;
+
+    font-size:12px;
+
+    font-weight:800;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:7px;
+
+    cursor:pointer;
+
+    transition:.35s ease;
+}
+
+.tab.active{
+    color:#fff;
+}
+
+.tab:active{
+    transform:scale(.94);
+}
+
+
+/* =========================================================
+   SVG COINS
+========================================================= */
+
+.coin{
+
+    width:27px;
+    height:27px;
+
+    border-radius:50%;
+
+    display:grid;
+    place-items:center;
+
+    border:
+        1px solid
+        rgba(255,255,255,.15);
+
+    box-shadow:
+        inset
+        0 1px
+        rgba(255,255,255,.20),
+
+        0 3px 12px
+        rgba(0,0,0,.25);
+
+    transition:
+        transform .5s
+        cubic-bezier(.34,1.56,.64,1),
+        box-shadow .35s ease;
+
+    overflow:hidden;
+}
+
+.coin svg{
+
+    width:100%;
+    height:100%;
+
+    animation:
+        coinFloat 3.4s
+        ease-in-out
+        infinite;
+}
+
+.tab.active .coin{
+
+    transform:
+        scale(1.16)
+        rotate(-7deg);
+
+    box-shadow:
+        0 0 20px
+        rgba(255,190,115,.20);
+}
+
+@keyframes coinFloat{
+
+    0%,
+    100%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-2px);
+    }
+
+}
+
+
+/* =========================================================
+   INPUT
+========================================================= */
+
+.input-label{
+
+    font-size:10px;
+
+    color:#777b7c;
+
+    font-weight:800;
+
+    margin:
+        0
+        0
+        7px
+        2px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.9px;
+}
+
+.amount-row{
+
+    display:flex;
+
+    gap:9px;
+
+    margin-bottom:12px;
+}
+
+.amount-box{
+
+    flex:1;
+
+    min-width:0;
+
+    height:59px;
+
+    border-radius:17px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.07);
+
+    background:#0a0b0c;
+
+    color:#fff;
+
+    text-align:left;
+
+    padding:
+        0
+        17px;
+
+    font-size:25px;
+
+    font-weight:850;
+
+    outline:none;
+
+    transition:.25s ease;
+}
+
+.amount-box:focus{
+
+    border-color:
+        rgba(255,190,115,.55);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(255,190,115,.08),
+
+        0 0 25px
+        rgba(255,190,115,.04);
+}
+
+.refresh{
+
+    width:59px;
+    height:59px;
+
+    flex-shrink:0;
+
+    border-radius:17px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    background:#181a1b;
+
+    color:#efc58c;
+
+    font-size:23px;
+
+    display:grid;
+
+    place-items:center;
+
+    cursor:pointer;
+
+    transition:
+        transform .7s ease,
+        background .25s ease;
+}
+
+.refresh:active{
+
+    background:#24201b;
+
+    transform:
+        rotate(180deg)
+        scale(.93);
+}
+
+
+/* =========================================================
+   RESULT
+========================================================= */
+
+.result{
+
+    position:relative;
+
+    overflow:hidden;
+
+    border-radius:21px;
+
+    padding:
+        17px;
+
+    margin-bottom:12px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #222223,
+            #171819
+        );
+
+    border:
+        1px solid
+        rgba(255,255,255,.075);
+
+    transition:
+        border-color .35s ease,
+        box-shadow .35s ease,
+        transform .25s ease;
+}
+
+.result.glow{
+
+    border-color:
+        rgba(255,190,115,.40);
+
+    box-shadow:
+        0 0 30px
+        rgba(255,190,115,.10);
+}
+
+.result::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+        radial-gradient(
+            circle at 93% 8%,
+            rgba(255,181,112,.12),
+            transparent 35%
+        );
+
+    pointer-events:none;
+}
+
+.result-label{
+
+    font-size:9px;
+
+    color:#777b7c;
+
+    text-transform:uppercase;
+
+    letter-spacing:.9px;
+
+    font-weight:800;
+
+    margin-bottom:5px;
+}
+
+.result-value{
+
+    font-size:30px;
+
+    font-weight:900;
+
+    letter-spacing:-1px;
+
+    color:#f5f5f5;
+
+    transition:.25s ease;
+}
+
+.result-value.bump{
+
+    animation:
+        valueBump .32s ease;
+}
+
+@keyframes valueBump{
+
+    50%{
+        transform:scale(1.035);
+        color:#ffd18b;
+    }
+
+}
+
+.rate-info{
+
+    font-size:11px;
+
+    color:#777b7c;
+
+    margin-top:6px;
+}
+
+.rate-info strong{
+    color:#c2c4c4;
+}
+
+.commission-info{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:6px;
+
+    margin-top:6px;
+
+    font-size:9px;
+
+    color:#676b6c;
+}
+
+.commission-badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    padding:
+        3px
+        6px;
+
+    border-radius:6px;
+
+    background:
+        rgba(255,190,115,.08);
+
+    color:#e7b97d;
+
+    border:
+        1px solid
+        rgba(255,190,115,.10);
+
+    font-weight:800;
+}
+
+
+/* =========================================================
+   API STATUS
+========================================================= */
+
+.api-status{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:7px;
+
+    padding:
+        8px
+        10px;
+
+    border-radius:11px;
+
+    background:
+        rgba(104,221,163,.045);
+
+    border:
+        1px solid
+        rgba(104,221,163,.07);
+
+    color:#707575;
+
+    font-size:9px;
+
+    margin-bottom:10px;
+
+    transition:.3s ease;
+}
+
+.api-status.error{
+
+    background:
+        rgba(235,105,105,.06);
+
+    border-color:
+        rgba(235,105,105,.11);
+
+    color:#9c7474;
+}
+
+.api-status.loading{
+
+    color:#b99b78;
+
+    background:
+        rgba(255,190,115,.045);
+
+    border-color:
+        rgba(255,190,115,.08);
+}
+
+.api-status-dot{
+
+    width:6px;
+    height:6px;
+
+    border-radius:50%;
+
+    background:#65dca1;
+
+    flex-shrink:0;
+}
+
+.api-status.error
+.api-status-dot{
+
+    background:#df7777;
+}
+
+.api-status.loading
+.api-status-dot{
+
+    background:#e9b977;
+
+    animation:
+        statusPulse 1s
+        infinite;
+}
+
+@keyframes statusPulse{
+
+    50%{
+        opacity:.3;
+        transform:scale(.7);
+    }
+
+}
+
+
+/* =========================================================
+   WHATSAPP
+========================================================= */
+
+.whatsapp-btn{
+
+    color:#0c160f;
+
+    background:
+        linear-gradient(
+            100deg,
+            #c1f5d3,
+            #7ee5aa
+        );
+
+    box-shadow:
+        0 11px 30px
+        rgba(80,210,137,.16);
+
+    margin-bottom:8px;
+}
+
+.whatsapp-icon{
+
+    width:24px;
+    height:24px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:50%;
+
+    background:
+        rgba(0,0,0,.08);
+
+    font-size:14px;
+
+    font-weight:900;
+}
+
+
+/* =========================================================
+   BACK
+========================================================= */
+
+.back-btn{
+
+    width:100%;
+
+    border:
+        1px solid
+        rgba(255,255,255,.055);
+
+    background:#17191a;
+
+    color:#888c8d;
+
+    border-radius:16px;
+
+    padding:13px;
+
+    font-size:12px;
+
+    font-weight:750;
+
+    cursor:pointer;
+
+    transition:.25s ease;
+}
+
+.back-btn:active{
+
+    transform:scale(.975);
+
+    background:#202223;
+
+    color:#fff;
+}
+
+
+/* =========================================================
+   MARKET
+========================================================= */
+
+.market{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:
+        15px
+        17px;
+
+    border-radius:20px;
+
+    background:#111314;
+
+    border:
+        1px solid
+        rgba(255,255,255,.065);
+
+    box-shadow:
+        0 12px 35px
+        rgba(0,0,0,.30);
+}
+
+.market-pair{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:9px;
+}
+
+.mini-coin{
+
+    width:35px;
+    height:35px;
+
+    border-radius:12px;
+
+    display:grid;
+    place-items:center;
+
+    font-weight:900;
+
+    font-size:12px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #272726,
+            #171819
+        );
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    box-shadow:
+        inset
+        0 1px
+        rgba(255,255,255,.08);
+}
+
+.mini-coin svg{
+
+    width:28px;
+    height:28px;
+}
+
+.market-name{
+
+    font-size:13px;
+
+    font-weight:800;
+}
+
+.market-desc{
+
+    font-size:9.5px;
+
+    color:#696d6e;
+
+    margin-top:3px;
+}
+
+.market-right{
+
+    text-align:right;
+}
+
+.market-price{
+
+    font-size:18px;
+
+    font-weight:850;
+
+    color:#f4c88d;
+}
+
+.market-status{
+
+    font-size:9px;
+
+    color:#6fd9a0;
+
+    font-weight:850;
+
+    margin-top:2px;
+
+    letter-spacing:.7px;
+}
+
+
+/* =========================================================
+   AUTO REFRESH INFO
+========================================================= */
+
+.auto-refresh{
+
+    margin-top:9px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    font-size:8.5px;
+
+    color:#5e6263;
+}
+
+.auto-refresh strong{
+
+    color:#8d9192;
+
+    font-weight:750;
+}
+
+
+/* =========================================================
+   CHART
+========================================================= */
+
+.chart-card{
+
+    padding:16px;
+
+    border-radius:22px;
+
+    background:#111314;
+
+    border:
+        1px solid
+        rgba(255,255,255,.065);
+
+    box-shadow:
+        0 12px 35px
+        rgba(0,0,0,.30);
+}
+
+.chart-head{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:10px;
+}
+
+.chart-title{
+
+    font-size:13px;
+
+    font-weight:800;
+}
+
+.chart-note{
+
+    font-size:9px;
+
+    color:#666a6b;
+}
+
+.chart-wrap{
+
+    height:155px;
+
+    position:relative;
+}
+
+
+/* =========================================================
+   DISCLAIMER
+========================================================= */
+
+.disclaimer{
+
+    font-size:8.5px;
+
+    line-height:1.5;
+
+    text-align:center;
+
+    color:#55595a;
+
+    padding:
+        0
+        15px
+        4px;
+}
+
+
+/* =========================================================
+   SMALL SCREENS
+========================================================= */
+
+@media(max-width:360px){
+
+    body{
+        padding-left:10px;
+        padding-right:10px;
+    }
+
+    .hero{
+        padding-left:15px;
+        padding-right:15px;
+    }
+
+    .hero-title{
+        font-size:25px;
+    }
+
+    .feature-text{
+        font-size:8.5px;
+    }
+
+    .tab{
+        font-size:11px;
+    }
+
+    .coin{
+        width:24px;
+        height:24px;
+    }
+
+    .amount-box{
+        font-size:22px;
+    }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media(prefers-reduced-motion:reduce){
+
+    *,
+    *::before,
+    *::after{
+
+        animation-duration:.01ms !important;
+
+        animation-iteration-count:1 !important;
+
+        transition-duration:.01ms !important;
+
+        scroll-behavior:auto !important;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+<!-- =====================================================
+     PAGE 1
+===================================================== -->
+
+<section id="page1" class="page active">
+
+<header class="header">
+
+    <div class="logo-area">
+
+        <div class="logo-mark">
+
+            <svg
+                class="logo-svg"
+                viewBox="0 0 100 100"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+
+                <path
+                    d="M30 72V28H55C66 28 73 34 73 44C73 54 66 60 55 60H42"
+                    stroke="#FFD18A"
+                    stroke-width="11"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"/>
+
+                <path
+                    d="M42 60V72"
+                    stroke="#F39B7E"
+                    stroke-width="11"
+                    stroke-linecap="round"/>
+
+            </svg>
+
+        </div>
+
+        <div class="logo-text">
+            Pul Perewot
+        </div>
+
+    </div>
+
+
+    <div class="live">
+
+        <span class="live-dot"></span>
+
+        LIVE
+
+    </div>
+
+</header>
+
+
+<div class="hero">
+
+
+    <div class="hero-logo">
+
+        <svg
+            viewBox="0 0 100 100"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+
+            <circle
+                cx="50"
+                cy="50"
+                r="34"
+                stroke="rgba(255,193,125,.22)"
+                stroke-width="2"/>
+
+            <path
+                d="M30 72V28H55C66 28 73 34 73 44C73 54 66 60 55 60H42"
+                stroke="#FFD18A"
+                stroke-width="10"
+                stroke-linecap="round"
+                stroke-linejoin="round"/>
+
+            <path
+                d="M42 60V72"
+                stroke="#F39B7E"
+                stroke-width="10"
+                stroke-linecap="round"/>
+
+        </svg>
+
+    </div>
+
+
+    <div class="hero-kicker">
+        PUL PEREWOT
+    </div>
+
+
+    <div class="hero-title">
+
+        Sevdiklerine<br>
+
+        <span>ynamly we çalt</span> köpri
+
+    </div>
+
+
+    <div class="hero-desc">
+
+        Walýuta kurslaryny göni wagtda gör,
+        mukdary hasapla we bir basyşda
+        WhatsApp arkaly ugrat.
+
+    </div>
+
+
+    <div class="feature-list">
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                ↗
+            </div>
+
+            <div class="feature-text">
+                Real-time kurslar
+            </div>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                ⇄
+            </div>
+
+            <div class="feature-text">
+                Çalt hasaplama
+            </div>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                ✓
+            </div>
+
+            <div class="feature-text">
+                WhatsApp-a ugrat
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <button
+        class="primary-btn"
+        onclick="goToPage2()">
+
+        Pul Perewot-a gir
+
+        <span>→</span>
+
+    </button>
+
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     PAGE 2
+===================================================== -->
+
+<section id="page2" class="page">
+
+
+<header class="header">
+
+
+    <div class="logo-area">
+
+        <div class="logo-mark">
+
+            <svg
+                class="logo-svg"
+                viewBox="0 0 100 100"
+                fill="none">
+
+                <path
+                    d="M30 72V28H55C66 28 73 34 73 44C73 54 66 60 55 60H42"
+                    stroke="#FFD18A"
+                    stroke-width="11"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"/>
+
+                <path
+                    d="M42 60V72"
+                    stroke="#F39B7E"
+                    stroke-width="11"
+                    stroke-linecap="round"/>
+
+            </svg>
+
+        </div>
+
+
+        <div class="logo-text">
+            Pul Perewot
+        </div>
+
+    </div>
+
+
+    <button
+        class="live"
+        onclick="fetchRates(true)">
+
+        <span class="live-dot"></span>
+
+        <span id="btn-text">
+            Kury Täze
+        </span>
+
+    </button>
+
+
+</header>
+
+
+
+<!-- =====================================================
+     EXCHANGE
+===================================================== -->
+
+<div class="exchange-card">
+
+
+    <div class="section-head">
+
+        <div class="section-title">
+            Walýuta hasaplaýjy
+        </div>
+
+        <div class="section-note">
+            EXCHANGE
+        </div>
+
+    </div>
+
+
+
+    <!-- CURRENCY TABS -->
+
+    <div
+        class="tabs"
+        id="currencyTabs">
+
+
+        <div
+            class="tab-indicator"
+            id="tabIndicator">
+        </div>
+
+
+
+        <!-- USD -->
+
+        <button
+            class="tab active"
+            data-index="0"
+            onclick="setCurrency('USD',this)">
+
+            <span class="coin usd">
+
+                <svg
+                    viewBox="0 0 100 100"
+                    xmlns="http://www.w3.org/2000/svg">
+
+                    <defs>
+
+                        <linearGradient
+                            id="usdGrad"
+                            x1="0"
+                            y1="0"
+                            x2="1"
+                            y2="1">
+
+                            <stop
+                                offset="0"
+                                stop-color="#315d4a"/>
+
+                            <stop
+                                offset="1"
+                                stop-color="#14251f"/>
+
+                        </linearGradient>
+
+                    </defs>
+
+                    <circle
+                        cx="50"
+                        cy="50"
+                        r="48"
+                        fill="url(#usdGrad)"/>
+
+                    <circle
+                        cx="50"
+                        cy="50"
+                        r="39"
+                        fill="none"
+                        stroke="#8fe0b7"
+                        stroke-opacity=".35"
+                        stroke-width="2"/>
+
+                    <text
+                        x="50"
+                        y="64"
+                        text-anchor="middle"
+                        font-size="46"
+                        font-weight="900"
+                        fill="#A9E9C7">$</text>
+
+                </svg>
+
+            </span>
+
+            USD
+
+        </button>
+
+
+
+        <!-- EUR -->
+
+        <button
+            class="tab"
+            data-index="1"
+            onclick="setCurrency('EUR',this)">
+
+            <span class="coin eur">
+
+                <svg
+                    viewBox="0 0 100 100"
+                    xmlns="http://www.w3.org/2000/svg">
+
+                    <defs>
+
+                        <linearGradient
+                            id="eurGrad"
+                            x1="0"
+                            y1="0"
+                            x2="1"
+                            y2="1">
+
+                            <stop
+                                offset="0"
+                                stop-color="#62582f"/>
+
+                            <stop
+                                offset="1"
+                                stop-color="#242116"/>
+
+                        </linearGradient>
+
+                    </defs>
+
+                    <circle
+                        cx="50"
+                        cy="50"
+                        r="48"
+                        fill="url(#eurGrad)"/>
+
+                    <circle
+                        cx="50"
+                        cy="50"
+                        r="39"
+                        fill="none"
+                        stroke="#FFD88D"
+                        stroke-opacity=".35"
+                        stroke-width="2"/>
+
+                    <text
+                        x="50"
+                        y="64"
+                        text-anchor="middle"
+                        font-size="43"
+                        font-weight="900"
+                        fill="#FFE1A4">€</text>
+
+                </svg>
+
+            </span>
+
+            EUR
+
+        </button>
+
+
+
+        <!-- TRY -->
+
+        <button
+            class="tab"
+            data-index="2"
+            onclick="setCurrency('TRY',this)">
+
+            <span class="coin try">
+
+                <svg
+                    viewBox="0 0 100 100"
+                    xmlns="http://www.w3.org/2000/svg">
+
+                    <defs>
+
+                        <linearGradient
+                            id="tryGrad"
+                            x1="0"
+                            y1="0"
+                            x2="1"
+                            y2="1">
+
+                            <stop
+                                offset="0"
+                                stop-color="#63373a"/>
+
+                            <stop
+                                offset="1"
+                                stop-color="#281819"/>
+
+                        </linearGradient>
+
+                    </defs>
+
+                    <circle
+                        cx="50"
+                        cy="50"
+                        r="48"
+                        fill="url(#tryGrad)"/>
+
+                    <circle
+                        cx="50"
+                        cy="50"
+                        r="39"
+                        fill="none"
+                        stroke="#FF9E9E"
+                        stroke-opacity=".35"
+                        stroke-width="2"/>
+
+                    <text
+                        x="50"
+                        y="64"
+                        text-anchor="middle"
+                        font-size="42"
+                        font-weight="900"
+                        fill="#FFB1B1">₺</text>
+
+                </svg>
+
+            </span>
+
+            TRY
+
+        </button>
+
+
+    </div>
+
+
+
+    <div class="input-label">
+        Mukdar
+    </div>
+
+
+    <div class="amount-row">
+
+
+        <input
+            type="number"
+            id="amount"
+            class="amount-box"
+            value="100"
+            min="0"
+            inputmode="decimal"
+            oninput="calculate()"
+            aria-label="Mukdar">
+
+
+        <button
+            class="refresh"
+            onclick="fetchRates(true)"
+            title="Kurlary täzele"
+            aria-label="Kurlary täzele">
+
+            ↻
+
+        </button>
+
+
+    </div>
+
+
+
+    <!-- API STATUS -->
+
+    <div
+        class="api-status"
+        id="apiStatus">
+
+        <span
+            class="api-status-dot"
+            id="apiStatusDot">
+        </span>
+
+        <span id="apiStatusText">
+            Göni kurs taýýar
+        </span>
+
+    </div>
+
+
+
+    <!-- RESULT -->
+
+    <div
+        class="result"
+        id="resultBox">
+
+
+        <div class="result-label">
+            Siz alarsyňyz
+        </div>
+
+
+        <div
+            class="result-value"
+            id="resultText">
+
+            0 RUB
+
+        </div>
+
+
+        <div class="rate-info">
+
+            <span id="rateText">
+                Kurs: --
+            </span>
+
+        </div>
+
+
+        <div class="commission-info">
+
+            <span class="commission-badge">
+                +4%
+            </span>
+
+            Komissiýa goşuldy
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- WHATSAPP -->
+
+    <a
+        id="whatsappBtn"
+        href="#"
+        target="_blank"
+        rel="noopener"
+        class="whatsapp-btn">
+
+        <span class="whatsapp-icon">
+            ↗
+        </span>
+
+        WhatsApp arkaly Ugrat
+
+    </a>
+
+
+
+    <button
+        class="back-btn"
+        onclick="goToPage1()">
+
+        ← Yza gaýt
+
+    </button>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     MARKET
+===================================================== -->
+
+<div class="market">
+
+
+    <div class="market-pair">
+
+
+        <div
+            class="mini-coin"
+            id="miniCoin">
+
+            $
+
+        </div>
+
+
+        <div>
+
+            <div
+                class="market-name"
+                id="marketPairText">
+
+                USD / RUB
+
+            </div>
+
+
+            <div class="market-desc">
+
+                Real-time exchange rate
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <div class="market-right">
+
+
+        <div
+            class="market-price"
+            id="marketPrice">
+
+            --
+
+        </div>
+
+
+        <div class="market-status">
+
+            ● LIVE
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- AUTO REFRESH -->
+
+<div class="auto-refresh">
+
+    <span>
+        Awto täzelenme:
+        <strong>60 sekunt</strong>
+    </span>
+
+    <span id="nextRefresh">
+        Indiki täzelenme: 60s
+    </span>
+
+</div>
+
+
+
+<!-- =====================================================
+     CHART
+===================================================== -->
+
+<div class="chart-card">
+
+
+    <div class="chart-head">
+
+        <div class="chart-title">
+            Kurs grafigi
+        </div>
+
+        <div class="chart-note">
+            Live movement
+        </div>
+
+    </div>
+
+
+    <div class="chart-wrap">
+
+        <canvas id="rateChart"></canvas>
+
+    </div>
+
+
+</div>
+
+
+
+<div class="disclaimer">
+
+    Kurs maglumatlary maglumat çeşmesine
+    baglylykda üýtgäp biler.
+
+</div>
+
+
+</section>
+
+</div>
+
+
+
+<script>
+
+/* =========================================================
+   KUR MANTIGI
+========================================================= */
+
+let currentCurrency = 'USD';
+
+let rates = {
+    USD: 86.56,
+    EUR: 94.20,
+    TRY: 2.65
+};
+
+
+/*
+   KOMİSYON %4
+   1.04 = %4
+*/
+
+const COMMISSION = 1.04;
+
+const PHONE = "79030156403";
+
+
+/* =========================================================
+   DEĞİŞKENLER
+========================================================= */
+
+let chart = null;
+
+let chartInitialized = false;
+
+let glowTimeout = null;
+
+let lastResult = null;
+
+let autoRefreshTimer = null;
+
+let countdownTimer = null;
+
+let countdown = 60;
+
+let isFetching = false;
+
+
+/* =========================================================
+   SAYFA 2
+========================================================= */
+
+function goToPage2(){
+
+    document
+        .getElementById('page1')
+        .classList
+        .remove('active');
+
+
+    setTimeout(()=>{
+
+        document
+            .getElementById('page2')
+            .classList
+            .add('active');
+
+
+        if(!chartInitialized){
+
+            initChart();
+
+            chartInitialized = true;
+
+        }
+
+
+        calculate();
+
+
+        /*
+           Sayfa açıldığında
+           otomatik yenileme başlatılır.
+        */
+
+        startAutoRefresh();
+
+
+    },80);
+
+}
+
+
+/* =========================================================
+   SAYFA 1
+========================================================= */
+
+function goToPage1(){
+
+    document
+        .getElementById('page2')
+        .classList
+        .remove('active');
+
+
+    setTimeout(()=>{
+
+        document
+            .getElementById('page1')
+            .classList
+            .add('active');
+
+    },80);
+
+}
+
+
+/* =========================================================
+   PARA SEMBOLÜ
+========================================================= */
+
+function getCoinSymbol(curr){
+
+    return curr === 'USD'
+        ? '$'
+        : curr === 'EUR'
+        ? '€'
+        : '₺';
+
+}
+
+
+/* =========================================================
+   API DURUMU
+========================================================= */
+
+function setApiStatus(type,text){
+
+    const box =
+        document.getElementById('apiStatus');
+
+    const textEl =
+        document.getElementById('apiStatusText');
+
+    if(!box || !textEl)
+        return;
+
+
+    box.classList.remove(
+        'error',
+        'loading'
+    );
+
+
+    if(type === 'error')
+        box.classList.add('error');
+
+
+    if(type === 'loading')
+        box.classList.add('loading');
+
+
+    textEl.innerText = text;
+
+}
+
+
+/* =========================================================
+   GRAFİK
+========================================================= */
+
+function initChart(){
+
+    const canvas =
+        document.getElementById('rateChart');
+
+
+    if(!canvas)
+        return;
+
+
+    const ctx =
+        canvas.getContext('2d');
+
+
+    chart = new Chart(ctx,{
+
+        type:'line',
+
+
+        data:{
+
+            labels:[
+                '01',
+                '03',
+                '05',
+                '07',
+                '09',
+                '11',
+                '13'
+            ],
+
+
+            datasets:[{
+
+                data:[
+                    86.2,
+                    86.4,
+                    86.3,
+                    86.5,
+                    86.4,
+                    86.7,
+                    rates.USD
+                ],
+
+
+                borderColor:'#f0b77c',
+
+                borderWidth:2.2,
+
+                tension:.42,
+
+                pointRadius:2.4,
+
+                pointHoverRadius:4,
+
+                pointBackgroundColor:'#ffd08f',
+
+                pointBorderWidth:0,
+
+                fill:true,
+
+
+                backgroundColor:function(context){
+
+                    const c =
+                        context.chart;
+
+
+                    const {
+                        ctx,
+                        chartArea
+                    } = c;
+
+
+                    if(!chartArea)
+                        return null;
+
+
+                    const g =
+                        ctx.createLinearGradient(
+                            0,
+                            chartArea.bottom,
+                            0,
+                            chartArea.top
+                        );
+
+
+                    g.addColorStop(
+                        0,
+                        'rgba(240,183,124,0)'
+                    );
+
+
+                    g.addColorStop(
+                        1,
+                        'rgba(240,183,124,.14)'
+                    );
+
+
+                    return g;
+
+                }
+
+            }]
+
+        },
+
+
+        options:{
+
+            responsive:true,
+
+            maintainAspectRatio:false,
+
+
+            animation:{
+
+                duration:700,
+
+                easing:'easeOutQuart'
+
+            },
+
+
+            interaction:{
+
+                intersect:false,
+
+                mode:'index'
+
+            },
+
+
+            plugins:{
+
+                legend:{
+                    display:false
+                },
+
+
+                tooltip:{
+
+                    backgroundColor:'#171819',
+
+                    borderColor:
+                        'rgba(255,255,255,.08)',
+
+                    borderWidth:1,
+
+                    titleColor:'#aaa',
+
+                    bodyColor:'#fff',
+
+                    displayColors:false,
+
+                    padding:10
+
+                }
+
+            },
+
+
+            scales:{
+
+                x:{
+
+                    grid:{
+                        display:false
+                    },
+
+                    border:{
+                        display:false
+                    },
+
+                    ticks:{
+
+                        color:'#55595a',
+
+                        font:{
+                            size:9
+                        }
+
+                    }
+
+                },
+
+
+                y:{
+
+                    grid:{
+
+                        color:
+                            'rgba(255,255,255,.035)'
+
+                    },
+
+                    border:{
+                        display:false
+                    },
+
+                    ticks:{
+
+                        color:'#55595a',
+
+                        font:{
+                            size:9
+                        },
+
+                        maxTicksLimit:4
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    });
+
+}
+
+
+/* =========================================================
+   GRAFİK GÜNCELLE
+========================================================= */
+
+function updateChart(){
+
+    if(!chart)
+        return;
+
+
+    const base =
+        rates[currentCurrency];
+
+
+    chart.data.datasets[0].data = [
+
+        base * 0.996,
+
+        base * 0.999,
+
+        base * 0.997,
+
+        base * 1.002,
+
+        base * 0.998,
+
+        base * 1.003,
+
+        base
+
+    ];
+
+
+    chart.update();
+
+}
+
+
+/* =========================================================
+   KURLARI YENİLE
+========================================================= */
+
+async function fetchRates(manual=false){
+
+    if(isFetching)
+        return;
+
+
+    isFetching = true;
+
+
+    const btnText =
+        document.getElementById('btn-text');
+
+
+    const refreshBtn =
+        document.querySelector('.refresh');
+
+
+    if(btnText)
+        btnText.innerText =
+            "Täzelenýär...";
+
+
+    setApiStatus(
+        'loading',
+        'Göni kurs täzelenýär...'
+    );
+
+
+    if(refreshBtn){
+
+        refreshBtn.style.transition =
+            'transform .7s ease';
+
+        refreshBtn.style.transform =
+            'rotate(360deg)';
+
+    }
+
+
+    try{
+
+        const response =
+            await fetch(
+                'https://open.er-api.com/v6/latest/USD',
+                {
+                    cache:'no-store'
+                }
+            );
+
+
+        if(!response.ok){
+
+            throw new Error(
+                'API response error'
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if(
+            !data ||
+            !data.rates ||
+            typeof data.rates.RUB !== 'number'
+        ){
+
+            throw new Error(
+                'Invalid rate data'
+            );
+
+        }
+
+
+        /*
+           MEVCUT KUR MANTIĞI
+           KORUNDU.
+        */
+
+        rates.USD =
+            data.rates.RUB;
+
+
+        rates.EUR =
+            data.rates.RUB /
+            data.rates.EUR;
+
+
+        rates.TRY =
+            data.rates.RUB /
+            data.rates.TRY;
+
+
+        setApiStatus(
+            'success',
+            'Kurslar göni wagtda täzelendi'
+        );
+
+
+        calculate();
+
+        updateChart();
+
+
+        /*
+           Başarılı yenilemeden sonra
+           sayaç tekrar 60'a döner.
+        */
+
+        resetCountdown();
+
+
+    }
+
+    catch(e){
+
+        console.log(
+            "Kur alınamadı:",
+            e
+        );
+
+
+        /*
+           API çalışmazsa
+           mevcut kur korunur.
+        */
+
+        setApiStatus(
+            'error',
+            'Kurs täzelenmedi — öňki kurs ulanylýar'
+        );
+
+
+        calculate();
+
+
+    }
+
+
+    if(btnText)
+        btnText.innerText =
+            "Kury Täze";
+
+
+    if(refreshBtn){
+
+        setTimeout(()=>{
+
+            refreshBtn.style.transform =
+                'rotate(0deg)';
+
+        },50);
+
+    }
+
+
+    isFetching = false;
+
+}
+
+
+/* =========================================================
+   PARA BİRİMİ
+========================================================= */
+
+function setCurrency(curr,btn){
+
+    currentCurrency = curr;
+
+
+    document
+        .querySelectorAll('.tab')
+        .forEach(t =>
+            t.classList.remove('active')
+        );
+
+
+    btn.classList.add('active');
+
+
+    const index =
+        parseInt(
+            btn.getAttribute('data-index')
+        );
+
+
+    document
+        .getElementById('tabIndicator')
+        .style.transform =
+        `translateX(${index * 100}%)`;
+
+
+    document
+        .getElementById('miniCoin')
+        .innerText =
+        getCoinSymbol(curr);
+
+
+    calculate();
+
+    updateChart();
+
+}
+
+
+/* =========================================================
+   HESAPLAMA
+========================================================= */
+
+function calculate(){
+
+    const amount =
+        parseFloat(
+            document
+                .getElementById('amount')
+                .value
+        ) || 0;
+
+
+    const rawRate =
+        rates[currentCurrency];
+
+
+    /*
+       %4 KOMİSYON
+    */
+
+    const finalRate =
+        rawRate * COMMISSION;
+
+
+    const total =
+        Math.round(
+            amount * finalRate
+        );
+
+
+    const resultBox =
+        document
+            .getElementById('resultBox');
+
+
+    const resultText =
+        document
+            .getElementById('resultText');
+
+
+    resultText.innerText =
+        total.toLocaleString('ru-RU')
+        + " RUB";
+
+
+    document
+        .getElementById('rateText')
+        .innerText =
+        `Kurs: ${finalRate.toFixed(2)} RUB`;
+
+
+    document
+        .getElementById('marketPairText')
+        .innerText =
+        `${currentCurrency} / RUB`;
+
+
+    document
+        .getElementById('marketPrice')
+        .innerText =
+        finalRate.toFixed(2);
+
+
+    /*
+       Sonuç animasyonu
+    */
+
+    const newResult =
+        `${total}-${currentCurrency}-${amount}`;
+
+
+    if(lastResult !== newResult){
+
+        resultText
+            .classList
+            .remove('bump');
+
+
+        void resultText.offsetWidth;
+
+
+        resultText
+            .classList
+            .add('bump');
+
+
+        lastResult =
+            newResult;
+
+    }
+
+
+    resultBox
+        .classList
+        .add('glow');
+
+
+    clearTimeout(
+        glowTimeout
+    );
+
+
+    glowTimeout =
+        setTimeout(()=>{
+
+            resultBox
+                .classList
+                .remove('glow');
+
+        },800);
+
+
+    /*
+       WhatsApp mesajı
+    */
+
+    const message =
+        `Walýuta: ${currentCurrency}%0A` +
+        `Mukdar: ${amount}%0A` +
+        `Kurs: ${finalRate.toFixed(2)} RUB%0A` +
+        `Jemi: ${total} RUB`;
+
+
+    document
+        .getElementById('whatsappBtn')
+        .href =
+        `https://wa.me/${PHONE}?text=${message}`;
+
+}
+
+
+/* =========================================================
+   OTOMATİK KUR YENİLEME
+========================================================= */
+
+/*
+   Her 60 saniyede API kontrol edilir.
+*/
+
+function startAutoRefresh(){
+
+    clearInterval(autoRefreshTimer);
+
+    clearInterval(countdownTimer);
+
+
+    countdown = 60;
+
+
+    updateCountdown();
+
+
+    /*
+       1 saniyelik sayaç
+    */
+
+    countdownTimer =
+        setInterval(()=>{
+
+            countdown--;
+
+            if(countdown <= 0){
+
+                countdown = 60;
+
+            }
+
+            updateCountdown();
+
+        },1000);
+
+
+    /*
+       60 saniyede bir gerçek API isteği
+    */
+
+    autoRefreshTimer =
+        setInterval(()=>{
+
+            fetchRates(false);
+
+        },60000);
+
+}
+
+
+/* =========================================================
+   SAYACI GÜNCELLE
+========================================================= */
+
+function updateCountdown(){
+
+    const element =
+        document.getElementById(
+            'nextRefresh'
+        );
+
+
+    if(!element)
+        return;
+
+
+    element.innerText =
+        `Indiki täzelenme: ${countdown}s`;
+
+}
+
+
+/* =========================================================
+   SAYACI SIFIRLA
+========================================================= */
+
+function resetCountdown(){
+
+    countdown = 60;
+
+    updateCountdown();
+
+}
+
+
+/* =========================================================
+   ZOOM ENGELLEME
+========================================================= */
+
+document.addEventListener(
+    'gesturestart',
+    e => e.preventDefault()
+);
+
+
+document.addEventListener(
+    'dblclick',
+    e => e.preventDefault()
+);
+
+
+/* =========================================================
+   BAŞLANGIÇ
+========================================================= */
+
+window.onload = ()=>{
+
+    calculate();
+
+};
+
+</script>
+
+</body>
+</html>
