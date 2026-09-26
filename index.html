@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Выбор услуги</title>
+<style>
+:root {
+  --bg: #F7F5F0;
+  --ink: #1C1C1C;
+  --teal: #0F3D3E;
+  --gold: #C9A227;
+  --clay: #B5442E;
+  --line: #DDD8CC;
+  font-family: system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); line-height: 1.5; }
+.topbar { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--line); }
+.mark { font-weight: 700; letter-spacing: -0.01em; color: var(--teal); }
+main { max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+.hero h1 { font-size: clamp(1.75rem, 4vw, 2.5rem); margin: 0 0 0.4rem; color: var(--teal); }
+.hero .sub { color: #555; margin: 0 0 2rem; }
+.services { display: grid; gap: 1rem; }
+.card { background: #fff; border: 1px solid var(--line); border-left: 4px solid var(--gold);
+  border-radius: 6px; padding: 1.25rem 1.5rem; cursor: pointer; }
+.card:nth-child(2) { border-left-color: var(--clay); }
+.card:nth-child(3) { border-left-color: var(--teal); }
+.card h2 { margin: 0 0 0.2rem; font-size: 1.15rem; }
+.card .tagline { margin: 0 0 0.5rem; color: var(--teal); font-size: 0.9rem; }
+.card .desc { margin: 0 0 0.75rem; color: #444; font-size: 0.95rem; }
+.card .cta { font-weight: 600; color: var(--clay); }
+.panel { background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 1.5rem; }
+.back { background: none; border: none; color: var(--teal); cursor: pointer; padding: 0;
+  margin-bottom: 1rem; font-size: 0.95rem; }
+#request-form { display: grid; gap: 0.9rem; margin-top: 1rem; }
+#request-form label { display: grid; gap: 0.3rem; font-size: 0.9rem; color: #333; }
+#request-form input, #request-form select, #request-form textarea {
+  font: inherit; padding: 0.55rem 0.7rem; border: 1px solid var(--line); border-radius: 4px; }
+#request-form button { justify-self: start; background: var(--teal); color: #fff; border: none;
+  padding: 0.65rem 1.4rem; border-radius: 4px; font: inherit; cursor: pointer; }
+footer { max-width: 720px; margin: 0 auto; padding: 0 1.5rem 2rem; color: #777; font-size: 0.85rem; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <span class="mark">Ватан Сервис</span>
+</header>
+
+<main>
+  <section class="hero">
+    <h1>Какая услуга нужна?</h1>
+    <p class="sub">Выберите, что хотите сделать — дальше проведём по шагам.</p>
+  </section>
+
+  <section class="services" id="services"></section>
+
+  <section class="panel" id="panel" hidden>
+    <button class="back" id="back">← Назад к услугам</button>
+    <div id="panel-body"></div>
+  </section>
+</main>
+
+<footer>
+  <p>Это демонстрационная витрина без реальных платежей. Обработку сумм и приём оплаты нужно подключать через отдельного платёжного провайдера.</p>
+</footer>
+
+<script>
+// ЗАМЕНИТЕ на свой юзернейм в Telegram (без @) — сюда будут уходить заявки.
+const TELEGRAM_USERNAME = "your_telegram_username";
+
+// Список услуг. Чтобы добавить новую услугу — просто добавьте объект в этот массив.
+const SERVICES = [
+  {
+    id: "study",
+    title: "Помощь по учёбе",
+    tagline: "Документы, поступление, сопровождение",
+    description:
+      "Помощь иностранным студентам с оформлением документов в РФ: миграционный учёт, договор с вузом, справки, продление визы/патента.",
+    fields: [
+      { name: "topic", label: "Что нужно сделать", type: "select",
+        options: ["Миграционный учёт", "Договор с вузом / оплата обучения", "Справки и переводы документов", "Другое"] },
+      { name: "details", label: "Кратко опишите вопрос", type: "textarea" }
+    ]
+  },
+  {
+    id: "transfer",
+    title: "Перевод денег",
+    tagline: "Отправка средств в Туркменистан",
+    description:
+      "Помощь с переводом денег родственникам или на собственные нужды. Уточним сумму, курс и способ получения.",
+    fields: [
+      { name: "amount", label: "Сумма перевода", type: "text" },
+      { name: "city", label: "Город получения в Туркменистане", type: "text" }
+    ]
+  },
+  {
+    id: "topup",
+    title: "Пополнение баланса",
+    tagline: "TMCELL, Wi-Fi, Belet Film и другие",
+    description:
+      "Пополнение мобильного счёта, домашнего интернета или подписок для родных в Туркменистане.",
+    fields: [
+      { name: "service", label: "Какой сервис пополнить", type: "select",
+        options: ["TMCELL", "Домашний Wi-Fi", "Belet Film", "Другое"] },
+      { name: "number", label: "Номер / логин счёта", type: "text" }
+    ]
+  }
+];
+
+const servicesEl = document.getElementById("services");
+const panelEl = document.getElementById("panel");
+const panelBody = document.getElementById("panel-body");
+const backBtn = document.getElementById("back");
+
+function renderCards() {
+  servicesEl.innerHTML = SERVICES.map(s => `
+    <article class="card" data-id="${s.id}" tabindex="0" role="button">
+      <h2>${s.title}</h2>
+      <p class="tagline">${s.tagline}</p>
+      <p class="desc">${s.description}</p>
+      <span class="cta">Выбрать →</span>
+    </article>
+  `).join("");
+
+  servicesEl.querySelectorAll(".card").forEach(card => {
+    card.addEventListener("click", () => openService(card.dataset.id));
+    card.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") openService(card.dataset.id);
+    });
+  });
+}
+
+function fieldHTML(f) {
+  if (f.type === "select") {
+    const opts = f.options.map(o => `<option>${o}</option>`).join("");
+    return `<label>${f.label}<select name="${f.name}">${opts}</select></label>`;
+  }
+  if (f.type === "textarea") {
+    return `<label>${f.label}<textarea name="${f.name}" rows="3"></textarea></label>`;
+  }
+  return `<label>${f.label}<input name="${f.name}" type="text"></label>`;
+}
+
+function openService(id) {
+  const service = SERVICES.find(s => s.id === id);
+  if (!service) return;
+
+  panelBody.innerHTML = `
+    <h2>${service.title}</h2>
+    <p class="desc">${service.description}</p>
+    <form id="request-form">
+      <label>Ваше имя<input name="name" type="text" required></label>
+      ${service.fields.map(fieldHTML).join("")}
+      <label>Телефон или Telegram для связи<input name="contact" type="text" required></label>
+      <button type="submit">Отправить заявку</button>
+    </form>
+  `;
+
+  document.getElementById("request-form").addEventListener("submit", e => {
+    e.preventDefault();
+    submitRequest(service, new FormData(e.target));
+  });
+
+  servicesEl.hidden = true;
+  document.querySelector(".hero").hidden = true;
+  panelEl.hidden = false;
+}
+
+function submitRequest(service, data) {
+  const lines = [`Заявка: ${service.title}`];
+  for (const [key, value] of data.entries()) {
+    if (value) lines.push(`${key}: ${value}`);
+  }
+  const text = encodeURIComponent(lines.join("\n"));
+  window.open(`https://t.me/${TELEGRAM_USERNAME}?text=${text}`, "_blank");
+}
+
+backBtn.addEventListener("click", () => {
+  panelEl.hidden = true;
+  servicesEl.hidden = false;
+  document.querySelector(".hero").hidden = false;
+});
+
+renderCards();
+</script>
+</body>
+</html>
