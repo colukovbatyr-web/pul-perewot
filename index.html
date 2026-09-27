@@ -1,0 +1,2183 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Pul Perewot — V15</title>
+
+<meta name="description" content="Pul Perewot V15">
+<meta name="theme-color" content="#07111f">
+
+<style>
+/* =========================================================
+   PUL PEREWOT V15
+   SINGLE FILE VERSION
+   ========================================================= */
+
+:root{
+    --bg:#050914;
+    --bg2:#081426;
+    --card:rgba(12,27,48,.78);
+    --card2:rgba(17,37,63,.9);
+    --blue:#1687ff;
+    --blue2:#42b8ff;
+    --cyan:#00eaff;
+    --green:#25e38a;
+    --red:#ff4d67;
+    --yellow:#ffd166;
+    --white:#f5f9ff;
+    --muted:#91a4bb;
+    --border:rgba(100,180,255,.16);
+    --shadow:0 20px 70px rgba(0,0,0,.45);
+    --radius:22px;
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    min-height:100vh;
+    font-family:Inter,Arial,Helvetica,sans-serif;
+    color:var(--white);
+    background:
+        radial-gradient(circle at 10% 10%,rgba(0,145,255,.18),transparent 30%),
+        radial-gradient(circle at 90% 20%,rgba(0,234,255,.12),transparent 25%),
+        radial-gradient(circle at 50% 90%,rgba(20,90,255,.12),transparent 30%),
+        var(--bg);
+    overflow-x:hidden;
+}
+
+/* Background effects */
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+    background-size:45px 45px;
+    mask-image:linear-gradient(to bottom,black,transparent);
+}
+
+.orb{
+    position:fixed;
+    width:300px;
+    height:300px;
+    border-radius:50%;
+    filter:blur(90px);
+    opacity:.18;
+    pointer-events:none;
+    z-index:-1;
+    animation:floatOrb 9s ease-in-out infinite alternate;
+}
+
+.orb.one{
+    background:#008cff;
+    top:5%;
+    left:-120px;
+}
+
+.orb.two{
+    background:#00eaff;
+    right:-120px;
+    top:40%;
+    animation-delay:2s;
+}
+
+.orb.three{
+    background:#6842ff;
+    bottom:-120px;
+    left:35%;
+    animation-delay:4s;
+}
+
+@keyframes floatOrb{
+    from{transform:translate(0,0) scale(1)}
+    to{transform:translate(50px,-30px) scale(1.15)}
+}
+
+/* Header */
+
+header{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    height:76px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 5%;
+    background:rgba(4,10,20,.72);
+    backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--border);
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-weight:900;
+    font-size:21px;
+    letter-spacing:-.5px;
+}
+
+.logo-icon{
+    width:42px;
+    height:42px;
+    border-radius:13px;
+    display:grid;
+    place-items:center;
+    background:linear-gradient(135deg,var(--blue),var(--cyan));
+    color:#001120;
+    font-weight:1000;
+    box-shadow:0 0 35px rgba(0,174,255,.35);
+}
+
+.logo span{
+    color:var(--blue2);
+}
+
+nav{
+    display:flex;
+    gap:8px;
+}
+
+nav a{
+    color:#c9d8e8;
+    text-decoration:none;
+    padding:10px 14px;
+    border-radius:12px;
+    transition:.25s;
+    font-size:14px;
+}
+
+nav a:hover{
+    background:rgba(30,145,255,.12);
+    color:white;
+}
+
+.header-actions{
+    display:flex;
+    gap:10px;
+    align-items:center;
+}
+
+.btn{
+    border:0;
+    cursor:pointer;
+    color:white;
+    font-weight:800;
+    border-radius:13px;
+    padding:12px 18px;
+    transition:.25s;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+}
+
+.btn-primary{
+    background:linear-gradient(135deg,#087cff,#00b8ff);
+    box-shadow:0 10px 30px rgba(0,140,255,.25);
+}
+
+.btn-dark{
+    background:rgba(255,255,255,.06);
+    border:1px solid var(--border);
+}
+
+.btn-danger{
+    background:linear-gradient(135deg,#ff3154,#bd1738);
+}
+
+.mobile-menu{
+    display:none;
+    font-size:25px;
+    cursor:pointer;
+}
+
+/* Hero */
+
+.hero{
+    max-width:1250px;
+    margin:auto;
+    padding:95px 5% 70px;
+    min-height:650px;
+    display:grid;
+    grid-template-columns:1.1fr .9fr;
+    gap:50px;
+    align-items:center;
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 13px;
+    border:1px solid rgba(40,160,255,.25);
+    background:rgba(20,120,255,.08);
+    color:#65c7ff;
+    border-radius:50px;
+    font-size:13px;
+    margin-bottom:22px;
+}
+
+.status-dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#25e38a;
+    box-shadow:0 0 15px #25e38a;
+}
+
+.hero h1{
+    font-size:clamp(44px,7vw,82px);
+    line-height:.95;
+    letter-spacing:-4px;
+    margin-bottom:24px;
+}
+
+.hero h1 .gradient{
+    background:linear-gradient(90deg,#fff,#4cc9ff,#1687ff);
+    -webkit-background-clip:text;
+    color:transparent;
+}
+
+.hero p{
+    color:var(--muted);
+    font-size:18px;
+    line-height:1.7;
+    max-width:620px;
+}
+
+.hero-buttons{
+    display:flex;
+    gap:12px;
+    margin-top:30px;
+    flex-wrap:wrap;
+}
+
+.hero-stats{
+    display:flex;
+    gap:30px;
+    margin-top:42px;
+}
+
+.stat strong{
+    display:block;
+    font-size:26px;
+}
+
+.stat span{
+    color:var(--muted);
+    font-size:12px;
+}
+
+/* Main panel */
+
+.main-card{
+    position:relative;
+    padding:30px;
+    border:1px solid var(--border);
+    border-radius:30px;
+    background:linear-gradient(145deg,rgba(15,36,62,.88),rgba(5,14,27,.88));
+    box-shadow:var(--shadow);
+    overflow:hidden;
+}
+
+.main-card::before{
+    content:"";
+    position:absolute;
+    width:220px;
+    height:220px;
+    border-radius:50%;
+    background:#008cff;
+    filter:blur(90px);
+    opacity:.12;
+    top:-120px;
+    right:-80px;
+}
+
+.card-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:24px;
+}
+
+.card-title h2{
+    font-size:21px;
+}
+
+.version{
+    font-size:11px;
+    color:#68caff;
+    padding:7px 10px;
+    border-radius:9px;
+    background:rgba(0,160,255,.1);
+    border:1px solid rgba(0,160,255,.2);
+}
+
+/* Converter */
+
+.field{
+    margin-bottom:16px;
+}
+
+.field label{
+    display:block;
+    color:#9db0c5;
+    font-size:12px;
+    margin-bottom:8px;
+}
+
+.input-wrap{
+    display:flex;
+    align-items:center;
+    background:#071323;
+    border:1px solid rgba(100,180,255,.13);
+    border-radius:14px;
+    overflow:hidden;
+}
+
+.input-wrap input,
+.input-wrap select{
+    width:100%;
+    border:0;
+    outline:0;
+    background:transparent;
+    color:white;
+    padding:15px;
+    font-size:15px;
+}
+
+.input-wrap select option{
+    background:#081426;
+}
+
+.currency{
+    padding:0 15px;
+    color:#65c7ff;
+    font-weight:800;
+    white-space:nowrap;
+}
+
+.swap{
+    width:42px;
+    height:42px;
+    margin:4px auto;
+    border-radius:50%;
+    border:1px solid rgba(0,180,255,.2);
+    background:#0b2037;
+    color:#65c7ff;
+    display:grid;
+    place-items:center;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.swap:hover{
+    transform:rotate(180deg);
+    background:#0d3152;
+}
+
+.result{
+    margin-top:20px;
+    padding:20px;
+    border-radius:18px;
+    background:linear-gradient(135deg,rgba(0,132,255,.12),rgba(0,229,255,.05));
+    border:1px solid rgba(0,168,255,.18);
+}
+
+.result small{
+    color:var(--muted);
+}
+
+.result-value{
+    font-size:30px;
+    font-weight:900;
+    margin-top:5px;
+}
+
+.result-rate{
+    color:#5bcaff;
+    font-size:12px;
+    margin-top:6px;
+}
+
+.full{
+    width:100%;
+}
+
+/* Sections */
+
+.section{
+    max-width:1250px;
+    margin:auto;
+    padding:80px 5%;
+}
+
+.section-heading{
+    margin-bottom:35px;
+}
+
+.section-heading span{
+    color:#48c1ff;
+    font-size:13px;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:2px;
+}
+
+.section-heading h2{
+    margin-top:8px;
+    font-size:38px;
+}
+
+.section-heading p{
+    color:var(--muted);
+    margin-top:10px;
+}
+
+/* Cards */
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+}
+
+.info-card{
+    padding:27px;
+    border-radius:20px;
+    border:1px solid var(--border);
+    background:rgba(10,26,45,.68);
+    transition:.3s;
+}
+
+.info-card:hover{
+    transform:translateY(-6px);
+    border-color:rgba(40,170,255,.3);
+    box-shadow:0 20px 50px rgba(0,0,0,.25);
+}
+
+.icon{
+    width:48px;
+    height:48px;
+    border-radius:14px;
+    display:grid;
+    place-items:center;
+    background:rgba(0,145,255,.12);
+    color:#51c5ff;
+    font-size:21px;
+    margin-bottom:20px;
+}
+
+.info-card h3{
+    margin-bottom:10px;
+}
+
+.info-card p{
+    color:var(--muted);
+    line-height:1.6;
+    font-size:14px;
+}
+
+/* History */
+
+.table-wrap{
+    overflow:auto;
+    border-radius:20px;
+    border:1px solid var(--border);
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:600px;
+}
+
+th,td{
+    text-align:left;
+    padding:17px;
+    border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+th{
+    color:#75cfff;
+    background:rgba(0,130,255,.07);
+    font-size:12px;
+}
+
+td{
+    color:#c5d3e2;
+    font-size:14px;
+}
+
+.status{
+    display:inline-flex;
+    padding:5px 9px;
+    border-radius:8px;
+    font-size:11px;
+    font-weight:800;
+}
+
+.status.success{
+    background:rgba(37,227,138,.1);
+    color:#3cf19c;
+}
+
+.status.pending{
+    background:rgba(255,209,102,.1);
+    color:#ffd166;
+}
+
+/* Admin */
+
+.admin-section{
+    display:none;
+}
+
+.admin-panel{
+    padding:30px;
+    border-radius:25px;
+    border:1px solid rgba(0,160,255,.18);
+    background:rgba(6,19,34,.9);
+}
+
+.admin-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    margin-bottom:30px;
+}
+
+.admin-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+}
+
+.admin-stat{
+    padding:20px;
+    border-radius:16px;
+    background:#0a1a2e;
+    border:1px solid var(--border);
+}
+
+.admin-stat span{
+    display:block;
+    color:var(--muted);
+    font-size:12px;
+    margin-bottom:8px;
+}
+
+.admin-stat strong{
+    font-size:25px;
+}
+
+.admin-tools{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+    margin-top:20px;
+}
+
+.tool-box{
+    padding:22px;
+    border-radius:18px;
+    background:#081525;
+    border:1px solid var(--border);
+}
+
+.tool-box h3{
+    margin-bottom:15px;
+}
+
+.tool-box input,
+.tool-box textarea{
+    width:100%;
+    padding:13px;
+    margin-bottom:10px;
+    border-radius:11px;
+    border:1px solid var(--border);
+    background:#050e1a;
+    color:white;
+    outline:none;
+}
+
+.tool-box textarea{
+    min-height:120px;
+    resize:vertical;
+}
+
+/* Modal */
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:5000;
+    background:rgba(0,0,0,.72);
+    backdrop-filter:blur(12px);
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.modal.active{
+    display:flex;
+}
+
+.modal-box{
+    width:100%;
+    max-width:430px;
+    padding:32px;
+    border-radius:25px;
+    border:1px solid var(--border);
+    background:#081524;
+    box-shadow:0 30px 100px rgba(0,0,0,.65);
+    animation:modalIn .35s ease;
+}
+
+@keyframes modalIn{
+    from{
+        opacity:0;
+        transform:translateY(20px) scale(.96);
+    }
+    to{
+        opacity:1;
+        transform:none;
+    }
+}
+
+.modal-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.close{
+    border:0;
+    background:transparent;
+    color:#7890a8;
+    font-size:25px;
+    cursor:pointer;
+}
+
+.password-box{
+    position:relative;
+}
+
+.password-box input{
+    width:100%;
+    padding:15px 50px 15px 15px;
+    border-radius:13px;
+    border:1px solid var(--border);
+    background:#050e1a;
+    color:white;
+    outline:none;
+}
+
+.toggle-pass{
+    position:absolute;
+    right:12px;
+    top:50%;
+    transform:translateY(-50%);
+    border:0;
+    background:none;
+    color:#6f879e;
+    cursor:pointer;
+}
+
+.error{
+    display:none;
+    margin-top:10px;
+    color:#ff7185;
+    font-size:12px;
+}
+
+.login-info{
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.6;
+    margin-top:15px;
+}
+
+/* Toast */
+
+.toast{
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    z-index:9999;
+    min-width:270px;
+    max-width:380px;
+    padding:16px 18px;
+    border-radius:15px;
+    background:#0c2036;
+    border:1px solid rgba(0,170,255,.25);
+    box-shadow:0 20px 60px rgba(0,0,0,.4);
+    transform:translateY(130px);
+    opacity:0;
+    transition:.35s;
+}
+
+.toast.show{
+    transform:translateY(0);
+    opacity:1;
+}
+
+.toast-title{
+    font-weight:900;
+    margin-bottom:4px;
+}
+
+.toast-text{
+    color:#9db0c5;
+    font-size:13px;
+}
+
+/* Footer */
+
+footer{
+    border-top:1px solid var(--border);
+    padding:40px 5%;
+    background:rgba(2,7,14,.65);
+}
+
+.footer-inner{
+    max-width:1250px;
+    margin:auto;
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+footer p{
+    color:#71869b;
+    font-size:13px;
+}
+
+.footer-links{
+    display:flex;
+    gap:18px;
+}
+
+.footer-links a{
+    color:#7890a8;
+    text-decoration:none;
+    font-size:13px;
+}
+
+/* Reveal animation */
+
+.reveal{
+    opacity:0;
+    transform:translateY(25px);
+    transition:.7s ease;
+}
+
+.reveal.visible{
+    opacity:1;
+    transform:none;
+}
+
+/* Responsive */
+
+@media(max-width:950px){
+
+    nav{
+        display:none;
+    }
+
+    .mobile-menu{
+        display:block;
+    }
+
+    .hero{
+        grid-template-columns:1fr;
+        padding-top:60px;
+    }
+
+    .cards{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .admin-grid{
+        grid-template-columns:1fr 1fr;
+    }
+}
+
+@media(max-width:650px){
+
+    header{
+        padding:0 18px;
+    }
+
+    .header-actions .btn-dark{
+        display:none;
+    }
+
+    .hero{
+        padding:55px 18px;
+    }
+
+    .hero h1{
+        font-size:48px;
+        letter-spacing:-2px;
+    }
+
+    .hero p{
+        font-size:15px;
+    }
+
+    .hero-stats{
+        gap:18px;
+    }
+
+    .main-card{
+        padding:20px;
+    }
+
+    .section{
+        padding:60px 18px;
+    }
+
+    .section-heading h2{
+        font-size:30px;
+    }
+
+    .cards{
+        grid-template-columns:1fr;
+    }
+
+    .admin-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .admin-tools{
+        grid-template-columns:1fr;
+    }
+
+    .footer-inner{
+        flex-direction:column;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="orb one"></div>
+<div class="orb two"></div>
+<div class="orb three"></div>
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header>
+
+    <div class="logo">
+        <div class="logo-icon">P</div>
+        <div>Pul <span>Perewot</span></div>
+    </div>
+
+    <nav>
+        <a href="#home">Ana Sayfa</a>
+        <a href="#services">Hizmetler</a>
+        <a href="#converter">Çevirici</a>
+        <a href="#history">Geçmiş</a>
+        <a href="#about">Hakkında</a>
+    </nav>
+
+    <div class="header-actions">
+        <button class="btn btn-dark" onclick="openLogin()">
+            Admin
+        </button>
+
+        <button class="btn btn-primary" onclick="scrollToConverter()">
+            Başla
+        </button>
+    </div>
+
+    <div class="mobile-menu" onclick="mobileNav()">
+        ☰
+    </div>
+
+</header>
+
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+
+<main>
+
+<section class="hero" id="home">
+
+    <div class="reveal">
+
+        <div class="badge">
+            <span class="status-dot"></span>
+            Sistem aktif — V15
+        </div>
+
+        <h1>
+            Pul Perewot
+            <br>
+            <span class="gradient">V15</span>
+        </h1>
+
+        <p>
+            Hızlı, modern ve kullanımı kolay para dönüşüm
+            ve transfer arayüzü. V15 sürümü yeni animasyonlar,
+            yönetim paneli ve gelişmiş kullanıcı arayüzü ile
+            hazırlanmıştır.
+        </p>
+
+        <div class="hero-buttons">
+            <button class="btn btn-primary" onclick="scrollToConverter()">
+                Para Çevir
+            </button>
+
+            <button class="btn btn-dark" onclick="openLogin()">
+                Admin Paneli
+            </button>
+        </div>
+
+        <div class="hero-stats">
+
+            <div class="stat">
+                <strong>V15</strong>
+                <span>Sürüm</span>
+            </div>
+
+            <div class="stat">
+                <strong>24/7</strong>
+                <span>Erişim</span>
+            </div>
+
+            <div class="stat">
+                <strong>100%</strong>
+                <span>Responsive</span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Converter card -->
+
+    <div class="main-card reveal" id="converter">
+
+        <div class="card-title">
+            <h2>Para Çevirici</h2>
+            <span class="version">V15 PREMIUM</span>
+        </div>
+
+        <div class="field">
+            <label>Gönderen para birimi</label>
+
+            <div class="input-wrap">
+
+                <input
+                    type="number"
+                    id="amount"
+                    value="1000"
+                    min="0"
+                    oninput="calculate()"
+                >
+
+                <select id="fromCurrency" onchange="calculate()">
+                    <option value="TRY">TRY</option>
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="RUB">RUB</option>
+                    <option value="GBP">GBP</option>
+                    <option value="TMT">TMT</option>
+                </select>
+
+            </div>
+        </div>
+
+
+        <button class="swap" onclick="swapCurrencies()">
+            ⇅
+        </button>
+
+
+        <div class="field">
+            <label>Alınacak para birimi</label>
+
+            <div class="input-wrap">
+
+                <input
+                    type="number"
+                    id="resultInput"
+                    readonly
+                >
+
+                <select id="toCurrency" onchange="calculate()">
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="TRY">TRY</option>
+                    <option value="RUB">RUB</option>
+                    <option value="GBP">GBP</option>
+                    <option value="TMT">TMT</option>
+                </select>
+
+            </div>
+        </div>
+
+
+        <div class="result">
+
+            <small>Yaklaşık sonuç</small>
+
+            <div class="result-value" id="resultValue">
+                0.00 USD
+            </div>
+
+            <div class="result-rate" id="rateText">
+                1 TRY ≈ 0.025 USD
+            </div>
+
+        </div>
+
+        <button
+            class="btn btn-primary full"
+            style="margin-top:16px"
+            onclick="showToast('İşlem hazır','Demo dönüşüm işlemi başlatıldı.')"
+        >
+            İşleme Devam Et
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     SERVICES
+========================================================= -->
+
+<section class="section" id="services">
+
+    <div class="section-heading reveal">
+        <span>Özellikler</span>
+        <h2>V15 ile gelenler</h2>
+        <p>
+            Yeni arayüz ve yönetim özellikleri.
+        </p>
+    </div>
+
+
+    <div class="cards">
+
+        <div class="info-card reveal">
+
+            <div class="icon">⚡</div>
+
+            <h3>Hızlı Arayüz</h3>
+
+            <p>
+                Hafif ve modern tasarım sayesinde
+                mobil ve masaüstünde hızlı kullanım.
+            </p>
+
+        </div>
+
+
+        <div class="info-card reveal">
+
+            <div class="icon">🔐</div>
+
+            <h3>Admin Paneli</h3>
+
+            <p>
+                Yönetim panelinden sistem istatistikleri
+                ve demo ayarları kontrol edilebilir.
+            </p>
+
+        </div>
+
+
+        <div class="info-card reveal">
+
+            <div class="icon">📱</div>
+
+            <h3>Mobil Uyum</h3>
+
+            <p>
+                Telefon, tablet ve bilgisayarlarda
+                responsive görünüm.
+            </p>
+
+        </div>
+
+
+        <div class="info-card reveal">
+
+            <div class="icon">🔄</div>
+
+            <h3>Dönüşüm</h3>
+
+            <p>
+                Birden fazla para birimi arasında
+                hızlı demo hesaplama.
+            </p>
+
+        </div>
+
+
+        <div class="info-card reveal">
+
+            <div class="icon">✨</div>
+
+            <h3>Animasyonlar</h3>
+
+            <p>
+                Geçişler, kart efektleri ve arka plan
+                animasyonları ile V15 görünümü.
+            </p>
+
+        </div>
+
+
+        <div class="info-card reveal">
+
+            <div class="icon">🛠</div>
+
+            <h3>Yönetilebilir</h3>
+
+            <p>
+                Admin bölümünde sistem bilgileri ve
+                içerik alanları için demo araçları.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     HISTORY
+========================================================= -->
+
+<section class="section" id="history">
+
+    <div class="section-heading reveal">
+
+        <span>İşlemler</span>
+
+        <h2>Son işlemler</h2>
+
+        <p>
+            Demo işlem geçmişi.
+        </p>
+
+    </div>
+
+
+    <div class="table-wrap reveal">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Tarih</th>
+                    <th>Gönderen</th>
+                    <th>Alan</th>
+                    <th>Tutar</th>
+                    <th>Durum</th>
+                </tr>
+            </thead>
+
+            <tbody id="historyTable">
+
+                <tr>
+                    <td>Bugün</td>
+                    <td>TRY</td>
+                    <td>USD</td>
+                    <td>1,000 TRY</td>
+                    <td>
+                        <span class="status success">
+                            Tamamlandı
+                        </span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Dün</td>
+                    <td>EUR</td>
+                    <td>TRY</td>
+                    <td>250 EUR</td>
+                    <td>
+                        <span class="status success">
+                            Tamamlandı
+                        </span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>25.09.2026</td>
+                    <td>USD</td>
+                    <td>RUB</td>
+                    <td>500 USD</td>
+                    <td>
+                        <span class="status pending">
+                            Bekliyor
+                        </span>
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     ABOUT
+========================================================= -->
+
+<section class="section" id="about">
+
+    <div class="section-heading reveal">
+
+        <span>V15</span>
+
+        <h2>Pul Perewot hakkında</h2>
+
+        <p>
+            Bu sayfa tek HTML dosyası içinde çalışan bağımsız
+            bir V15 arayüz örneğidir.
+        </p>
+
+    </div>
+
+
+    <div class="cards">
+
+        <div class="info-card reveal">
+
+            <div class="icon">🚀</div>
+
+            <h3>Modern yapı</h3>
+
+            <p>
+                CSS ve JavaScript aynı dosya içinde
+                çalışacak şekilde hazırlanmıştır.
+            </p>
+
+        </div>
+
+
+        <div class="info-card reveal">
+
+            <div class="icon">💻</div>
+
+            <h3>Tek dosya</h3>
+
+            <p>
+                Harici framework gerektirmeden
+                index.html üzerinden çalışabilir.
+            </p>
+
+        </div>
+
+
+        <div class="info-card reveal">
+
+            <div class="icon">🔒</div>
+
+            <h3>Admin sistemi</h3>
+
+            <p>
+                Demo admin giriş ekranı ve dashboard
+                bu sürümün içinde bulunmaktadır.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     ADMIN SECTION
+========================================================= -->
+
+<section class="section admin-section" id="adminSection">
+
+    <div class="admin-panel">
+
+        <div class="admin-top">
+
+            <div>
+                <span style="color:#54c6ff;font-size:12px;">
+                    YÖNETİM PANELİ
+                </span>
+
+                <h2 style="margin-top:5px;">
+                    Pul Perewot Admin
+                </h2>
+            </div>
+
+            <button
+                class="btn btn-danger"
+                onclick="logoutAdmin()"
+            >
+                Çıkış
+            </button>
+
+        </div>
+
+
+        <div class="admin-grid">
+
+            <div class="admin-stat">
+                <span>Toplam işlem</span>
+                <strong id="adminTransactions">1,248</strong>
+            </div>
+
+            <div class="admin-stat">
+                <span>Aktif kullanıcı</span>
+                <strong>327</strong>
+            </div>
+
+            <div class="admin-stat">
+                <span>Bugünkü işlem</span>
+                <strong>84</strong>
+            </div>
+
+            <div class="admin-stat">
+                <span>Sistem</span>
+                <strong style="color:#35e99a;">
+                    AKTİF
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="admin-tools">
+
+            <div class="tool-box">
+
+                <h3>Site başlığı</h3>
+
+                <input
+                    id="siteTitle"
+                    value="Pul Perewot V15"
+                >
+
+                <button
+                    class="btn btn-primary"
+                    onclick="saveSiteTitle()"
+                >
+                    Kaydet
+                </button>
+
+            </div>
+
+
+            <div class="tool-box">
+
+                <h3>Admin mesajı</h3>
+
+                <textarea id="adminMessage">Sistem aktif.</textarea>
+
+                <button
+                    class="btn btn-primary"
+                    onclick="saveAdminMessage()"
+                >
+                    Kaydet
+                </button>
+
+            </div>
+
+
+            <div class="tool-box">
+
+                <h3>Demo işlem ekle</h3>
+
+                <input
+                    id="demoAmount"
+                    placeholder="Tutar"
+                >
+
+                <button
+                    class="btn btn-primary"
+                    onclick="addDemoTransaction()"
+                >
+                    İşlem ekle
+                </button>
+
+            </div>
+
+
+            <div class="tool-box">
+
+                <h3>Sistem durumu</h3>
+
+                <p
+                    id="systemStatus"
+                    style="
+                        color:#35e99a;
+                        margin-bottom:15px;
+                    "
+                >
+                    ● Sistem normal çalışıyor
+                </p>
+
+                <button
+                    class="btn btn-dark"
+                    onclick="checkSystem()"
+                >
+                    Kontrol et
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer>
+
+    <div class="footer-inner">
+
+        <div>
+            <div class="logo">
+                <div class="logo-icon">P</div>
+                <div>Pul <span>Perewot</span></div>
+            </div>
+
+            <p style="margin-top:12px;">
+                V15 • BLUE PREMIUM
+            </p>
+        </div>
+
+
+        <div class="footer-links">
+            <a href="#home">Ana Sayfa</a>
+            <a href="#services">Hizmetler</a>
+            <a href="#about">Hakkında</a>
+            <a href="#" onclick="openLogin();return false;">
+                Admin
+            </a>
+        </div>
+
+    </div>
+
+</footer>
+
+
+<!-- =========================================================
+     LOGIN MODAL
+========================================================= -->
+
+<div class="modal" id="loginModal">
+
+    <div class="modal-box">
+
+        <div class="modal-head">
+
+            <div>
+                <span
+                    style="
+                        color:#54c6ff;
+                        font-size:11px;
+                        font-weight:800;
+                    "
+                >
+                    V15 ADMIN
+                </span>
+
+                <h2 style="margin-top:5px;">
+                    Yönetici Girişi
+                </h2>
+            </div>
+
+            <button
+                class="close"
+                onclick="closeLogin()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>Admin şifresi</label>
+
+            <div class="password-box">
+
+                <input
+                    type="password"
+                    id="adminPassword"
+                    placeholder="Şifreyi girin"
+                    onkeydown="if(event.key==='Enter')loginAdmin()"
+                >
+
+                <button
+                    class="toggle-pass"
+                    onclick="togglePassword()"
+                >
+                    👁
+                </button>
+
+            </div>
+
+            <div
+                class="error"
+                id="loginError"
+            >
+                Şifre yanlış.
+            </div>
+
+        </div>
+
+
+        <button
+            class="btn btn-primary full"
+            onclick="loginAdmin()"
+        >
+            Admin Paneline Gir
+        </button>
+
+
+        <p class="login-info">
+            V15 demo yönetim sistemi.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     TOAST
+========================================================= -->
+
+<div class="toast" id="toast">
+
+    <div class="toast-title" id="toastTitle">
+        Bildirim
+    </div>
+
+    <div class="toast-text" id="toastText">
+        İşlem tamamlandı.
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   PUL PEREWOT V15 JAVASCRIPT
+========================================================= */
+
+
+/* ---------------------------------------------------------
+   DEMO ADMIN
+--------------------------------------------------------- */
+
+const ADMIN_PASSWORD = "serdar15";
+
+
+/* ---------------------------------------------------------
+   CURRENCY RATES
+   DEMO RATES
+--------------------------------------------------------- */
+
+const rates = {
+
+    TRY:{
+        USD:0.025,
+        EUR:0.021,
+        RUB:2.20,
+        GBP:0.018,
+        TMT:0.088
+    },
+
+    USD:{
+        TRY:40.00,
+        EUR:0.84,
+        RUB:88.00,
+        GBP:0.74,
+        TMT:3.50
+    },
+
+    EUR:{
+        TRY:47.60,
+        USD:1.19,
+        RUB:105.00,
+        GBP:0.88,
+        TMT:4.15
+    },
+
+    RUB:{
+        TRY:0.455,
+        USD:0.011,
+        EUR:0.0095,
+        GBP:0.0084,
+        TMT:0.040
+    },
+
+    GBP:{
+        TRY:54.00,
+        USD:1.35,
+        EUR:1.14,
+        RUB:119.00,
+        TMT:4.73
+    },
+
+    TMT:{
+        TRY:11.35,
+        USD:0.286,
+        EUR:0.241,
+        RUB:25.00,
+        GBP:0.211
+    }
+
+};
+
+
+/* ---------------------------------------------------------
+   CONVERTER
+--------------------------------------------------------- */
+
+function calculate(){
+
+    const amount =
+        parseFloat(
+            document.getElementById("amount").value
+        ) || 0;
+
+    const from =
+        document.getElementById("fromCurrency").value;
+
+    const to =
+        document.getElementById("toCurrency").value;
+
+    let rate = 1;
+
+    if(from !== to){
+
+        if(
+            rates[from] &&
+            rates[from][to]
+        ){
+            rate = rates[from][to];
+        }
+
+    }
+
+    const result = amount * rate;
+
+    document.getElementById("resultInput").value =
+        result.toFixed(2);
+
+    document.getElementById("resultValue").textContent =
+        result.toLocaleString("tr-TR",{
+            minimumFractionDigits:2,
+            maximumFractionDigits:2
+        }) + " " + to;
+
+    document.getElementById("rateText").textContent =
+        "1 " + from + " ≈ " +
+        rate.toFixed(4) + " " + to;
+
+}
+
+
+/* ---------------------------------------------------------
+   SWAP
+--------------------------------------------------------- */
+
+function swapCurrencies(){
+
+    const from =
+        document.getElementById("fromCurrency");
+
+    const to =
+        document.getElementById("toCurrency");
+
+    const temp = from.value;
+
+    from.value = to.value;
+    to.value = temp;
+
+    calculate();
+
+}
+
+
+/* ---------------------------------------------------------
+   SCROLL
+--------------------------------------------------------- */
+
+function scrollToConverter(){
+
+    document
+        .getElementById("converter")
+        .scrollIntoView({
+            behavior:"smooth",
+            block:"center"
+        });
+
+}
+
+
+/* ---------------------------------------------------------
+   LOGIN MODAL
+--------------------------------------------------------- */
+
+function openLogin(){
+
+    document
+        .getElementById("loginModal")
+        .classList.add("active");
+
+    setTimeout(function(){
+
+        document
+            .getElementById("adminPassword")
+            .focus();
+
+    },200);
+
+}
+
+
+function closeLogin(){
+
+    document
+        .getElementById("loginModal")
+        .classList.remove("active");
+
+    document
+        .getElementById("adminPassword")
+        .value="";
+
+    document
+        .getElementById("loginError")
+        .style.display="none";
+
+}
+
+
+function togglePassword(){
+
+    const input =
+        document.getElementById("adminPassword");
+
+    input.type =
+        input.type === "password"
+        ? "text"
+        : "password";
+
+}
+
+
+function loginAdmin(){
+
+    const password =
+        document.getElementById("adminPassword").value;
+
+    const error =
+        document.getElementById("loginError");
+
+    if(password === ADMIN_PASSWORD){
+
+        localStorage.setItem(
+            "pul_perewot_admin",
+            "true"
+        );
+
+        error.style.display="none";
+
+        closeLogin();
+
+        document
+            .getElementById("adminSection")
+            .style.display="block";
+
+        document
+            .getElementById("adminSection")
+            .scrollIntoView({
+                behavior:"smooth"
+            });
+
+        showToast(
+            "Giriş başarılı",
+            "Admin paneline hoş geldin."
+        );
+
+    }else{
+
+        error.style.display="block";
+
+        showToast(
+            "Giriş başarısız",
+            "Admin şifresi yanlış."
+        );
+
+    }
+
+}
+
+
+/* ---------------------------------------------------------
+   LOGOUT
+--------------------------------------------------------- */
+
+function logoutAdmin(){
+
+    localStorage.removeItem(
+        "pul_perewot_admin"
+    );
+
+    document
+        .getElementById("adminSection")
+        .style.display="none";
+
+    showToast(
+        "Çıkış yapıldı",
+        "Admin oturumu kapatıldı."
+    );
+
+}
+
+
+/* ---------------------------------------------------------
+   CHECK ADMIN SESSION
+--------------------------------------------------------- */
+
+function checkAdminSession(){
+
+    const logged =
+        localStorage.getItem(
+            "pul_perewot_admin"
+        );
+
+    if(logged === "true"){
+
+        document
+            .getElementById("adminSection")
+            .style.display="block";
+
+    }
+
+}
+
+
+/* ---------------------------------------------------------
+   TOAST
+--------------------------------------------------------- */
+
+let toastTimer;
+
+function showToast(title,text){
+
+    const toast =
+        document.getElementById("toast");
+
+    document
+        .getElementById("toastTitle")
+        .textContent = title;
+
+    document
+        .getElementById("toastText")
+        .textContent = text;
+
+    toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer = setTimeout(function(){
+
+        toast.classList.remove("show");
+
+    },3500);
+
+}
+
+
+/* ---------------------------------------------------------
+   ADMIN TOOLS
+--------------------------------------------------------- */
+
+function saveSiteTitle(){
+
+    const value =
+        document
+            .getElementById("siteTitle")
+            .value;
+
+    localStorage.setItem(
+        "pul_site_title",
+        value
+    );
+
+    showToast(
+        "Kaydedildi",
+        "Site başlığı güncellendi."
+    );
+
+}
+
+
+function saveAdminMessage(){
+
+    const value =
+        document
+            .getElementById("adminMessage")
+            .value;
+
+    localStorage.setItem(
+        "pul_admin_message",
+        value
+    );
+
+    showToast(
+        "Kaydedildi",
+        "Admin mesajı kaydedildi."
+    );
+
+}
+
+
+function addDemoTransaction(){
+
+    const amount =
+        document
+            .getElementById("demoAmount")
+            .value;
+
+    if(!amount){
+
+        showToast(
+            "Eksik bilgi",
+            "Önce bir tutar gir."
+        );
+
+        return;
+
+    }
+
+    const counter =
+        document
+            .getElementById("adminTransactions");
+
+    let number =
+        parseInt(counter.textContent.replace(/,/g,""))
+        || 0;
+
+    number++;
+
+    counter.textContent =
+        number.toLocaleString("tr-TR");
+
+    document
+        .getElementById("demoAmount")
+        .value="";
+
+    showToast(
+        "İşlem eklendi",
+        amount + " tutarında demo işlem oluşturuldu."
+    );
+
+}
+
+
+function checkSystem(){
+
+    document
+        .getElementById("systemStatus")
+        .textContent =
+        "● Sistem kontrol edildi — normal";
+
+    showToast(
+        "Sistem aktif",
+        "Tüm demo servisler çalışıyor."
+    );
+
+}
+
+
+/* ---------------------------------------------------------
+   MOBILE NAV
+--------------------------------------------------------- */
+
+function mobileNav(){
+
+    const nav =
+        document.querySelector("nav");
+
+    if(nav.style.display === "flex"){
+
+        nav.style.display="none";
+
+    }else{
+
+        nav.style.display="flex";
+        nav.style.position="absolute";
+        nav.style.top="76px";
+        nav.style.left="0";
+        nav.style.right="0";
+        nav.style.padding="15px";
+        nav.style.background="#07111f";
+        nav.style.flexDirection="column";
+        nav.style.borderBottom="1px solid rgba(100,180,255,.16)";
+
+    }
+
+}
+
+
+/* ---------------------------------------------------------
+   REVEAL ANIMATION
+--------------------------------------------------------- */
+
+const observer =
+    new IntersectionObserver(
+        entries => {
+
+            entries.forEach(entry => {
+
+                if(entry.isIntersecting){
+
+                    entry
+                        .target
+                        .classList
+                        .add("visible");
+
+                }
+
+            });
+
+        },
+        {
+            threshold:.12
+        }
+    );
+
+
+document
+    .querySelectorAll(".reveal")
+    .forEach(el => observer.observe(el));
+
+
+/* ---------------------------------------------------------
+   CLOSE MODAL WHEN CLICK OUTSIDE
+--------------------------------------------------------- */
+
+document
+    .getElementById("loginModal")
+    .addEventListener(
+        "click",
+        function(event){
+
+            if(event.target === this){
+
+                closeLogin();
+
+            }
+
+        }
+    );
+
+
+/* ---------------------------------------------------------
+   LOAD SAVED SETTINGS
+--------------------------------------------------------- */
+
+function loadSettings(){
+
+    const title =
+        localStorage.getItem(
+            "pul_site_title"
+        );
+
+    const message =
+        localStorage.getItem(
+            "pul_admin_message"
+        );
+
+    if(title){
+
+        document
+            .getElementById("siteTitle")
+            .value=title;
+
+    }
+
+    if(message){
+
+        document
+            .getElementById("adminMessage")
+            .value=message;
+
+    }
+
+}
+
+
+/* ---------------------------------------------------------
+   INITIALIZE
+--------------------------------------------------------- */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        calculate();
+
+        checkAdminSession();
+
+        loadSettings();
+
+    }
+);
+
+</script>
+
+</body>
+</html>
