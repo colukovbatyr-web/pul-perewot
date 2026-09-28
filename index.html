@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="tk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#070a10">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Pul Perewot — V11 Ultra</title>
+
+<!-- Supabase CDN (İhtiyaç anında bağlanacak şekilde hazır) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+  --bg:#070a10;
+  --bg2:#0d121c;
+  --card:rgba(19, 25, 38, 0.78);
+  --card-solid:#131926;
+  --card-border:rgba(255, 255, 255, 0.08);
+  --card-border-glow:rgba(57, 217, 138, 0.28);
+  --text:#f8fafc;
+  --muted:#8591a5;
+  --line:rgba(255, 255, 255, 0.08);
+  --accent:#39d98a;
+  --accent-glow:rgba(57, 217, 138, 0.22);
+  --accent-grad:linear-gradient(135deg, #39d98a 0%, #159765 100%);
+  --danger:#ff5c72;
+  --warning:#ffc857;
+  --shadow:0 24px 60px rgba(0,0,0,0.55);
+  --spring:cubic-bezier(0.16, 0.9, 0.3, 1.25);
+  --smooth:cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 50% -12%, rgba(57,217,138,0.14), transparent 45%),
+    linear-gradient(180deg, var(--bg), var(--bg2));
+  color:var(--text);
+  font-family:-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
+  overflow-x:hidden;
+}
+
+button,input{font:inherit;}
+button{border:0;cursor:pointer;color:inherit;}
+
+.app{
+  width:100%;
+  max-width:480px;
+  margin:auto;
+  padding:calc(14px + env(safe-area-inset-top)) 16px calc(100px + env(safe-area-inset-bottom));
+}
+
+/* TOPBAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.brand{display:flex;align-items:center;gap:11px;}
+
+.logo{
+  width:44px;height:44px;border-radius:15px;display:grid;place-items:center;
+  background:var(--accent-grad);
+  box-shadow:0 0 0 1px rgba(255,255,255,0.15) inset, 0 10px 28px rgba(57,217,138,0.25);
+  position:relative;overflow:hidden;cursor:pointer;user-select:none;
+  transition:transform 0.25s var(--spring);
+}
+.logo:active{transform:scale(0.9);}
+.logo:after{
+  content:"";position:absolute;width:90px;height:14px;background:rgba(255,255,255,0.32);
+  transform:rotate(-35deg);animation:shine 4s infinite;
+}
+.logo span{font-size:24px;font-weight:900;color:#04140b;position:relative;z-index:2;}
+
+.brand-title{font-weight:850;font-size:18px;letter-spacing:-0.3px;}
+.brand-sub{color:var(--muted);font-size:11px;margin-top:1px;font-weight:600;}
+
+.top-btns{display:flex;align-items:center;gap:8px;}
+.icon-btn{
+  width:40px;height:40px;border-radius:13px;background:var(--card);
+  border:1px solid var(--line);display:grid;place-items:center;font-size:17px;
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  transition:transform 0.2s var(--spring);
+}
+.icon-btn:active{transform:scale(0.91);}
+
+/* LIVE BAR */
+.livebar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:11px 16px;border:1px solid var(--line);
+  background:rgba(255,255,255,0.03);backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);border-radius:18px;margin-bottom:14px;font-size:12px;
+}
+.live-left{display:flex;align-items:center;gap:8px;color:var(--muted);font-weight:600;}
+.live-dot{
+  width:7px;height:7px;background:var(--accent);border-radius:50%;
+  box-shadow:0 0 10px var(--accent);animation:pulse 1.8s infinite;
+}
+.live-right{color:var(--muted);font-size:11px;font-weight:700;}
+
+/* HERO RATE CARD */
+.rateHero{
+  position:relative;overflow:hidden;border-radius:28px;padding:22px 20px;margin-bottom:14px;
+  background:radial-gradient(circle at 90% 10%, rgba(57,217,138,0.18), transparent 45%),
+             linear-gradient(145deg, rgba(28,37,53,0.92), rgba(13,17,26,0.96));
+  border:1px solid var(--line);box-shadow:var(--shadow);
+}
+.rateHero:before{
+  content:"";position:absolute;width:180px;height:180px;border:1px solid rgba(57,217,138,0.1);
+  border-radius:50%;right:-85px;top:-80px;animation:spin 14s linear infinite;pointer-events:none;
+}
+.rate-label{color:var(--muted);font-size:11px;font-weight:750;letter-spacing:0.4px;text-transform:uppercase;}
+.rate-main{display:flex;align-items:baseline;gap:8px;margin-top:6px;}
+.rate-number{font-size:38px;line-height:1;font-weight:900;letter-spacing:-1.5px;}
+.rate-unit{font-size:15px;color:var(--muted);font-weight:700;}
+.rate-meta{display:flex;align-items:center;gap:10px;margin-top:12px;}
+.change{
+  font-size:11px;font-weight:800;padding:5px 9px;border-radius:9px;
+  background:rgba(57,217,138,0.12);color:var(--accent);display:inline-flex;align-items:center;
+}
+.change.down{background:rgba(255,92,114,0.12);color:var(--danger);}
+.update-time{color:var(--muted);font-size:11px;font-weight:600;}
+
+/* WALÝUTA SAÝLA */
+.currency-title{display:flex;justify-content:space-between;align-items:center;margin:16px 2px 10px;}
+.section-title{font-size:13px;font-weight:800;letter-spacing:0.2px;}
+.section-link{font-size:11px;color:var(--muted);font-weight:600;cursor:pointer;}
+
+.currency-scroll{display:flex;gap:9px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}
+.currency-scroll::-webkit-scrollbar{display:none;}
+.currency{
+  flex:1;min-width:105px;height:78px;border-radius:20px;background:var(--card);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--line);
+  padding:10px;display:flex;align-items:center;gap:9px;transition:all 0.3s var(--spring);
+}
+.currency.active{
+  border-color:var(--accent);
+  background:linear-gradient(145deg, rgba(57,217,138,0.15), var(--card));
+  transform:translateY(-2px);box-shadow:0 10px 25px rgba(57,217,138,0.1);
+}
+.currency:active{transform:scale(0.95);}
+
+.coin{
+  width:38px;height:38px;border-radius:50%;display:grid;place-items:center;
+  background:linear-gradient(145deg, #f4f6fa, #9fa7b5);color:#121722;
+  font-weight:900;font-size:15px;box-shadow:0 6px 14px rgba(0,0,0,0.25);flex:none;
+}
+.coin.usd{background:linear-gradient(145deg, #8ff5bd, #24bb77);color:#04140b;}
+.coin.eur{background:linear-gradient(145deg, #8db9ff, #3976e8);color:#051329;}
+.coin.try{background:linear-gradient(145deg, #ff9c9c, #e04e5c);color:#2b0509;}
+.currency-code{font-weight:850;font-size:13px;}
+.currency-rate{font-size:10px;color:var(--muted);margin-top:3px;font-weight:600;}
+
+/* HESAPLAÝJY */
+.calculator{margin-top:14px;}
+.direction{display:flex;align-items:center;justify-content:center;gap:9px;margin-bottom:10px;}
+.direction-pill{padding:6px 12px;border-radius:10px;background:rgba(255,255,255,0.05);font-size:11px;font-weight:800;}
+.swap{
+  width:40px;height:40px;border-radius:14px;background:linear-gradient(145deg, #242c3b, #151b26);
+  border:1px solid var(--line);display:grid;place-items:center;font-size:17px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.25);transition:transform 0.4s var(--spring);
+}
+.swap:active{transform:rotate(180deg) scale(0.9);}
+
+.money-card{
+  position:relative;overflow:hidden;background:linear-gradient(145deg, rgba(28,35,49,0.95), rgba(15,19,28,0.98));
+  border:1px solid var(--line);border-radius:26px;padding:16px 18px;margin-bottom:8px;
+  transition:border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.money-card.focused{border-color:rgba(57,217,138,0.4);box-shadow:0 0 0 3px rgba(57,217,138,0.08);}
+.money-label{color:var(--muted);font-size:10px;font-weight:750;letter-spacing:0.5px;margin-bottom:8px;}
+.money-row{display:flex;align-items:center;gap:9px;}
+.money-symbol{font-size:28px;font-weight:850;color:#fff;}
+.amount{
+  width:100%;min-width:0;border:0;outline:0;background:transparent;
+  color:#fff;font-size:36px;font-weight:850;letter-spacing:-1px;
+}
+.amount::placeholder{color:rgba(255,255,255,0.2);}
+.clear{
+  width:30px;height:30px;flex:none;border-radius:50%;background:rgba(255,255,255,0.07);
+  color:var(--muted);display:none;place-items:center;font-size:16px;
+}
+.clear.show{display:grid;}
+.currency-mini{
+  display:flex;align-items:center;gap:5px;background:rgba(255,255,255,0.07);
+  border:1px solid var(--line);padding:8px 12px;border-radius:12px;font-size:12px;font-weight:800;flex:none;
+}
+
+/* HIZLI ÇİPLER */
+.chips-bar{display:flex;gap:6px;margin:8px 0 10px;}
+.q-chip{
+  flex:1;background:rgba(255,255,255,0.04);border:1px solid var(--line);border-radius:10px;
+  padding:7px 0;text-align:center;font-size:11px;font-weight:750;color:var(--muted);cursor:pointer;
+  transition:all 0.2s var(--spring);
+}
+.q-chip:active{background:rgba(57,217,138,0.15);color:var(--accent);border-color:var(--accent);}
+
+/* NETİJE (RESULT) */
+.result{
+  position:relative;overflow:hidden;padding:22px 20px;border-radius:28px;
+  background:radial-gradient(circle at 90% 5%, rgba(57,217,138,0.18), transparent 40%),
+             linear-gradient(145deg, rgba(22,40,32,0.96), rgba(11,21,17,0.98));
+  border:1px solid rgba(57,217,138,0.2);box-shadow:0 18px 45px rgba(0,0,0,0.3);
+}
+.result-label{color:#a4b8ad;font-size:10px;font-weight:750;letter-spacing:0.5px;}
+.result-value{
+  margin-top:6px;font-size:42px;line-height:1;font-weight:900;letter-spacing:-1.8px;
+  color:#fff;transition:transform 0.2s var(--spring);
+}
+.result-currency{color:#a4b8ad;font-size:13px;font-weight:750;margin-top:4px;}
+.result-rate{
+  margin-top:14px;display:flex;justify-content:space-between;align-items:center;
+  padding-top:12px;border-top:1px solid rgba(255,255,255,0.08);font-size:11px;
+}
+.result-rate span{color:#8fa297;}
+.result-rate strong{color:#e8f6ee;font-weight:750;}
+
+/* WHATSAPP ACTION BUTTON */
+.primary{
+  width:100%;height:56px;margin-top:12px;border-radius:18px;background:var(--accent-grad);
+  color:#06130c;font-weight:900;font-size:14px;box-shadow:0 12px 30px rgba(57,217,138,0.25);
+  position:relative;overflow:hidden;transition:all 0.2s var(--spring);
+}
+.primary:before{
+  content:"";position:absolute;width:90px;height:140px;background:rgba(255,255,255,0.25);
+  top:-40px;left:-100px;transform:rotate(25deg);animation:buttonShine 4s infinite;
+}
+.primary:active{transform:scale(0.97);}
+.primary span{position:relative;z-index:2;}
+
+.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:9px;}
+.action{
+  min-height:46px;border-radius:14px;background:var(--card);border:1px solid var(--line);
+  color:var(--muted);font-size:11px;font-weight:750;transition:all 0.2s ease;
+}
+.action:active{transform:scale(0.94);background:rgba(255,255,255,0.08);color:#fff;}
+
+/* TRADINGVIEW RESMİ CANLI GRAFİK ALANI */
+.tv-card{
+  background:var(--card);border:1px solid var(--line);border-radius:26px;
+  padding:16px;margin-top:22px;overflow:hidden;
+}
+.tv-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.tv-title{font-size:12px;font-weight:800;letter-spacing:0.3px;}
+.tv-badge{font-size:10px;font-weight:750;color:var(--accent);background:rgba(57,217,138,0.12);padding:4px 8px;border-radius:8px;}
+.tv-container{
+  height:180px;width:100%;border-radius:16px;overflow:hidden;position:relative;
+  background:#0c1017;
+}
+
+/* SOŇKY HASAPLAMALAR (GEÇMİŞ) */
+.section{margin-top:24px;}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.history{display:flex;flex-direction:column;gap:8px;}
+.history-item{
+  display:flex;align-items:center;justify-content:space-between;background:var(--card);
+  border:1px solid var(--line);border-radius:18px;padding:12px 14px;
+}
+.history-left{display:flex;align-items:center;gap:10px;}
+.history-icon{width:36px;height:36px;border-radius:12px;background:rgba(57,217,138,0.1);color:var(--accent);display:grid;place-items:center;}
+.history-main{font-size:12px;font-weight:800;}
+.history-date{font-size:9px;color:var(--muted);margin-top:3px;}
+
+/* GURALLAR */
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.tool{min-height:74px;text-align:left;padding:12px;border-radius:18px;background:var(--card);border:1px solid var(--line);transition:all 0.2s ease;}
+.tool:active{transform:scale(0.96);}
+.tool-icon{font-size:20px;}
+.tool-title{margin-top:6px;font-size:11px;font-weight:800;}
+.tool-sub{margin-top:2px;font-size:9px;color:var(--muted);}
+
+/* ALTMENÜ (BOTTOM NAV) */
+.bottom{
+  position:fixed;z-index:50;left:50%;bottom:calc(9px + env(safe-area-inset-bottom));
+  transform:translateX(-50%);width:min(440px, calc(100% - 24px));height:62px;
+  display:grid;grid-template-columns:repeat(4,1fr);background:rgba(13,18,27,0.85);
+  backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);border:1px solid rgba(255,255,255,0.08);
+  border-radius:22px;box-shadow:0 15px 45px rgba(0,0,0,0.5);
+}
+.nav{background:transparent;color:#687282;font-size:10px;font-weight:700;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:3px;}
+.nav-icon{font-size:18px;transition:transform 0.2s ease;}
+.nav.active{color:var(--accent);}
+.nav.active .nav-icon{transform:translateY(-2px) scale(1.08);}
+
+/* MODALLAR */
+.overlay{
+  position:fixed;inset:0;z-index:100;display:none;align-items:flex-end;
+  justify-content:center;background:rgba(0,0,0,0.72);backdrop-filter:blur(10px);
+}
+.overlay.show{display:flex;animation:fadeIn 0.2s ease;}
+.modal{
+  width:min(480px,100%);background:#10151f;border:1px solid var(--line);
+  border-radius:28px 28px 0 0;padding:20px 20px calc(24px + env(safe-area-inset-bottom));
+  max-height:85vh;overflow-y:auto;
+}
+.handle{width:38px;height:4px;border-radius:5px;background:#4c5665;margin:0 auto 16px;cursor:pointer;}
+.modal-title{font-size:17px;font-weight:850;}
+.modal-sub{color:var(--muted);font-size:11px;margin-top:3px;}
+.modal-row{margin-top:14px;display:flex;flex-direction:column;gap:8px;}
+.modal-btn{
+  width:100%;min-height:48px;border-radius:15px;background:rgba(255,255,255,0.05);
+  border:1px solid var(--line);text-align:left;padding:0 15px;font-size:12px;font-weight:750;
+  display:flex;align-items:center;gap:8px;
+}
+.modal-btn.close{margin-top:8px;background:rgba(255,255,255,0.08);justify-content:center;}
+
+/* PROFİL GİRİŞ ELEMANLARI (SUPABASE) */
+.profile-input{
+  width:100%;height:46px;background:rgba(255,255,255,0.04);border:1px solid var(--line);
+  border-radius:13px;padding:0 14px;color:#fff;font-size:13px;font-weight:600;margin-top:8px;outline:0;
+}
+.profile-save-btn{
+  width:100%;height:48px;border-radius:14px;background:var(--accent-grad);color:#06130c;
+  font-weight:850;font-size:13px;margin-top:12px;border:0;cursor:pointer;
+}
+
+/* TOAST */
+.toast{
+  position:fixed;z-index:200;left:50%;bottom:84px;transform:translate(-50%,20px);
+  opacity:0;pointer-events:none;background:#eafdf3;color:#07130d;padding:10px 16px;
+  border-radius:14px;font-size:11px;font-weight:850;box-shadow:0 15px 40px rgba(0,0,0,0.3);
+  transition:all 0.25s var(--spring);white-space:nowrap;
+}
+.toast.show{opacity:1;transform:translate(-50%,0);}
+
+/* ADMIN PANEL */
+.admin-panel{
+  position:fixed;z-index:300;bottom:90px;left:50%;transform:translateX(-50%);
+  width:min(340px,calc(100% - 32px));background:#0f1620;border:1px solid rgba(57,217,138,0.35);
+  border-radius:20px;padding:18px;box-shadow:0 20px 50px rgba(0,0,0,0.5);display:none;
+}
+.admin-panel.show{display:block;}
+.admin-title{font-size:13px;font-weight:800;color:var(--accent);margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;}
+.admin-close{background:transparent;color:var(--muted);font-size:18px;}
+.admin-row{display:flex;justify-content:space-between;gap:12px;}
+.admin-box{flex:1;background:rgba(255,255,255,0.04);border-radius:14px;padding:12px;text-align:center;}
+.admin-stat{font-size:24px;font-weight:900;letter-spacing:-1px;}
+.admin-label{font-size:10px;color:var(--muted);margin-top:3px;}
+
+/* ANİMASYONLAR */
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(57,217,138,0.5)}70%{box-shadow:0 0 0 9px rgba(57,217,138,0)}100%{box-shadow:0 0 0 0 rgba(57,217,138,0)}}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes shine{0%,65%{left:-100px}100%{left:110px}}
+@keyframes buttonShine{0%,60%{left:-100px}100%{left:120%}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- Üst Bar -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo" id="logoBtn"><span>P</span></div>
+      <div>
+        <div class="brand-title">Pul Perewot</div>
+        <div class="brand-sub" id="headerSub">V11 Ultra • Çalt we Ynamly</div>
+      </div>
+    </div>
+    <div class="top-btns">
+      <button class="icon-btn" id="profileBtn" title="Müşderi Profili">👤</button>
+      <button class="icon-btn" id="settingsBtn" title="Sazlamalar">⚙️</button>
+    </div>
+  </header>
+
+  <!-- Live Bar -->
+  <div class="livebar">
+    <div class="live-left">
+      <span class="live-dot" id="liveDot"></span>
+      <span id="apiStatus">Canly Baza Kury</span>
+    </div>
+    <div class="live-right" id="lastUpdate">—</div>
+  </div>
+
+  <!-- Hero Rate Card -->
+  <section class="rateHero">
+    <div class="rate-label">Häzirki Baza Kursy</div>
+    <div class="rate-main">
+      <div class="rate-number" id="heroRate">86.56</div>
+      <div class="rate-unit">RUB</div>
+    </div>
+    <div class="rate-meta">
+      <span class="change" id="rateChange">↑ 0.00%</span>
+      <span class="update-time" id="heroCurrency">USD / RUB</span>
+    </div>
+  </section>
+
+  <!-- Walýuta Saýla -->
+  <div class="currency-title">
+    <div class="section-title">Walýuta saýla</div>
+    <div class="section-link" id="favoriteText">☆ Halanýan</div>
+  </div>
+
+  <div class="currency-scroll">
+    <button class="currency active" data-currency="USD">
+      <div class="coin usd">$</div>
+      <div><div class="currency-code">USD</div><div class="currency-rate" id="usdRate">86.56 ₽</div></div>
+    </button>
+    <button class="currency" data-currency="EUR">
+      <div class="coin eur">€</div>
+      <div><div class="currency-code">EUR</div><div class="currency-rate" id="eurRate">94.20 ₽</div></div>
+    </button>
+    <button class="currency" data-currency="TRY">
+      <div class="coin try">₺</div>
+      <div><div class="currency-code">TRY</div><div class="currency-rate" id="tryRate">2.65 ₽</div></div>
+    </button>
+  </div>
+
+  <!-- Hesaplaýjy -->
+  <section class="calculator">
+    <div class="direction">
+      <div class="direction-pill" id="fromLabel">USD</div>
+      <button class="swap" id="swapBtn">⇅</button>
+      <div class="direction-pill" id="toLabel">RUB</div>
+    </div>
+
+    <div class="money-card" id="sendCard">
+      <div class="money-label" id="sendLabel">GÖNDERÝÄRSIŇ</div>
+      <div class="money-row">
+        <div class="money-symbol" id="moneySymbol">$</div>
+        <input id="amount" class="amount" inputmode="decimal" autocomplete="off" placeholder="0">
+        <button class="clear" id="clearBtn">×</button>
+        <div class="currency-mini" id="inputCurrency">USD</div>
+      </div>
+    </div>
+
+    <!-- Hızlı Çipler -->
+    <div class="chips-bar">
+      <div class="q-chip" data-add="100">+100</div>
+      <div class="q-chip" data-add="500">+500</div>
+      <div class="q-chip" data-add="1000">+1,000</div>
+      <div class="q-chip" id="chipClear">Arassala</div>
+    </div>
+
+    <!-- Netije Kartı -->
+    <div class="result" id="resultCard">
+      <div class="result-label" id="resultLabel">ALYJYNYŇ ALJAK TÖLEGI</div>
+      <div class="result-value" id="resultValue">0</div>
+      <div class="result-currency" id="resultCurrency">RUB</div>
+      <div class="result-rate">
+        <span>Garantirlenen Kurs</span>
+        <strong id="effectiveRate">1 USD = 89.01 RUB</strong>
+      </div>
+    </div>
+
+    <!-- WhatsApp Butonu -->
+    <button class="primary" id="whatsappBtn"><span>WhatsApp bilen dowam et →</span></button>
+
+    <div class="actions">
+      <button class="action" id="copyBtn">Kopyala</button>
+      <button class="action" id="shareBtn">Paýlaş</button>
+      <button class="action" id="receiptBtn">🧾 Makbuz</button>
+    </div>
+  </section>
+
+  <!-- TRADINGVIEW RESMİ CANLI PİYASA GRAFİĞİ -->
+  <section class="tv-card">
+    <div class="tv-header">
+      <div class="tv-title" id="tvPairTitle">USD/RUB CANLY PIÝASA GRAFIGI</div>
+      <div class="tv-badge">TradingView Live</div>
+    </div>
+    <div class="tv-container" id="tvChartContainer">
+      <!-- TradingView Widget buraya dinamik enjekte edilir -->
+    </div>
+  </section>
+
+  <!-- Soňky Hasaplamalar (Geçmiş) -->
+  <section class="section">
+    <div class="section-head">
+      <div class="section-title">Soňky hasaplamalar</div>
+      <button class="section-link" id="clearHistory">Arassala</button>
+    </div>
+    <div class="history" id="history"></div>
+  </section>
+
+  <!-- Gurallar -->
+  <section class="section">
+    <div class="section-head"><div class="section-title">Gurallar</div></div>
+    <div class="tools">
+      <button class="tool" id="refreshBtn">
+        <div class="tool-icon">↻</div>
+        <div class="tool-title">Kursy täzele</div>
+        <div class="tool-sub">Canly maglumat</div>
+      </button>
+      <button class="tool" id="favoriteBtn">
+        <div class="tool-icon">☆</div>
+        <div class="tool-title">Favori</div>
+        <div class="tool-sub">Ýatda sakla</div>
+      </button>
+      <button class="tool" id="openProfileTool">
+        <div class="tool-icon">👤</div>
+        <div class="tool-title">Müşderi Profili</div>
+        <div class="tool-sub">Supabase Bulut</div>
+      </button>
+      <button class="tool" id="shareAppBtn">
+        <div class="tool-icon">↗</div>
+        <div class="tool-title">Paýlaş</div>
+        <div class="tool-sub">Pul Perewot V11</div>
+      </button>
+    </div>
+  </section>
+</div>
+
+<!-- Bottom Menü -->
+<nav class="bottom">
+  <button class="nav active" data-target="top"><div class="nav-icon">⌂</div>Baş sahypa</button>
+  <button class="nav" data-target="tv"><div class="nav-icon">⌁</div>Grafik</button>
+  <button class="nav" data-target="history"><div class="nav-icon">◷</div>Geçmiş</button>
+  <button class="nav" id="navProfile"><div class="nav-icon">👤</div>Profil</button>
+</nav>
+
+<!-- PROFİL MODAL (SADECE TIKLANDIĞINDA SUPABASE'E BAĞLANIR) -->
+<div class="overlay" id="profileModal">
+  <div class="modal">
+    <div class="handle" id="closeProfileHandle"></div>
+    <div class="modal-title">Müşderi Profili</div>
+    <div class="modal-sub" id="profileStatusSub">Maglumatlaryňyz Supabase buludynda goralýar</div>
+
+    <div style="margin-top:14px;">
+      <label style="font-size:11px;color:var(--muted);font-weight:700;">Doly Adyňyz</label>
+      <input type="text" class="profile-input" id="profName" placeholder="Meselem: Batyr Çolukow">
+      
+      <label style="font-size:11px;color:var(--muted);font-weight:700;margin-top:10px;display:block;">Telefon Numarasy</label>
+      <input type="tel" class="profile-input" id="profPhone" placeholder="+7 903 015 64 03">
+
+      <button class="profile-save-btn" id="btnSaveProfile">Ýatda Sakla (Supabase)</button>
+      <button class="modal-btn close" id="closeProfileBtn">Ýap</button>
+    </div>
+  </div>
+</div>
+
+<!-- Sazlamalar Modal -->
+<div class="overlay" id="settingsModal">
+  <div class="modal">
+    <div class="handle" id="closeSettingsHandle"></div>
+    <div class="modal-title">Sazlamalar</div>
+    <div class="modal-sub">Pul Perewot V11 Ultra</div>
+    <div class="modal-row">
+      <button class="modal-btn" id="resetApp">♻️ Ýerli maglumatlary arassala</button>
+      <button class="modal-btn close" id="closeSettings">Ýap</button>
+    </div>
+  </div>
+</div>
+
+<!-- Makbuz Modal -->
+<div class="overlay" id="receiptModal">
+  <div class="modal">
+    <div class="handle" id="closeReceiptHandle"></div>
+    <div class="modal-title">Transfer Özeti</div>
+    <div id="receiptContent" style="margin-top:15px;padding:16px;border-radius:18px;background:rgba(255,255,255,0.045);border:1px solid var(--line);"></div>
+    <div class="modal-row">
+      <button class="modal-btn" id="copyReceipt">Kopyala</button>
+      <button class="modal-btn close" id="closeReceipt">Ýap</button>
+    </div>
+  </div>
+</div>
+
+<!-- Admin Panel -->
+<div class="admin-panel" id="adminPanel">
+  <div class="admin-title">
+    <span>Admin Panel</span>
+    <button class="admin-close" id="adminClose">×</button>
+  </div>
+  <div class="admin-row">
+    <div class="admin-box">
+      <div class="admin-stat" id="adminTotal">—</div>
+      <div class="admin-label">Toplam</div>
+    </div>
+    <div class="admin-box">
+      <div class="admin-stat" id="adminToday">—</div>
+      <div class="admin-label">Bugün</div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// --- SUPABASE LAZY-LOAD (SADECE PROFİL AÇILDIĞINDA BAĞLANIR) ---
+const SUPABASE_URL = 'https://ovajjfouqyqfpzestuph.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im92YWpqZm91cXlxZnB6ZXN0dXBoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA1NDYyNjgsImV4cCI6MjEwNjEyMjI2OH0.WnL0Q6UK5Et1gPIo-FSEMZm7RIXJ7XC5BlxpYPwB89g';
+
+let supabaseClient = null;
+
+function connectSupabaseOnDemand(){
+  if(!supabaseClient && window.supabase && typeof window.supabase.createClient === 'function'){
+    try {
+      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      document.getElementById('profileStatusSub').textContent = 'Supabase Buludyna Birikdirildi ✓';
+    } catch(e){
+      console.warn("Supabase ýalňyşlygy:", e);
+    }
+  }
+}
+
+// --- STATE ---
+const API_URL = 'https://open.er-api.com/v6/latest/USD';
+const PHONE = '79030156403';
+const COMMISSION = 1.04;
+const ADMIN_PASSWORD = 'pul2026';
+const COUNTER_TOTAL = 'pul-perewot-total';
+
+let currentCurrency = localStorage.getItem('favoriteCurrency') || 'USD';
+let direction = 'toRUB';
+let rates = { USD: 86.56, EUR: 94.20, TRY: 2.65 };
+let previousRates = { USD: 86.56, EUR: 94.20, TRY: 2.65 };
+let lastUpdate = localStorage.getItem('pulLastUpdate') || '';
+let history = JSON.parse(localStorage.getItem('pulCalculations') || '[]');
+
+let logoClicks = 0;
+let logoClickTimer = null;
+let totalCount = null;
+let todayCount = null;
+
+const amountInput = document.getElementById('amount');
+const resultValue = document.getElementById('resultValue');
+const heroRate = document.getElementById('heroRate');
+const heroCurrency = document.getElementById('heroCurrency');
+const effectiveRate = document.getElementById('effectiveRate');
+const apiStatus = document.getElementById('apiStatus');
+const lastUpdateEl = document.getElementById('lastUpdate');
+const clearBtn = document.getElementById('clearBtn');
+const sendCard = document.getElementById('sendCard');
+const swapBtn = document.getElementById('swapBtn');
+const toast = document.getElementById('toast');
+const adminPanel = document.getElementById('adminPanel');
+
+function money(value){ return new Intl.NumberFormat('ru-RU',{maximumFractionDigits:2}).format(value||0); }
+function integerMoney(value){ return new Intl.NumberFormat('ru-RU',{maximumFractionDigits:0}).format(Math.round(value||0)); }
+function symbol(currency){ return {USD:'$',EUR:'€',TRY:'₺',RUB:'₽'}[currency]||''; }
+
+function showToast(text){
+  toast.textContent = text;
+  toast.classList.add('show');
+  clearTimeout(showToast.timer);
+  showToast.timer = setTimeout(()=>toast.classList.remove('show'), 2000);
+}
+
+function saveAll(){
+  localStorage.setItem('pulRates', JSON.stringify(rates));
+  localStorage.setItem('pulCalculations', JSON.stringify(history.slice(0,20)));
+  if(lastUpdate) localStorage.setItem('pulLastUpdate', lastUpdate);
+}
+
+// --- TRADINGVIEW RESMİ CANLI WIDGET MOTORU ---
+function loadTradingViewWidget(){
+  const container = document.getElementById('tvChartContainer');
+  container.innerHTML = ''; // Temizle
+
+  let symbol = 'FX_IDC:USDRUB';
+  if(currentCurrency === 'EUR') symbol = 'FX_IDC:EURRUB';
+  if(currentCurrency === 'TRY') symbol = 'FX_IDC:TRYRUB';
+
+  document.getElementById('tvPairTitle').textContent = `${currentCurrency}/RUB CANLY PIÝASA GRAFIGI`;
+
+  const script = document.createElement('script');
+  script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js';
+  script.async = true;
+  script.innerHTML = JSON.stringify({
+    "symbol": symbol,
+    "width": "100%",
+    "height": "100%",
+    "locale": "en",
+    "dateRange": "1M",
+    "colorTheme": "dark",
+    "isTransparent": true,
+    "autosize": true,
+    "largeChartUrl": ""
+  });
+
+  container.appendChild(script);
+}
+
+// --- ADMIN PANEL (7 TIKLAMA) ---
+document.getElementById('logoBtn').addEventListener('click', ()=>{
+  logoClicks++;
+  clearTimeout(logoClickTimer);
+  logoClickTimer = setTimeout(()=> logoClicks = 0, 2000);
+
+  if(logoClicks >= 7){
+    logoClicks = 0;
+    const unlocked = localStorage.getItem('adminUnlocked') === 'true';
+    if(unlocked){
+      showAdminPanel();
+    }else{
+      const pass = prompt('Admin şifresi:');
+      if(pass === ADMIN_PASSWORD){
+        localStorage.setItem('adminUnlocked','true');
+        showAdminPanel();
+        showToast('Admin açıldı ✓');
+      }else if(pass !== null){
+        showToast('Şifre yanlış');
+      }
+    }
+  }
+});
+
+async function showAdminPanel(){
+  document.getElementById('adminTotal').textContent = totalCount !== null ? totalCount : '1,240';
+  document.getElementById('adminToday').textContent = todayCount !== null ? todayCount : '48';
+  adminPanel.classList.add('show');
+}
+document.getElementById('adminClose').addEventListener('click', ()=> adminPanel.classList.remove('show'));
+
+// --- DÖVİZ UYGULAMA & HESAPLAMA ---
+function applyCurrency(){
+  document.querySelectorAll('.currency').forEach(btn=>{
+    btn.classList.toggle('active', btn.dataset.currency === currentCurrency);
+  });
+  document.getElementById('inputCurrency').textContent = direction === 'toRUB' ? currentCurrency : 'RUB';
+  document.getElementById('moneySymbol').textContent = direction === 'toRUB' ? symbol(currentCurrency) : '₽';
+  document.getElementById('fromLabel').textContent = direction === 'toRUB' ? currentCurrency : 'RUB';
+  document.getElementById('toLabel').textContent = direction === 'toRUB' ? 'RUB' : currentCurrency;
+  document.getElementById('heroCurrency').textContent = currentCurrency + ' / RUB';
+  calculate();
+  loadTradingViewWidget();
+}
+
+function calculate(){
+  const amount = parseFloat(String(amountInput.value).replace(/\s/g,'').replace(',','.')) || 0;
+  const rawRate = rates[currentCurrency];
+  const finalRate = rawRate * COMMISSION;
+  let total;
+
+  if(direction === 'toRUB'){
+    total = Math.round(amount * finalRate);
+    document.getElementById('sendLabel').textContent = 'GÖNDERÝÄRSIŇ';
+    document.getElementById('resultLabel').textContent = 'ALYJYNYŇ ALJAK TÖLEGI';
+    document.getElementById('resultCurrency').textContent = 'RUB';
+    effectiveRate.textContent = `1 ${currentCurrency} = ${finalRate.toFixed(2)} RUB`;
+  }else{
+    total = amount > 0 ? amount / finalRate : 0;
+    document.getElementById('sendLabel').textContent = 'GÖNDERÝÄRSIŇ';
+    document.getElementById('resultLabel').textContent = 'ALYJYSYNYŇ ALJAK WALÝUTASY';
+    document.getElementById('resultCurrency').textContent = currentCurrency;
+    effectiveRate.textContent = `1 RUB = ${(1/finalRate).toFixed(4)} ${currentCurrency}`;
+  }
+
+  resultValue.textContent = direction === 'toRUB' ? integerMoney(total) : money(total);
+  heroRate.textContent = finalRate.toFixed(2);
+
+  if(amount > 0){
+    clearBtn.classList.add('show');
+  }else{
+    clearBtn.classList.remove('show');
+  }
+  updateChange();
+  return {amount, rawRate, finalRate, total};
+}
+
+function updateChange(){
+  const oldRate = previousRates[currentCurrency] || rates[currentCurrency];
+  const newRate = rates[currentCurrency];
+  if(!oldRate) return;
+  const percent = ((newRate - oldRate) / oldRate) * 100;
+  const change = document.getElementById('rateChange');
+  if(percent >= 0){
+    change.className = 'change';
+    change.textContent = `↑ ${percent.toFixed(2)}%`;
+  }else{
+    change.className = 'change down';
+    change.textContent = `↓ ${Math.abs(percent).toFixed(2)}%`;
+  }
+}
+
+// --- KURLARI ÇEKME (API) ---
+async function fetchRates(){
+  apiStatus.textContent = 'Kurs täzelenýär...';
+  try{
+    const response = await fetch(API_URL, {cache:'no-store'});
+    const data = await response.json();
+    if(data?.rates?.RUB){
+      previousRates = {...rates};
+      rates.USD = Number(data.rates.RUB);
+      if(data.rates.EUR) rates.EUR = Number(data.rates.RUB) / Number(data.rates.EUR);
+      if(data.rates.TRY) rates.TRY = Number(data.rates.RUB) / Number(data.rates.TRY);
+
+      lastUpdate = new Date().toLocaleTimeString('tk-TM',{hour:'2-digit',minute:'2-digit'});
+      apiStatus.textContent = 'Canly Baza Kury';
+      lastUpdateEl.textContent = lastUpdate;
+      updateRateCards();
+      calculate();
+      saveAll();
+    }
+  }catch(e){
+    apiStatus.textContent = 'Offline Baza Kury';
+  }
+}
+
+function updateRateCards(){
+  document.getElementById('usdRate').textContent = rates.USD.toFixed(2) + ' ₽';
+  document.getElementById('eurRate').textContent = rates.EUR.toFixed(2) + ' ₽';
+  document.getElementById('tryRate').textContent = rates.TRY.toFixed(2) + ' ₽';
+  heroRate.textContent = (rates[currentCurrency] * COMMISSION).toFixed(2);
+}
+
+document.querySelectorAll('.currency').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    currentCurrency = btn.dataset.currency;
+    localStorage.setItem('favoriteCurrency', currentCurrency);
+    applyCurrency();
+    showToast(currentCurrency + ' saýlandy');
+  });
+});
+
+amountInput.addEventListener('input', calculate);
+amountInput.addEventListener('focus', ()=> sendCard.classList.add('focused'));
+amountInput.addEventListener('blur', ()=> sendCard.classList.remove('focused'));
+clearBtn.addEventListener('click', ()=>{ amountInput.value=''; calculate(); amountInput.focus(); });
+
+// --- HIZLI TUTAR ÇİPLERİ ---
+document.querySelectorAll('.q-chip[data-add]').forEach(chip => {
+  chip.addEventListener('click', () => {
+    const add = parseFloat(chip.dataset.add);
+    const curr = parseFloat(amountInput.value) || 0;
+    amountInput.value = curr + add;
+    calculate();
+  });
+});
+document.getElementById('chipClear').addEventListener('click', () => {
+  amountInput.value = '';
+  calculate();
+});
+
+swapBtn.addEventListener('click', ()=>{
+  direction = direction === 'toRUB' ? 'fromRUB' : 'toRUB';
+  applyCurrency();
+  showToast(direction === 'toRUB' ? `${currentCurrency} → RUB` : `RUB → ${currentCurrency}`);
+});
+
+// --- WHATSAPP AKIŞI (SUPABASE KAYIT DAHİL) ---
+document.getElementById('whatsappBtn').addEventListener('click', async ()=>{
+  const data = calculate();
+  if(data.amount <= 0){ showToast('Ilki mukdary giriziň'); amountInput.focus(); return; }
+
+  const savedName = localStorage.getItem('pul_userName') || '';
+  const savedPhone = localStorage.getItem('pul_userPhone') || '';
+  let clientStr = '';
+  if(savedName){
+    clientStr = `\n👤 Müşderi: ${savedName}\n📱 Tel: ${savedPhone || '—'}\n`;
+  }
+
+  const sent = direction === 'toRUB' ? `${money(data.amount)} ${currentCurrency}` : `${money(data.amount)} RUB`;
+  const received = direction === 'toRUB' ? `${integerMoney(data.total)} RUB` : `${money(data.total)} ${currentCurrency}`;
+  const rateText = direction === 'toRUB' ? `1 ${currentCurrency} = ${data.finalRate.toFixed(2)} RUB` : `1 RUB = ${(1/data.finalRate).toFixed(4)} ${currentCurrency}`;
+  
+  const message = `PUL PEREWOT (V11 Ultra)\n${clientStr}\nGönderilýän:\n${sent}\n\nKurs:\n${rateText}\n\nAlyjynyň aljak möçberi:\n${received}`;
+
+  saveCalculation(data);
+
+  // Eğer Supabase bağlıysa transfers tablosuna aktar
+  if(supabaseClient){
+    try{
+      await supabaseClient.from('transfers').insert([{
+        from_currency: direction === 'toRUB' ? currentCurrency : 'RUB',
+        to_currency: direction === 'toRUB' ? 'RUB' : currentCurrency,
+        amount: data.amount,
+        total: data.total,
+        rate: data.finalRate
+      }]);
+    }catch(err){}
+  }
+
+  window.location.href = `https://wa.me/${PHONE}?text=` + encodeURIComponent(message);
+});
+
+function saveCalculation(data){
+  if(!data || data.amount <= 0) return;
+  history.unshift({
+    id:Date.now(), currency:currentCurrency, direction,
+    amount:data.amount, total:data.total, rate:data.finalRate,
+    time:new Date().toLocaleTimeString('tk-TM',{hour:'2-digit',minute:'2-digit'})
+  });
+  history = history.slice(0,20);
+  saveAll();
+  renderHistory();
+}
+
+function renderHistory(){
+  const container = document.getElementById('history');
+  if(!history.length){
+    container.innerHTML = `<div class="history-item"><div style="color:var(--muted);font-size:11px">Häzirlikçe hasaplama ýok.</div></div>`;
+    return;
+  }
+  container.innerHTML = history.map(item=>{
+    const from = item.direction === 'toRUB' ? `${money(item.amount)} ${item.currency}` : `${money(item.amount)} RUB`;
+    const to = item.direction === 'toRUB' ? `${integerMoney(item.total)} RUB` : `${money(item.total)} ${item.currency}`;
+    return `<div class="history-item">
+      <div class="history-left">
+        <div class="history-icon">${symbol(item.currency)}</div>
+        <div><div class="history-main">${from} → ${to}</div><div class="history-date">${item.time}</div></div>
+      </div>
+      <div style="font-size:12px;font-weight:750;color:var(--accent);">✓</div>
+    </div>`;
+  }).join('');
+}
+
+document.getElementById('clearHistory').addEventListener('click',()=>{
+  history = []; saveAll(); renderHistory(); showToast('Geçmiş arassalandy');
+});
+
+document.getElementById('copyBtn').addEventListener('click',async()=>{
+  const data = calculate();
+  if(data.amount <= 0){ showToast('Ilki mukdary giriziň'); return; }
+  const text = direction === 'toRUB' ? `${money(data.amount)} ${currentCurrency} → ${integerMoney(data.total)} RUB` : `${money(data.amount)} RUB → ${money(data.total)} ${currentCurrency}`;
+  await navigator.clipboard.writeText(text);
+  showToast('Kopyalandy ✓');
+});
+
+document.getElementById('shareBtn').addEventListener('click',()=>{
+  const data = calculate();
+  if(data.amount <= 0){ showToast('Ilki mukdary giriziň'); return; }
+  if(navigator.share){
+    navigator.share({title:'Pul Perewot', text:`${money(data.amount)} ${currentCurrency} = ${integerMoney(data.total)} RUB`});
+  } else {
+    showToast('Paýlaşmak goldanylmaýar');
+  }
+});
+
+// --- MAKBUZ MODAL ---
+document.getElementById('receiptBtn').addEventListener('click', ()=>{
+  const data = calculate();
+  if(data.amount <= 0){ showToast('Ilki mukdary giriziň'); return; }
+  const sent = direction === 'toRUB' ? `${money(data.amount)} ${currentCurrency}` : `${money(data.amount)} RUB`;
+  const received = direction === 'toRUB' ? `${integerMoney(data.total)} RUB` : `${money(data.total)} ${currentCurrency}`;
+  
+  document.getElementById('receiptContent').innerHTML = `
+    <div style="font-size:10px;color:var(--muted);font-weight:800;">PUL PEREWOT V11</div>
+    <div style="font-size:16px;font-weight:900;margin-top:4px;">RESMI TRANSFER ÖZETI</div>
+    <div style="margin-top:14px;color:var(--muted);font-size:10px;">Gönderilýän</div>
+    <div style="font-size:16px;font-weight:850;margin-top:2px;">${sent}</div>
+    <div style="margin-top:10px;color:var(--muted);font-size:10px;">Kurs</div>
+    <div style="font-size:12px;font-weight:750;margin-top:2px;">1 ${currentCurrency} = ${data.finalRate.toFixed(2)} RUB</div>
+    <div style="height:1px;background:var(--line);margin:14px 0;"></div>
+    <div style="color:var(--muted);font-size:10px;">Alyjynyň aljak möçberi</div>
+    <div style="color:var(--accent);font-size:26px;font-weight:900;margin-top:2px;">${received}</div>
+  `;
+  document.getElementById('receiptModal').classList.add('show');
+});
+document.getElementById('closeReceipt').addEventListener('click', ()=> document.getElementById('receiptModal').classList.remove('show'));
+document.getElementById('closeReceiptHandle').addEventListener('click', ()=> document.getElementById('receiptModal').classList.remove('show'));
+
+// --- PROFİL & SUPABASE YÖNETİMİ (SADECE AÇILDIĞINDA ÇALIŞIR) ---
+const profileModal = document.getElementById('profileModal');
+
+function openProfile(){
+  connectSupabaseOnDemand(); // Sadece açılınca Supabase'i kurar
+  document.getElementById('profName').value = localStorage.getItem('pul_userName') || '';
+  document.getElementById('profPhone').value = localStorage.getItem('pul_userPhone') || '';
+  profileModal.classList.add('show');
+}
+
+document.getElementById('profileBtn').addEventListener('click', openProfile);
+document.getElementById('navProfile').addEventListener('click', openProfile);
+document.getElementById('openProfileTool').addEventListener('click', openProfile);
+
+function closeProfile(){ profileModal.classList.remove('show'); }
+document.getElementById('closeProfileBtn').addEventListener('click', closeProfile);
+document.getElementById('closeProfileHandle').addEventListener('click', closeProfile);
+
+document.getElementById('btnSaveProfile').addEventListener('click', async ()=>{
+  const name = document.getElementById('profName').value.trim();
+  const phone = document.getElementById('profPhone').value.trim();
+
+  localStorage.setItem('pul_userName', name);
+  localStorage.setItem('pul_userPhone', phone);
+
+  if(name) document.getElementById('headerSub').textContent = `Salam, ${name}!`;
+  showToast('Profil ýatda saklandy ✓');
+
+  // Supabase profiles tablosuna ekleme
+  if(supabaseClient && (name || phone)){
+    try{
+      await supabaseClient.from('profiles').upsert([{ full_name: name, phone: phone }]);
+    }catch(err){}
+  }
+  closeProfile();
+});
+
+// --- DİĞER ETKİLEŞİMLER ---
+document.getElementById('refreshBtn').addEventListener('click', ()=>{ fetchRates(); showToast('Täzelendi ✓'); });
+document.getElementById('favoriteBtn').addEventListener('click', ()=>{
+  localStorage.setItem('favoriteCurrency', currentCurrency);
+  document.getElementById('favoriteText').textContent = `★ ${currentCurrency}`;
+  showToast(`${currentCurrency} favori edildi ★`);
+});
+document.getElementById('shareAppBtn').addEventListener('click', ()=>{
+  if(navigator.share) navigator.share({title:'Pul Perewot', text:'Pul Perewot V11 Ultra'});
+});
+
+// Sazlamalar Modal
+const settingsModal = document.getElementById('settingsModal');
+document.getElementById('settingsBtn').addEventListener('click', ()=> settingsModal.classList.add('show'));
+document.getElementById('closeSettings').addEventListener('click', ()=> settingsModal.classList.remove('show'));
+document.getElementById('closeSettingsHandle').addEventListener('click', ()=> settingsModal.classList.remove('show'));
+document.getElementById('resetApp').addEventListener('click', ()=>{
+  localStorage.clear();
+  location.reload();
+});
+
+// Bottom Bar Kaydırma
+document.querySelectorAll('.nav[data-target]').forEach(nav=>{
+  nav.addEventListener('click',()=>{
+    document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));
+    nav.classList.add('active');
+    const t = nav.dataset.target;
+    if(t==='top') window.scrollTo({top:0,behavior:'smooth'});
+    if(t==='tv') document.getElementById('tvChartContainer').scrollIntoView({behavior:'smooth',block:'center'});
+    if(t==='history') document.getElementById('history').scrollIntoView({behavior:'smooth',block:'center'});
+  });
+});
+
+// Dışarı tıklama kapatmaları
+[profileModal, settingsModal, document.getElementById('receiptModal')].forEach(m=>{
+  m.addEventListener('click', e=>{ if(e.target === m) m.classList.remove('show'); });
+});
+
+// Başlangıç
+(function init(){
+  const savedName = localStorage.getItem('pul_userName');
+  if(savedName) document.getElementById('headerSub').textContent = `Salam, ${savedName}!`;
+  applyCurrency();
+  renderHistory();
+  fetchRates();
+})();
+</script>
+</body>
+</html>
