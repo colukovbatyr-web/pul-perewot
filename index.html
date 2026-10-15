@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="tk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#080b12">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Pul Perewot — V10</title>
+
+<style>
+:root{
+  --bg:#070a10;
+  --bg2:#0d111a;
+  --card:rgba(19,24,35,.82);
+  --card2:rgba(25,31,44,.9);
+  --text:#f7f9fc;
+  --muted:#8e98a9;
+  --line:rgba(255,255,255,.08);
+  --accent:#39d98a;
+  --accent2:#20b875;
+  --danger:#ff6374;
+  --warning:#ffc857;
+  --shadow:0 20px 60px rgba(0,0,0,.35);
+  --radius:26px;
+}
+
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html{scroll-behavior:smooth;}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 50% -10%,rgba(57,217,138,.12),transparent 35%),
+    linear-gradient(180deg,var(--bg),var(--bg2));
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Inter,Arial,sans-serif;
+  overflow-x:hidden;
+}
+
+button,input{font:inherit;}
+button{border:0;cursor:pointer;color:inherit;}
+
+.app{
+  width:100%;
+  max-width:520px;
+  margin:auto;
+  padding:calc(14px + env(safe-area-inset-top)) 16px calc(100px + env(safe-area-inset-bottom));
+}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+.brand{display:flex;align-items:center;gap:11px;}
+
+.logo{
+  width:43px;height:43px;border-radius:15px;display:grid;place-items:center;
+  background:linear-gradient(145deg,#4af0a0,#159765);
+  box-shadow:0 0 0 1px rgba(255,255,255,.12) inset,0 10px 30px rgba(57,217,138,.22);
+  position:relative;overflow:hidden;cursor:pointer;user-select:none;
+}
+.logo:after{content:"";position:absolute;width:80px;height:12px;background:rgba(255,255,255,.28);transform:rotate(-35deg);animation:shine 4s infinite;}
+.logo span{font-size:24px;font-weight:900;position:relative;z-index:2;}
+
+.brand-title{font-weight:800;font-size:17px;letter-spacing:.2px;}
+.brand-sub{color:var(--muted);font-size:11px;margin-top:2px;}
+
+.settings{width:42px;height:42px;border-radius:15px;background:var(--card);border:1px solid var(--line);display:grid;place-items:center;font-size:19px;transition:.25s;}
+.settings:active{transform:scale(.91) rotate(20deg);}
+
+.livebar{display:flex;align-items:center;justify-content:space-between;padding:12px 15px;border:1px solid var(--line);background:rgba(255,255,255,.035);border-radius:18px;margin-bottom:14px;}
+.live-left{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);}
+.live-dot{width:8px;height:8px;background:var(--accent);border-radius:50%;box-shadow:0 0 0 0 rgba(57,217,138,.55);animation:pulse 1.8s infinite;}
+.live-right{font-size:11px;color:var(--muted);}
+
+.rateHero{position:relative;overflow:hidden;border-radius:30px;padding:23px 21px;margin-bottom:16px;background:radial-gradient(circle at 85% 10%,rgba(57,217,138,.18),transparent 35%),linear-gradient(145deg,rgba(27,35,49,.94),rgba(14,18,27,.96));border:1px solid rgba(255,255,255,.08);box-shadow:var(--shadow);}
+.rateHero:before{content:"";position:absolute;width:180px;height:180px;border:1px solid rgba(57,217,138,.12);border-radius:50%;right:-85px;top:-80px;animation:spin 12s linear infinite;}
+.rate-label{color:var(--muted);font-size:12px;margin-bottom:7px;}
+.rate-main{display:flex;align-items:baseline;gap:8px;}
+.rate-number{font-size:34px;line-height:1;font-weight:850;letter-spacing:-1.5px;}
+.rate-unit{font-size:14px;color:var(--muted);}
+.rate-meta{display:flex;align-items:center;gap:10px;margin-top:12px;}
+.change{font-size:12px;font-weight:750;padding:6px 9px;border-radius:10px;background:rgba(57,217,138,.1);color:var(--accent);}
+.change.down{background:rgba(255,99,116,.1);color:var(--danger);}
+.update-time{color:var(--muted);font-size:11px;}
+
+.currency-title{display:flex;justify-content:space-between;align-items:center;margin:20px 2px 10px;}
+.section-title{font-size:13px;font-weight:800;}
+.section-link{font-size:11px;color:var(--muted);}
+
+.currency-scroll{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 8px;scrollbar-width:none;}
+.currency-scroll::-webkit-scrollbar{display:none;}
+.currency{flex:0 0 112px;height:78px;border-radius:21px;background:var(--card);border:1px solid var(--line);padding:10px;display:flex;align-items:center;gap:9px;transition:.3s cubic-bezier(.2,.8,.2,1);}
+.currency.active{border-color:rgba(57,217,138,.5);background:linear-gradient(145deg,rgba(57,217,138,.12),var(--card));transform:translateY(-2px);box-shadow:0 10px 30px rgba(57,217,138,.09);}
+.currency:active{transform:scale(.95);}
+
+.coin{width:39px;height:39px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#f4f6fa,#9fa7b5);color:#121722;font-weight:900;font-size:15px;box-shadow:inset 2px 2px 4px rgba(255,255,255,.8),inset -3px -3px 5px rgba(0,0,0,.2),0 6px 15px rgba(0,0,0,.18);animation:coinFloat 3.2s ease-in-out infinite;transition:.5s;}
+.currency.active .coin{animation:coinSpin 1s cubic-bezier(.2,.8,.2,1);}
+.coin.usd{background:linear-gradient(145deg,#8ff5bd,#24bb77)}
+.coin.eur{background:linear-gradient(145deg,#8db9ff,#3976e8)}
+.coin.try{background:linear-gradient(145deg,#ff9c9c,#e04e5c)}
+.currency-code{font-weight:800;font-size:13px;}
+.currency-rate{font-size:10px;color:var(--muted);margin-top:3px;}
+
+.calculator{margin-top:17px;}
+.direction{display:flex;align-items:center;justify-content:center;gap:9px;margin-bottom:12px;}
+.direction-pill{padding:7px 11px;border-radius:10px;background:rgba(255,255,255,.05);font-size:11px;font-weight:800;}
+.swap{width:42px;height:42px;border-radius:15px;background:linear-gradient(145deg,#242c3b,#151b26);border:1px solid var(--line);display:grid;place-items:center;font-size:19px;transition:.45s cubic-bezier(.2,.8,.2,1);box-shadow:0 8px 20px rgba(0,0,0,.2);}
+.swap:active{transform:rotate(180deg) scale(.9);}
+.swap.rotating{animation:swapSpin .6s cubic-bezier(.2,.8,.2,1);}
+
+.money-card{position:relative;overflow:hidden;background:linear-gradient(145deg,rgba(28,35,49,.96),rgba(15,19,28,.98));border:1px solid var(--line);border-radius:28px;padding:17px 17px 18px;margin-bottom:10px;transition:.3s;}
+.money-card.focused{border-color:rgba(57,217,138,.38);box-shadow:0 0 0 3px rgba(57,217,138,.06);}
+.money-label{color:var(--muted);font-size:11px;font-weight:700;margin-bottom:9px;}
+.money-row{display:flex;align-items:center;gap:9px;}
+.money-symbol{font-size:28px;font-weight:800;}
+.amount{width:100%;min-width:0;border:0;outline:0;background:transparent;color:var(--text);font-size:34px;font-weight:850;letter-spacing:-1px;}
+.amount::placeholder{color:#4f5969;}
+.clear{width:31px;height:31px;flex:none;border-radius:50%;background:rgba(255,255,255,.07);color:var(--muted);display:none;place-items:center;}
+.clear.show{display:grid;}
+.currency-mini{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.07);border:1px solid var(--line);padding:9px 11px;border-radius:13px;font-size:12px;font-weight:800;flex:none;}
+
+.result{position:relative;overflow:hidden;margin-top:15px;padding:23px 20px;border-radius:29px;background:radial-gradient(circle at 90% 5%,rgba(57,217,138,.17),transparent 35%),linear-gradient(145deg,rgba(25,43,37,.98),rgba(12,24,20,.98));border:1px solid rgba(57,217,138,.16);box-shadow:0 20px 50px rgba(0,0,0,.25);}
+.result:before,.result:after{content:"";position:absolute;border:1px solid rgba(57,217,138,.08);border-radius:50%;pointer-events:none;}
+.result:before{width:180px;height:180px;right:-90px;top:-95px;animation:spin 14s linear infinite;}
+.result:after{width:120px;height:120px;left:-85px;bottom:-70px;animation:spinReverse 10s linear infinite;}
+.result-label{color:#a4b8ad;font-size:11px;font-weight:700;}
+.result-value{margin-top:6px;font-size:43px;line-height:1.05;font-weight:900;letter-spacing:-2px;position:relative;z-index:2;}
+.result-currency{color:#a4b8ad;font-size:13px;margin-top:4px;}
+.result-rate{margin-top:16px;display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid rgba(255,255,255,.08);font-size:11px;}
+.result-rate span:first-child{color:#8fa297;}
+.result-rate strong{color:#e8f6ee;}
+.result.updated .result-value{animation:numberPop .45s ease;}
+
+.primary{width:100%;height:58px;margin-top:12px;border-radius:19px;background:linear-gradient(135deg,#4af0a0,#19a96c);color:#06130c;font-weight:900;font-size:14px;box-shadow:0 14px 35px rgba(31,194,124,.2);position:relative;overflow:hidden;transition:.25s;}
+.primary:before{content:"";position:absolute;width:80px;height:130px;background:rgba(255,255,255,.2);top:-40px;left:-100px;transform:rotate(25deg);animation:buttonShine 4s infinite;}
+.primary:active{transform:scale(.975);}
+.primary span{position:relative;z-index:2;}
+
+.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:9px;}
+.action{min-height:49px;border-radius:16px;background:var(--card);border:1px solid var(--line);color:var(--muted);font-size:11px;font-weight:750;transition:.25s;}
+.action:active{transform:scale(.95);}
+
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px;}
+.info{background:var(--card);border:1px solid var(--line);border-radius:21px;padding:15px;}
+.info-label{color:var(--muted);font-size:10px;}
+.info-value{margin-top:6px;font-size:13px;font-weight:800;}
+
+.section{margin-top:25px;}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:11px;}
+
+.chart-card{background:var(--card);border:1px solid var(--line);border-radius:25px;padding:16px;overflow:hidden;}
+.chart-tabs{display:flex;gap:5px;margin-bottom:15px;}
+.chart-tab{padding:7px 11px;border-radius:10px;background:transparent;color:var(--muted);font-size:10px;font-weight:800;}
+.chart-tab.active{background:rgba(57,217,138,.11);color:var(--accent);}
+.chart{height:145px;position:relative;overflow:hidden;}
+.chart svg{width:100%;height:100%;overflow:visible;}
+.chart-line{fill:none;stroke:var(--accent);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 5px rgba(57,217,138,.35));stroke-dasharray:500;stroke-dashoffset:500;animation:drawLine 1.4s ease forwards;}
+.chart-area{opacity:.08;}
+.chart-point{fill:var(--accent);animation:pulsePoint 1.5s infinite;}
+.chart-note{color:var(--muted);font-size:9px;margin-top:8px;}
+
+.history{display:flex;flex-direction:column;gap:8px;}
+.history-item{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--line);border-radius:19px;padding:13px 14px;animation:slideUp .35s ease;}
+.history-left{display:flex;align-items:center;gap:10px;}
+.history-icon{width:36px;height:36px;border-radius:12px;background:rgba(57,217,138,.09);color:var(--accent);display:grid;place-items:center;}
+.history-main{font-size:12px;font-weight:800;}
+.history-date{font-size:9px;color:var(--muted);margin-top:3px;}
+.history-total{font-size:12px;font-weight:850;}
+
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.tool{min-height:75px;text-align:left;padding:13px;border-radius:20px;background:var(--card);border:1px solid var(--line);transition:.25s;}
+.tool:active{transform:scale(.96);}
+.tool-icon{font-size:20px;}
+.tool-title{margin-top:7px;font-size:11px;font-weight:800;}
+.tool-sub{margin-top:2px;font-size:9px;color:var(--muted);}
+
+.alert-card{background:var(--card);border:1px solid var(--line);border-radius:23px;padding:16px;}
+.alert-row{display:flex;gap:8px;}
+.alert-input{flex:1;min-width:0;border:1px solid var(--line);outline:0;border-radius:14px;background:rgba(255,255,255,.04);color:var(--text);padding:12px;font-size:13px;}
+.alert-btn{padding:0 15px;border-radius:14px;background:rgba(57,217,138,.12);color:var(--accent);font-size:11px;font-weight:850;}
+.alert-status{margin-top:10px;font-size:10px;color:var(--muted);}
+
+.bottom{position:fixed;z-index:50;left:50%;bottom:calc(9px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(488px,calc(100% - 24px));height:64px;display:grid;grid-template-columns:repeat(4,1fr);background:rgba(13,17,25,.88);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border:1px solid rgba(255,255,255,.09);border-radius:22px;box-shadow:0 15px 45px rgba(0,0,0,.4);}
+.nav{background:transparent;color:#687282;font-size:10px;font-weight:700;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;}
+.nav-icon{font-size:18px;transition:.25s;}
+.nav.active{color:var(--accent);}
+.nav.active .nav-icon{transform:translateY(-2px) scale(1.08);}
+
+.overlay{position:fixed;inset:0;z-index:100;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.62);backdrop-filter:blur(7px);}
+.overlay.show{display:flex;animation:fadeIn .25s ease;}
+.modal{width:min(520px,100%);background:#10151f;border:1px solid var(--line);border-radius:30px 30px 0 0;padding:18px 18px calc(22px + env(safe-area-inset-bottom));animation:modalUp .35s cubic-bezier(.2,.8,.2,1);}
+.handle{width:40px;height:4px;border-radius:5px;background:#4c5665;margin:0 auto 20px;}
+.modal-title{font-size:18px;font-weight:850;}
+.modal-sub{color:var(--muted);font-size:11px;margin-top:4px;}
+.modal-row{margin-top:15px;display:flex;flex-direction:column;gap:8px;}
+.modal-btn{width:100%;min-height:50px;border-radius:16px;background:rgba(255,255,255,.055);border:1px solid var(--line);text-align:left;padding:0 15px;font-size:12px;font-weight:750;}
+.close{margin-top:10px;background:rgba(255,255,255,.08);text-align:center;}
+
+.toast{position:fixed;z-index:200;left:50%;bottom:88px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#eafdf3;color:#07130d;padding:11px 15px;border-radius:14px;font-size:11px;font-weight:850;box-shadow:0 15px 40px rgba(0,0,0,.3);transition:.3s;white-space:nowrap;}
+.toast.show{opacity:1;transform:translate(-50%,0);}
+
+/* ADMIN PANEL */
+.admin-panel{
+  position:fixed;z-index:300;bottom:90px;left:50%;transform:translateX(-50%);
+  width:min(340px,calc(100% - 32px));background:#0f1620;border:1px solid rgba(57,217,138,.35);
+  border-radius:20px;padding:18px 18px;box-shadow:0 20px 50px rgba(0,0,0,.5);display:none;
+}
+.admin-panel.show{display:block;animation:slideUp .3s ease;}
+.admin-title{font-size:13px;font-weight:800;color:var(--accent);margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;}
+.admin-close{background:transparent;color:var(--muted);font-size:18px;padding:0 4px;}
+.admin-row{display:flex;justify-content:space-between;gap:12px;margin-bottom:8px;}
+.admin-box{flex:1;background:rgba(255,255,255,.04);border-radius:14px;padding:12px;text-align:center;}
+.admin-stat{font-size:24px;font-weight:900;letter-spacing:-1px;}
+.admin-label{font-size:10px;color:var(--muted);margin-top:3px;}
+
+body.light{--bg:#f5f7fa;--bg2:#edf0f5;--card:rgba(255,255,255,.86);--card2:#fff;--text:#10141c;--muted:#697383;--line:rgba(10,20,35,.09);--shadow:0 20px 55px rgba(30,40,60,.12);}
+body.light .money-card,body.light .rateHero{background:rgba(255,255,255,.92);}
+body.light .bottom{background:rgba(255,255,255,.88);}
+body.light .modal{background:#f7f8fb;}
+
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(57,217,138,.5)}70%{box-shadow:0 0 0 9px rgba(57,217,138,0)}100%{box-shadow:0 0 0 0 rgba(57,217,138,0)}}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes spinReverse{from{transform:rotate(360deg)}to{transform:rotate(0)}}
+@keyframes coinSpin{0%{transform:rotateY(0) scale(1)}50%{transform:rotateY(180deg) scale(1.15)}100%{transform:rotateY(360deg) scale(1)}}
+@keyframes coinFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+@keyframes swapSpin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+@keyframes numberPop{0%{transform:translateY(7px);opacity:.2}100%{transform:translateY(0);opacity:1}}
+@keyframes shine{0%,65%{left:-100px}100%{left:110px}}
+@keyframes buttonShine{0%,60%{left:-100px}100%{left:120%}}
+@keyframes drawLine{to{stroke-dashoffset:0}}
+@keyframes pulsePoint{0%,100%{r:3}50%{r:5}}
+@keyframes slideUp{from{transform:translateY(8px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes modalUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important;}}
+@media(max-width:370px){.app{padding-left:12px;padding-right:12px;}.rate-number{font-size:30px;}.amount{font-size:30px;}.result-value{font-size:38px;}.currency{flex-basis:105px;}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo" id="logoBtn"><span>P</span></div>
+      <div>
+        <div class="brand-title">Pul Perewot</div>
+        <div class="brand-sub">Çalt • Ýönekeý • Ynamly</div>
+      </div>
+    </div>
+    <button class="settings" id="settingsBtn" aria-label="Sazlamalar">⚙️</button>
+  </header>
+
+  <div class="livebar">
+    <div class="live-left">
+      <span class="live-dot" id="liveDot"></span>
+      <span id="apiStatus">Kurs täzelenýär...</span>
+    </div>
+    <div class="live-right" id="lastUpdate">—</div>
+  </div>
+
+  <section class="rateHero">
+    <div class="rate-label">Häzirki kurs</div>
+    <div class="rate-main">
+      <div class="rate-number" id="heroRate">86.56</div>
+      <div class="rate-unit">RUB</div>
+    </div>
+    <div class="rate-meta">
+      <span class="change" id="rateChange">↑ 0.00%</span>
+      <span class="update-time" id="heroCurrency">USD / RUB</span>
+    </div>
+  </section>
+
+  <div class="currency-title">
+    <div class="section-title">Walýuta saýla</div>
+    <div class="section-link" id="favoriteText">☆ Halanýan</div>
+  </div>
+
+  <div class="currency-scroll">
+    <button class="currency active" data-currency="USD">
+      <div class="coin usd">$</div>
+      <div><div class="currency-code">USD</div><div class="currency-rate" id="usdRate">86.56 ₽</div></div>
+    </button>
+    <button class="currency" data-currency="EUR">
+      <div class="coin eur">€</div>
+      <div><div class="currency-code">EUR</div><div class="currency-rate" id="eurRate">94.20 ₽</div></div>
+    </button>
+    <button class="currency" data-currency="TRY">
+      <div class="coin try">₺</div>
+      <div><div class="currency-code">TRY</div><div class="currency-rate" id="tryRate">2.65 ₽</div></div>
+    </button>
+  </div>
+
+  <section class="calculator">
+    <div class="direction">
+      <div class="direction-pill" id="fromLabel">USD</div>
+      <button class="swap" id="swapBtn" aria-label="Ýönü çalyş">⇅</button>
+      <div class="direction-pill" id="toLabel">RUB</div>
+    </div>
+
+    <div class="money-card" id="sendCard">
+      <div class="money-label" id="sendLabel">GÖNDERÝÄRSIŇ</div>
+      <div class="money-row">
+        <div class="money-symbol" id="moneySymbol">$</div>
+        <input id="amount" class="amount" inputmode="decimal" autocomplete="off" placeholder="0" aria-label="Mukdar">
+        <button class="clear" id="clearBtn">×</button>
+        <div class="currency-mini" id="inputCurrency">USD</div>
+      </div>
+    </div>
+
+    <div class="result" id="resultCard">
+      <div class="result-label" id="resultLabel">ALICY ALAR</div>
+      <div class="result-value" id="resultValue">0</div>
+      <div class="result-currency" id="resultCurrency">RUB</div>
+      <div class="result-rate">
+        <span>Kurs</span>
+        <strong id="effectiveRate">1 USD = 89.01 RUB</strong>
+      </div>
+    </div>
+
+    <button class="primary" id="whatsappBtn"><span>WhatsApp bilen dowam et →</span></button>
+
+    <div class="actions">
+      <button class="action" id="copyBtn">Kopyala</button>
+      <button class="action" id="shareBtn">Paýlaş</button>
+      <button class="action" id="receiptBtn">🧾 Makbuz</button>
+    </div>
+
+    <div class="info-grid">
+      <div class="info">
+        <div class="info-label">Bazadaky kurs</div>
+        <div class="info-value" id="marketRate">86.56 RUB</div>
+      </div>
+      <div class="info">
+        <div class="info-label">Soňky täzelenme</div>
+        <div class="info-value" id="infoUpdate">—</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div class="section-title">Kurs hereketi</div>
+      <div class="section-link">Live</div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-tabs">
+        <button class="chart-tab active" data-range="1D">1G</button>
+        <button class="chart-tab" data-range="1W">1H</button>
+        <button class="chart-tab" data-range="1M">1A</button>
+        <button class="chart-tab" data-range="3M">3A</button>
+      </div>
+      <div class="chart" id="chart"></div>
+      <div class="chart-note">Grafik wizual tendensi görkezýär.</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div class="section-title">Soňky hasaplamalar</div>
+      <button class="section-link" id="clearHistory">Arassala</button>
+    </div>
+    <div class="history" id="history"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><div class="section-title">Kurs duýduryşy</div></div>
+    <div class="alert-card">
+      <div class="alert-row">
+        <input class="alert-input" id="alertInput" inputmode="decimal" placeholder="Mysal: 91.00">
+        <button class="alert-btn" id="alertBtn">Goý</button>
+      </div>
+      <div class="alert-status" id="alertStatus">Duýduryş goýulmady.</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><div class="section-title">Gurallar</div></div>
+    <div class="tools">
+      <button class="tool" id="installBtn">
+        <div class="tool-icon">📱</div>
+        <div class="tool-title">App ýaly ulan</div>
+        <div class="tool-sub">Home Screen-e goş</div>
+      </button>
+      <button class="tool" id="refreshBtn">
+        <div class="tool-icon">↻</div>
+        <div class="tool-title">Kursy täzele</div>
+        <div class="tool-sub">Häzir barla</div>
+      </button>
+      <button class="tool" id="favoriteBtn">
+        <div class="tool-icon">☆</div>
+        <div class="tool-title">Favori</div>
+        <div class="tool-sub">Walýutany ýatda sakla</div>
+      </button>
+      <button class="tool" id="shareAppBtn">
+        <div class="tool-icon">↗</div>
+        <div class="tool-title">Paýlaş</div>
+        <div class="tool-sub">Pul Perewot</div>
+      </button>
+    </div>
+  </section>
+</div>
+
+<nav class="bottom">
+  <button class="nav active" data-target="top"><div class="nav-icon">⌂</div>Baş sahypa</button>
+  <button class="nav" data-target="chart"><div class="nav-icon">⌁</div>Kurslar</button>
+  <button class="nav" data-target="history"><div class="nav-icon">◷</div>Geçmiş</button>
+  <button class="nav" id="navSettings"><div class="nav-icon">⚙</div>Sazlamalar</button>
+</nav>
+
+<div class="overlay" id="settingsModal">
+  <div class="modal">
+    <div class="handle"></div>
+    <div class="modal-title">Sazlamalar</div>
+    <div class="modal-sub">Pul Perewot V10</div>
+    <div class="modal-row">
+      <button class="modal-btn" id="darkTheme">🌙 Dark görnüş</button>
+      <button class="modal-btn" id="lightTheme">☀️ Light görnüş</button>
+      <button class="modal-btn" id="systemTheme">📱 Sistem görnüşi</button>
+      <button class="modal-btn" id="resetApp">♻️ Ýerli maglumatlary arassala</button>
+      <button class="modal-btn close" id="closeSettings">Ýap</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="receiptModal">
+  <div class="modal">
+    <div class="handle"></div>
+    <div class="modal-title">Transfer özeti</div>
+    <div id="receiptContent" style="margin-top:15px;padding:18px;border-radius:20px;background:rgba(255,255,255,.045);border:1px solid var(--line);"></div>
+    <div class="modal-row">
+      <button class="modal-btn" id="copyReceipt">Kopyala</button>
+      <button class="modal-btn" id="shareReceipt">Paýlaş</button>
+      <button class="modal-btn close" id="closeReceipt">Ýap</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="admin-panel" id="adminPanel">
+  <div class="admin-title">
+    <span>Admin Panel</span>
+    <button class="admin-close" id="adminClose">×</button>
+  </div>
+  <div class="admin-row">
+    <div class="admin-box">
+      <div class="admin-stat" id="adminTotal">—</div>
+      <div class="admin-label">Toplam</div>
+    </div>
+    <div class="admin-box">
+      <div class="admin-stat" id="adminToday">—</div>
+      <div class="admin-label">Bugün</div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+
+<script>
+const API_URL = 'https://open.er-api.com/v6/latest/USD';
+const PHONE = '79030156403';
+const COMMISSION = 1.04;
+const ADMIN_PASSWORD = 'pul2026';
+const COUNTER_TOTAL = 'pul-perewot-total';
+
+let currentCurrency = localStorage.getItem('favoriteCurrency') || 'USD';
+let direction = 'toRUB';
+let rates = { USD: 86.56, EUR: 94.20, TRY: 2.65 };
+let previousRates = { USD: 86.56, EUR: 94.20, TRY: 2.65 };
+let lastUpdate = localStorage.getItem('pulLastUpdate') || '';
+let history = JSON.parse(localStorage.getItem('pulCalculations') || '[]');
+let alertValue = parseFloat(localStorage.getItem('rateAlert') || '0') || 0;
+
+let logoClicks = 0;
+let logoClickTimer = null;
+let totalCount = null;
+let todayCount = null;
+
+const amountInput = document.getElementById('amount');
+const resultValue = document.getElementById('resultValue');
+const resultCard = document.getElementById('resultCard');
+const heroRate = document.getElementById('heroRate');
+const heroCurrency = document.getElementById('heroCurrency');
+const effectiveRate = document.getElementById('effectiveRate');
+const marketRate = document.getElementById('marketRate');
+const apiStatus = document.getElementById('apiStatus');
+const lastUpdateEl = document.getElementById('lastUpdate');
+const infoUpdate = document.getElementById('infoUpdate');
+const clearBtn = document.getElementById('clearBtn');
+const sendCard = document.getElementById('sendCard');
+const swapBtn = document.getElementById('swapBtn');
+const toast = document.getElementById('toast');
+const adminPanel = document.getElementById('adminPanel');
+
+function money(value){ return new Intl.NumberFormat('ru-RU',{maximumFractionDigits:2}).format(value||0); }
+function integerMoney(value){ return new Intl.NumberFormat('ru-RU',{maximumFractionDigits:0}).format(Math.round(value||0)); }
+function symbol(currency){ return {USD:'$',EUR:'€',TRY:'₺',RUB:'₽'}[currency]||''; }
+
+function showToast(text){
+  toast.textContent = text;
+  toast.classList.add('show');
+  clearTimeout(showToast.timer);
+  showToast.timer = setTimeout(()=>toast.classList.remove('show'),2200);
+}
+
+function saveAll(){
+  localStorage.setItem('pulRates', JSON.stringify(rates));
+  localStorage.setItem('pulCalculations', JSON.stringify(history.slice(0,20)));
+  if(lastUpdate) localStorage.setItem('pulLastUpdate', lastUpdate);
+}
+
+function getTodayKey(){
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const day = String(d.getDate()).padStart(2,'0');
+  return `pul-perewot-${y}-${m}-${day}`;
+}
+
+async function hitCounters(){
+  try{
+    const todayKey = getTodayKey();
+    const [totalRes, todayRes] = await Promise.all([
+      fetch(`https://countapi.mileshilliard.com/api/v1/hit/${COUNTER_TOTAL}`),
+      fetch(`https://countapi.mileshilliard.com/api/v1/hit/${todayKey}`)
+    ]);
+    const totalData = await totalRes.json();
+    const todayData = await todayRes.json();
+    totalCount = totalData.value;
+    todayCount = todayData.value;
+  }catch(e){}
+}
+
+async function getCounters(){
+  try{
+    const todayKey = getTodayKey();
+    const [totalRes, todayRes] = await Promise.all([
+      fetch(`https://countapi.mileshilliard.com/api/v1/get/${COUNTER_TOTAL}`),
+      fetch(`https://countapi.mileshilliard.com/api/v1/get/${todayKey}`)
+    ]);
+    const totalData = await totalRes.json();
+    const todayData = await todayRes.json();
+    totalCount = totalData.value || 0;
+    todayCount = todayData.value || 0;
+  }catch(e){
+    totalCount = totalCount || 0;
+    todayCount = todayCount || 0;
+  }
+}
+
+// Admin
+document.getElementById('logoBtn').addEventListener('click', ()=>{
+  logoClicks++;
+  clearTimeout(logoClickTimer);
+  logoClickTimer = setTimeout(()=> logoClicks = 0, 2000);
+
+  if(logoClicks >= 7){
+    logoClicks = 0;
+    const unlocked = localStorage.getItem('adminUnlocked') === 'true';
+    if(unlocked){
+      showAdminPanel();
+    }else{
+      const pass = prompt('Admin şifresi:');
+      if(pass === ADMIN_PASSWORD){
+        localStorage.setItem('adminUnlocked','true');
+        showAdminPanel();
+        showToast('Admin açıldı ✓');
+      }else if(pass !== null){
+        showToast('Şifre yanlış');
+      }
+    }
+  }
+});
+
+async function showAdminPanel(){
+  await getCounters();
+  document.getElementById('adminTotal').textContent = totalCount !== null ? totalCount : '—';
+  document.getElementById('adminToday').textContent = todayCount !== null ? todayCount : '—';
+  adminPanel.classList.add('show');
+}
+
+document.getElementById('adminClose').addEventListener('click', ()=> adminPanel.classList.remove('show'));
+
+function applyCurrency(){
+  document.querySelectorAll('.currency').forEach(btn=>{
+    btn.classList.toggle('active', btn.dataset.currency === currentCurrency);
+  });
+  document.getElementById('inputCurrency').textContent = direction === 'toRUB' ? currentCurrency : 'RUB';
+  document.getElementById('moneySymbol').textContent = direction === 'toRUB' ? symbol(currentCurrency) : '₽';
+  document.getElementById('fromLabel').textContent = direction === 'toRUB' ? currentCurrency : 'RUB';
+  document.getElementById('toLabel').textContent = direction === 'toRUB' ? 'RUB' : currentCurrency;
+  document.getElementById('heroCurrency').textContent = currentCurrency + ' / RUB';
+  calculate();
+}
+
+function calculate(){
+  const amount = parseFloat(String(amountInput.value).replace(/\s/g,'').replace(',','.')) || 0;
+  const rawRate = rates[currentCurrency];
+  const finalRate = rawRate * COMMISSION;
+  let total;
+
+  if(direction === 'toRUB'){
+    total = Math.round(amount * finalRate);
+    document.getElementById('sendLabel').textContent = 'GÖNDERÝÄRSIŇ';
+    document.getElementById('resultLabel').textContent = 'ALICY ALAR';
+    document.getElementById('resultCurrency').textContent = 'RUB';
+    effectiveRate.textContent = `1 ${currentCurrency} = ${finalRate.toFixed(2)} RUB`;
+  }else{
+    total = amount > 0 ? amount / finalRate : 0;
+    document.getElementById('sendLabel').textContent = 'GÖNDERÝÄRSIŇ';
+    document.getElementById('resultLabel').textContent = 'ALYJYŇ ALJAK WALÝUTASY';
+    document.getElementById('resultCurrency').textContent = currentCurrency;
+    effectiveRate.textContent = `1 RUB = ${(1/finalRate).toFixed(4)} ${currentCurrency}`;
+  }
+
+  resultValue.textContent = direction === 'toRUB' ? integerMoney(total) : money(total);
+  marketRate.textContent = `${rawRate.toFixed(2)} RUB`;
+  heroRate.textContent = finalRate.toFixed(2);
+
+  if(amount > 0){
+    resultCard.classList.remove('updated');
+    void resultCard.offsetWidth;
+    resultCard.classList.add('updated');
+    clearBtn.classList.add('show');
+  }else{
+    clearBtn.classList.remove('show');
+  }
+  updateChange();
+  return {amount, rawRate, finalRate, total};
+}
+
+function updateChange(){
+  const oldRate = previousRates[currentCurrency] || rates[currentCurrency];
+  const newRate = rates[currentCurrency];
+  if(!oldRate) return;
+  const percent = ((newRate - oldRate) / oldRate) * 100;
+  const change = document.getElementById('rateChange');
+  if(percent >= 0){
+    change.className = 'change';
+    change.textContent = `↑ ${percent.toFixed(2)}%`;
+  }else{
+    change.className = 'change down';
+    change.textContent = `↓ ${Math.abs(percent).toFixed(2)}%`;
+  }
+}
+
+async function fetchRates(){
+  apiStatus.textContent = 'Kurs täzelenýär...';
+  document.getElementById('liveDot').style.background = 'var(--warning)';
+  try{
+    const response = await fetch(API_URL,{cache:'no-store'});
+    if(!response.ok) throw new Error('API error');
+    const data = await response.json();
+    if(!data || !data.rates || !data.rates.RUB) throw new Error('Invalid API data');
+
+    previousRates = {...rates};
+    rates.USD = Number(data.rates.RUB);
+    if(data.rates.EUR) rates.EUR = Number(data.rates.RUB) / Number(data.rates.EUR);
+    if(data.rates.TRY) rates.TRY = Number(data.rates.RUB) / Number(data.rates.TRY);
+
+    lastUpdate = new Date().toLocaleTimeString('tk-TM',{hour:'2-digit',minute:'2-digit'});
+    apiStatus.textContent = 'Kurslar täzelendi';
+    document.getElementById('liveDot').style.background = 'var(--accent)';
+    lastUpdateEl.textContent = lastUpdate;
+    infoUpdate.textContent = lastUpdate;
+    updateRateCards();
+    calculate();
+    drawChart();
+    saveAll();
+    checkAlert();
+    showToast('Kurs täzelendi ✓');
+  }catch(error){
+    apiStatus.textContent = 'Kurs täzelenmedi — öňki kurs ulanylýar';
+    document.getElementById('liveDot').style.background = 'var(--warning)';
+    if(lastUpdate){
+      lastUpdateEl.textContent = lastUpdate;
+      infoUpdate.textContent = lastUpdate;
+    }
+    updateRateCards();
+    calculate();
+    drawChart();
+  }
+}
+
+function updateRateCards(){
+  document.getElementById('usdRate').textContent = rates.USD.toFixed(2) + ' ₽';
+  document.getElementById('eurRate').textContent = rates.EUR.toFixed(2) + ' ₽';
+  document.getElementById('tryRate').textContent = rates.TRY.toFixed(2) + ' ₽';
+  heroRate.textContent = (rates[currentCurrency] * COMMISSION).toFixed(2);
+  heroCurrency.textContent = currentCurrency + ' / RUB';
+}
+
+document.querySelectorAll('.currency').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    currentCurrency = btn.dataset.currency;
+    localStorage.setItem('favoriteCurrency', currentCurrency);
+    applyCurrency();
+    drawChart();
+    showToast(currentCurrency + ' saýlandy');
+  });
+});
+
+amountInput.addEventListener('input', calculate);
+amountInput.addEventListener('focus', ()=> sendCard.classList.add('focused'));
+amountInput.addEventListener('blur', ()=> sendCard.classList.remove('focused'));
+clearBtn.addEventListener('click', ()=>{ amountInput.value=''; calculate(); amountInput.focus(); });
+
+swapBtn.addEventListener('click', ()=>{
+  direction = direction === 'toRUB' ? 'fromRUB' : 'toRUB';
+  swapBtn.classList.remove('rotating');
+  void swapBtn.offsetWidth;
+  swapBtn.classList.add('rotating');
+  applyCurrency();
+  showToast(direction === 'toRUB' ? `${currentCurrency} → RUB` : `RUB → ${currentCurrency}`);
+});
+
+document.getElementById('whatsappBtn').addEventListener('click',()=>{
+  const data = calculate();
+  if(data.amount <= 0){ showToast('Ilki mukdary giriziň'); amountInput.focus(); return; }
+  const sent = direction === 'toRUB' ? `${money(data.amount)} ${currentCurrency}` : `${money(data.amount)} RUB`;
+  const received = direction === 'toRUB' ? `${integerMoney(data.total)} RUB` : `${money(data.total)} ${currentCurrency}`;
+  const rateText = direction === 'toRUB' ? `1 ${currentCurrency} = ${data.finalRate.toFixed(2)} RUB` : `1 RUB = ${(1/data.finalRate).toFixed(4)} ${currentCurrency}`;
+  const message = `PUL PEREWOT\n\nGönderilýän:\n${sent}\n\nKurs:\n${rateText}\n\nAlyjynyň aljak möçberi:\n${received}`;
+  saveCalculation(data);
+  window.location.href = `https://wa.me/${PHONE}?text=` + encodeURIComponent(message);
+});
+
+function saveCalculation(data){
+  if(!data || data.amount <= 0) return;
+  history.unshift({
+    id:Date.now(), currency:currentCurrency, direction,
+    amount:data.amount, total:data.total, rate:data.finalRate,
+    time:new Date().toLocaleTimeString('tk-TM',{hour:'2-digit',minute:'2-digit'})
+  });
+  history = history.slice(0,20);
+  saveAll();
+  renderHistory();
+}
+
+function renderHistory(){
+  const container = document.getElementById('history');
+  if(!history.length){
+    container.innerHTML = `<div class="history-item"><div style="color:var(--muted);font-size:11px">Häzirlikçe hasaplama ýok.</div></div>`;
+    return;
+  }
+  container.innerHTML = history.map(item=>{
+    const from = item.direction === 'toRUB' ? `${money(item.amount)} ${item.currency}` : `${money(item.amount)} RUB`;
+    const to = item.direction === 'toRUB' ? `${integerMoney(item.total)} RUB` : `${money(item.total)} ${item.currency}`;
+    return `<button class="history-item" data-history-id="${item.id}">
+      <div class="history-left">
+        <div class="history-icon">${symbol(item.currency)}</div>
+        <div><div class="history-main">${from} → ${to}</div><div class="history-date">${item.time}</div></div>
+      </div>
+      <div class="history-total">↗</div>
+    </button>`;
+  }).join('');
+  document.querySelectorAll('[data-history-id]').forEach(el=>{
+    el.addEventListener('click',()=>{
+      const item = history.find(x=>x.id === Number(el.dataset.historyId));
+      if(!item) return;
+      currentCurrency = item.currency;
+      direction = item.direction;
+      amountInput.value = item.amount;
+      localStorage.setItem('favoriteCurrency', currentCurrency);
+      applyCurrency();
+      window.scrollTo({top:0,behavior:'smooth'});
+      showToast('Hasaplama gaýtadan goýuldy');
+    });
+  });
+}
+
+document.getElementById('clearHistory').addEventListener('click',()=>{
+  history = []; saveAll(); renderHistory(); showToast('Geçmiş arassalandy');
+});
+
+document.getElementById('copyBtn').addEventListener('click',async()=>{
+  const data = calculate();
+  if(data.amount <= 0){ showToast('Ilki mukdary giriziň'); return; }
+  const text = direction === 'toRUB' ? `${money(data.amount)} ${currentCurrency} → ${integerMoney(data.total)} RUB` : `${money(data.amount)} RUB → ${money(data.total)} ${currentCurrency}`;
+  try{ await navigator.clipboard.writeText(text); showToast('Kopyalandy ✓'); }
+  catch{ showToast('Kopyalamak mümkin bolmady'); }
+});
+
+async function shareText(text){
+  if(navigator.share){ try{ await navigator.share({title:'Pul Perewot',text}); return true; }catch{} }
+  try{ await navigator.clipboard.writeText(text); showToast('Kopyalandy ✓'); }catch{}
+  return false;
+}
+
+document.getElementById('shareBtn').addEventListener('click',()=>{
+  const data = calculate();
+  if(data.amount <= 0){ showToast('Ilki mukdary giriziň'); return; }
+  shareText(`PUL PEREWOT\n\n${money(data.amount)} ${currentCurrency}\n→\n${integerMoney(data.total)} RUB\n\nKurs: ${data.finalRate.toFixed(2)} RUB`);
+});
+
+document.getElementById('shareAppBtn').addEventListener('click',()=>{
+  shareText('Pul Perewot — çalt we ýönekeý walýuta hasaplaýjy.');
+});
+
+function buildReceipt(){
+  const data = calculate();
+  if(data.amount <= 0){ showToast('Ilki mukdary giriziň'); return null; }
+  const sent = direction === 'toRUB' ? `${money(data.amount)} ${currentCurrency}` : `${money(data.amount)} RUB`;
+  const received = direction === 'toRUB' ? `${integerMoney(data.total)} RUB` : `${money(data.total)} ${currentCurrency}`;
+  return {
+    sent, received,
+    rate: direction === 'toRUB' ? `1 ${currentCurrency} = ${data.finalRate.toFixed(2)} RUB` : `1 RUB = ${(1/data.finalRate).toFixed(4)} ${currentCurrency}`
+  };
+}
+
+document.getElementById('receiptBtn').addEventListener('click',()=>{
+  const receipt = buildReceipt();
+  if(!receipt) return;
+  document.getElementById('receiptContent').innerHTML = `
+    <div style="font-size:11px;color:var(--muted);">PUL PEREWOT</div>
+    <div style="font-size:16px;font-weight:900;margin-top:4px;">TRANSFER ÖZETI</div>
+    <div style="margin-top:18px;color:var(--muted);font-size:10px;">Gönderilýän</div>
+    <div style="font-size:17px;font-weight:850;margin-top:3px;">${receipt.sent}</div>
+    <div style="margin-top:14px;color:var(--muted);font-size:10px;">Kurs</div>
+    <div style="font-size:13px;font-weight:800;margin-top:3px;">${receipt.rate}</div>
+    <div style="height:1px;background:var(--line);margin:16px 0;"></div>
+    <div style="color:var(--muted);font-size:10px;">Alyjynyň aljak möçberi</div>
+    <div style="color:var(--accent);font-size:28px;font-weight:900;margin-top:4px;">${receipt.received}</div>
+    <div style="color:var(--muted);font-size:9px;margin-top:12px;">${new Date().toLocaleString('tk-TM')}</div>`;
+  document.getElementById('receiptModal').classList.add('show');
+});
+
+document.getElementById('closeReceipt').addEventListener('click',()=> document.getElementById('receiptModal').classList.remove('show'));
+document.getElementById('copyReceipt').addEventListener('click',()=>{
+  const receipt = buildReceipt();
+  if(!receipt) return;
+  shareText(`PUL PEREWOT\n\nGönderilýän:\n${receipt.sent}\n\nKurs:\n${receipt.rate}\n\nAlyjynyň aljak möçberi:\n${receipt.received}`);
+});
+document.getElementById('shareReceipt').addEventListener('click',()=>{
+  const receipt = buildReceipt();
+  if(!receipt) return;
+  shareText(`PUL PEREWOT\n\n${receipt.sent}\n→\n${receipt.received}\n\n${receipt.rate}`);
+});
+
+function drawChart(){
+  const container = document.getElementById('chart');
+  const base = rates[currentCurrency] || 1;
+  const points = [];
+  for(let i=0;i<36;i++){
+    const wave = Math.sin(i*.52)*.9;
+    const wave2 = Math.sin(i*.17)*.55;
+    const drift = (i/35)*((rates[currentCurrency]-previousRates[currentCurrency])||0);
+    points.push(base - .8 + wave + wave2 + drift);
+  }
+  const min = Math.min(...points);
+  const max = Math.max(...points);
+  const width=360, height=145;
+  const coords = points.map((v,i)=>{
+    const x = i/(points.length-1)*width;
+    const y = height - ((v-min)/(max-min||1))*(height-20) - 10;
+    return [x,y];
+  });
+  const line = coords.map((p,i)=>`${i===0?'M':'L'} ${p[0].toFixed(2)} ${p[1].toFixed(2)}`).join(' ');
+  const area = line + ` L ${width} ${height} L 0 ${height} Z`;
+  const last = coords[coords.length-1];
+  container.innerHTML = `<svg viewBox="0 0 ${width} ${height}" preserveAspectRatio="none">
+    <path class="chart-area" d="${area}" fill="var(--accent)"/>
+    <path class="chart-line" d="${line}"/>
+    <circle class="chart-point" cx="${last[0]}" cy="${last[1]}" r="4"/>
+  </svg>`;
+}
+
+document.querySelectorAll('.chart-tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.chart-tab').forEach(x=>x.classList.remove('active'));
+    tab.classList.add('active');
+    drawChart();
+  });
+});
+
+function updateFavoriteUI(){
+  const saved = localStorage.getItem('favoriteCurrency');
+  document.getElementById('favoriteText').textContent = saved ? `★ ${saved}` : '☆ Halanýan';
+}
+
+document.getElementById('favoriteBtn').addEventListener('click',()=>{
+  localStorage.setItem('favoriteCurrency', currentCurrency);
+  updateFavoriteUI();
+  showToast(`${currentCurrency} favori edildi ★`);
+});
+
+function updateAlertUI(){
+  document.getElementById('alertStatus').textContent = alertValue > 0 ?
+    `🔔 ${currentCurrency} ${alertValue.toFixed(2)} RUB bolanda duýduryş beriler.` : 'Duýduryş goýulmady.';
+}
+
+document.getElementById('alertBtn').addEventListener('click',()=>{
+  const value = parseFloat(document.getElementById('alertInput').value.replace(',','.'));
+  if(!value || value <= 0){ showToast('Dogry kurs giriziň'); return; }
+  alertValue = value;
+  localStorage.setItem('rateAlert', String(alertValue));
+  updateAlertUI();
+  showToast('Duýduryş goýuldy 🔔');
+});
+
+function checkAlert(){
+  if(alertValue > 0 && rates[currentCurrency] >= alertValue){
+    showToast(`🔔 ${currentCurrency} maksada ýetdi!`);
+    alertValue = 0;
+    localStorage.removeItem('rateAlert');
+    updateAlertUI();
+  }
+}
+
+document.getElementById('refreshBtn').addEventListener('click',()=> fetchRates());
+document.getElementById('installBtn').addEventListener('click',()=> showToast('Safari → Share → Add to Home Screen'));
+
+const settingsModal = document.getElementById('settingsModal');
+document.getElementById('settingsBtn').addEventListener('click',()=> settingsModal.classList.add('show'));
+document.getElementById('navSettings').addEventListener('click',()=> settingsModal.classList.add('show'));
+document.getElementById('closeSettings').addEventListener('click',()=> settingsModal.classList.remove('show'));
+
+document.getElementById('darkTheme').addEventListener('click',()=>{
+  document.body.classList.remove('light');
+  localStorage.setItem('pulTheme','dark');
+  showToast('Dark görnüş işjeň');
+});
+document.getElementById('lightTheme').addEventListener('click',()=>{
+  document.body.classList.add('light');
+  localStorage.setItem('pulTheme','light');
+  showToast('Light görnüş işjeň');
+});
+document.getElementById('systemTheme').addEventListener('click',()=>{
+  localStorage.setItem('pulTheme','system');
+  applyTheme();
+  showToast('Sistem görnüşi işjeň');
+});
+
+function applyTheme(){
+  const theme = localStorage.getItem('pulTheme') || 'dark';
+  if(theme === 'light') document.body.classList.add('light');
+  else if(theme === 'dark') document.body.classList.remove('light');
+  else document.body.classList.toggle('light', window.matchMedia('(prefers-color-scheme: light)').matches);
+}
+
+document.getElementById('resetApp').addEventListener('click',()=>{
+  ['pulRates','pulCalculations','favoriteCurrency','rateAlert','pulLastUpdate','adminUnlocked'].forEach(k=>localStorage.removeItem(k));
+  history = []; alertValue = 0; currentCurrency = 'USD'; amountInput.value = '';
+  renderHistory(); updateAlertUI(); updateFavoriteUI(); applyCurrency();
+  showToast('Ýerli maglumatlar arassalandy');
+});
+
+document.querySelectorAll('.nav[data-target]').forEach(nav=>{
+  nav.addEventListener('click',()=>{
+    document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));
+    nav.classList.add('active');
+    const t = nav.dataset.target;
+    if(t==='top') window.scrollTo({top:0,behavior:'smooth'});
+    if(t==='chart') document.getElementById('chart').scrollIntoView({behavior:'smooth',block:'center'});
+    if(t==='history') document.getElementById('history').scrollIntoView({behavior:'smooth',block:'center'});
+  });
+});
+
+settingsModal.addEventListener('click',e=>{ if(e.target===settingsModal) settingsModal.classList.remove('show'); });
+document.getElementById('receiptModal').addEventListener('click',e=>{
+  if(e.target===document.getElementById('receiptModal')) document.getElementById('receiptModal').classList.remove('show');
+});
+
+(function init(){
+  const savedRates = localStorage.getItem('pulRates');
+  if(savedRates){ try{ rates = {...rates, ...JSON.parse(savedRates)}; }catch{} }
+  applyTheme();
+  updateRateCards();
+  applyCurrency();
+  renderHistory();
+  updateFavoriteUI();
+  updateAlertUI();
+  if(lastUpdate){ lastUpdateEl.textContent = lastUpdate; infoUpdate.textContent = lastUpdate; }
+  drawChart();
+  fetchRates();
+  setInterval(fetchRates, 60000);
+  hitCounters(); // ziyaretçi sayacını artır
+})();
+</script>
+</body>
+</html>
