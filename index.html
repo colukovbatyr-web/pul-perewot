@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Пополнение Tmcell</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;800&family=Onest:wght@400;600;700&display=swap">
+<style>
+:root{--bg:#0a55a8;--paper:#f6f9ff;--ink:#0b1f3f;--muted:#5b6b82;--line:#c9d6ea;--field:#e6eefb;--brand:#0a55a8;--on-brand:#fff;--accent:#ffd23f;--err:#c62828;
+--disp:"Unbounded","Arial Black",Arial,sans-serif;--body:"Onest","Segoe UI",Roboto,Arial,sans-serif;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#061a3a;--paper:#10264a;--ink:#eaf1ff;--muted:#9db0cc;--line:#2a4468;--field:#0b1d3a;--brand:#6fa0ff;--on-brand:#06152b;--err:#ff8a80}}
+:root[data-theme="dark"]{--bg:#061a3a;--paper:#10264a;--ink:#eaf1ff;--muted:#9db0cc;--line:#2a4468;--field:#0b1d3a;--brand:#6fa0ff;--on-brand:#06152b;--err:#ff8a80}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:#fff;font:16px/1.5 var(--body)}
+main{max-width:520px;margin:0 auto;padding:22px 16px 40px}
+.top{display:flex;align-items:center;justify-content:space-between;margin:0 0 16px}
+.logo{width:68px;height:68px;display:block}
+.lang{display:flex;gap:4px;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:transparent;color:#fff;font:700 14px var(--body);padding:7px 12px;border-radius:999px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:#fff;color:#0a3d7a}
+h1{font:800 clamp(26px,8vw,38px)/1.1 var(--disp);margin:0 0 10px;letter-spacing:-.02em}
+.lead{margin:0 0 20px;max-width:36ch;color:rgba(255,255,255,.86)}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:0 0 16px}
+.tabs button{border:2px solid rgba(255,255,255,.35);background:transparent;color:#fff;font:700 16px var(--body);padding:11px;border-radius:14px;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:#fff;border-color:#fff;color:#0a3d7a}
+.ticket{position:relative;overflow:hidden;background:var(--paper);color:var(--ink);border-radius:22px;padding:22px 20px 0}
+.lbl,label{display:block;font-weight:700;margin:0 0 8px}
+.field{margin-bottom:20px}
+.phone{display:flex;border:2px solid var(--line);border-radius:12px;background:var(--field);overflow:hidden}
+.phone:focus-within{border-color:var(--brand)}
+.phone span{padding:0 14px;min-width:64px;justify-content:center;display:flex;align-items:center;font-weight:700;border-right:1px solid var(--line)}
+.phone input{flex:1;min-width:0;border:0;background:transparent;color:var(--ink);font:600 22px var(--body);letter-spacing:.04em;padding:13px 12px;outline:0}
+.amounts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.amounts button{font:700 17px var(--body);padding:12px 0;border-radius:12px;border:2px solid var(--line);background:var(--field);color:var(--ink);cursor:pointer}
+.amounts button[aria-pressed="true"]{border-color:var(--brand);background:var(--brand);color:var(--on-brand)}
+.custom{margin-top:8px;width:100%;border:2px solid var(--line);border-radius:12px;background:var(--field);color:var(--ink);font:600 17px var(--body);padding:11px 12px}
+.custom:focus{outline:0;border-color:var(--brand)}
+.tear{position:relative;margin:4px -20px 0;border-top:2px dashed var(--line)}
+.tear::before,.tear::after{content:"";position:absolute;top:-13px;width:24px;height:24px;border-radius:50%;background:var(--bg)}
+.tear::before{left:-12px}.tear::after{right:-12px}
+.stub{padding:22px 0 22px}
+.k{font-weight:700;color:var(--muted);margin:0}
+.rub{font:800 clamp(40px,13vw,58px)/1.05 var(--disp);letter-spacing:-.03em;margin:4px 0 6px;font-variant-numeric:tabular-nums}
+.rub small{font-size:.55em;margin-left:6px}
+.note{color:var(--muted);font-size:14px;margin:0 0 16px}
+.err{color:var(--err);min-height:1.4em;margin:0 0 10px;font-size:15px}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.go{display:block;width:100%;border:0;border-radius:14px;background:var(--accent);color:#1a1400;font:800 18px var(--body);padding:16px;cursor:pointer;text-align:center;text-decoration:none}
+.alt{border:2px solid var(--line);background:var(--field);color:var(--ink);font:700 17px var(--body);border-radius:14px;padding:16px;cursor:pointer}
+.row{display:flex;gap:10px}.row .go{flex:1}
+.sum{font:800 20px/1.25 var(--disp);margin:4px 0 6px}
+.h2{font:800 20px/1.2 var(--disp);margin:0 0 6px}
+.ticket a:not(.go){color:var(--brand);font-weight:700}
+.hidden{display:none}
+.svc{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 20px}
+.svc button{font:700 15px var(--body);padding:11px 4px;border-radius:12px;border:2px solid var(--line);background:var(--field);color:var(--ink);cursor:pointer}
+.svc button[aria-pressed="true"]{border-color:var(--brand);background:var(--brand);color:var(--on-brand)}
+.steps{margin:28px 0 0;padding:0;list-style:none;display:grid;gap:12px;color:rgba(255,255,255,.82)}
+.steps li{padding-left:14px;border-left:3px solid var(--accent)}
+.steps b{color:#fff}
+footer{margin-top:26px;color:rgba(255,255,255,.7);font-size:14px}
+body::before,body::after{content:"";position:fixed;border-radius:50%;pointer-events:none;z-index:-1}
+body::before{width:420px;height:420px;top:-160px;right:-160px;background:rgba(255,255,255,.07)}
+body::after{width:300px;height:300px;bottom:-120px;left:-120px;background:rgba(255,255,255,.05)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.chips span{font-size:13px;font-weight:600;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.14);display:inline-flex;align-items:center;gap:7px}
+.chips span::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.bar{height:34px;margin-top:20px;opacity:.5;border-radius:2px;background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 5px,var(--ink) 5px 6px,transparent 6px 10px,var(--ink) 10px 13px,transparent 13px 16px)}
+.check{width:64px;height:64px;border-radius:50%;background:var(--accent);color:#1a1400;font:800 34px/64px var(--disp);text-align:center;margin:0 0 12px}
+.wa{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));width:56px;height:56px;border-radius:50%;background:#25d366;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.3)}
+.wa svg{width:30px;height:30px}
+footer{margin-bottom:44px}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(255,255,255,.55)}100%{box-shadow:0 0 0 30px rgba(255,255,255,0)}}
+@keyframes pop{0%{transform:scale(.2);opacity:0}70%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+.sig{display:flex;align-items:flex-end;gap:3px;height:22px;margin:0 auto 0 14px}
+.sig i{width:5px;border-radius:2px;background:var(--accent);display:block}
+.sig i:nth-child(1){height:6px}.sig i:nth-child(2){height:10px}.sig i:nth-child(3){height:15px}.sig i:nth-child(4){height:21px}
+.go{position:relative;overflow:hidden}
+.conf{position:absolute;top:-10px;width:8px;height:14px;border-radius:2px;pointer-events:none}
+@keyframes drop{0%{transform:translateY(-40px) rotate(-3deg);opacity:0}100%{transform:none;opacity:1}}
+@keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.07)}100%{transform:scale(1)}}
+@keyframes sig{0%,100%{opacity:.3}50%{opacity:1}}
+@keyframes shine{0%,70%{transform:translateX(-120%)}100%{transform:translateX(320%)}}
+@keyframes fall{to{transform:translateY(420px) rotate(540deg);opacity:0}}
+@keyframes drift{to{transform:translate(-30px,40px)}}
+@media (prefers-reduced-motion:no-preference){.go{transition:transform .12s}.go:active{transform:scale(.98)}.logo{border-radius:50%;animation:ping 1.8s ease-out 3}.check{animation:pop .5s ease-out}
+#form,#conf,#done{animation:drop .7s cubic-bezier(.2,1.1,.3,1) both}
+.sig i{animation:sig 1.4s ease-in-out infinite}.sig i:nth-child(2){animation-delay:.15s}.sig i:nth-child(3){animation-delay:.3s}.sig i:nth-child(4){animation-delay:.45s}
+#go::after{content:"";position:absolute;inset:0 auto 0 0;width:35%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.6),transparent);animation:shine 4.5s ease-in-out infinite}
+.bump{transform-origin:left center;animation:bump .3s ease-out}
+.amounts button{transition:transform .12s}.amounts button:active{transform:scale(.94)}
+.conf{animation:fall 1.8s ease-in forwards}
+body::before{animation:drift 16s ease-in-out infinite alternate}}
+</style>
+</head>
+<body>
+<main>
+<div class="top">
+<svg class="logo" viewBox="0 0 200 200" role="img" aria-label="TM Cell"><defs><clipPath id="c"><circle cx="100" cy="100" r="96"/></clipPath></defs><g clip-path="url(#c)"><rect width="200" height="200" fill="#0a55a8"/><polygon points="14,122 76,122 170,210 100,210" fill="#053a74"/><rect x="84" y="80" width="130" height="42" rx="21" fill="#fff"/><g font-family="Arial Black,Arial,Helvetica,sans-serif" font-weight="900" font-size="40"><text x="14" y="114" fill="#fff">TM</text><text x="98" y="114" fill="#0a55a8">CELL</text></g></g></svg>
+<div class="sig" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+<div class="lang" role="group" aria-label="Language">
+<button type="button" data-l="ru" aria-pressed="true">RU</button>
+<button type="button" data-l="tk" aria-pressed="false">TM</button>
+<button type="button" data-l="en" aria-pressed="false">EN</button>
+</div>
+</div>
+<h1 data-i="title"></h1>
+<p class="lead" data-i="lead"></p>
+<div class="chips"><span data-i="c1"></span><span data-i="c2"></span><span data-i="c3"></span></div>
+
+<div id="viewA">
+<section class="ticket" id="form">
+<div class="svc" role="group" aria-label="Service"><button type="button" data-s="tm" aria-pressed="true">Tmcell</button><button type="button" data-s="wf" aria-pressed="false">Wi-Fi</button><button type="button" data-s="bf" aria-pressed="false">Belet Film</button></div>
+<div class="field">
+<label for="ph" id="pl"></label>
+<div class="phone"><span id="pf">+993</span><input id="ph" inputmode="numeric" autocomplete="tel-national" placeholder="65 123456" maxlength="9"></div>
+</div>
+<div class="field">
+<div class="lbl" id="al" data-i="amtLbl"></div>
+<div class="amounts" role="group" aria-labelledby="al">
+<button type="button" aria-pressed="false" data-a="10">10</button>
+<button type="button" aria-pressed="true" data-a="20">20</button>
+<button type="button" aria-pressed="false" data-a="50">50</button>
+<button type="button" aria-pressed="false" data-a="100">100</button>
+</div>
+<input class="custom" id="cu" inputmode="numeric" data-ph="other">
+</div>
+<div class="tear" aria-hidden="true"></div>
+<div class="stub">
+<p class="k" data-i="pay"></p>
+<p class="rub" id="rub" aria-live="polite">0<small>₽</small></p>
+<p class="note" id="nt"></p>
+<p class="err" id="er" role="alert"></p>
+<button class="go" id="go" type="button" data-i="goBtn"></button>
+<div class="bar" aria-hidden="true"></div>
+</div>
+</section>
+
+<section class="ticket hidden" id="conf">
+<div class="stub">
+<div class="lbl" data-i="chk"></div>
+<p class="sum" id="sum"></p>
+<p class="note" id="sum2"></p>
+<p class="note" data-i="nofix"></p>
+<div class="row"><button class="alt" id="back" type="button" data-i="back"></button><a class="go" id="ok" href="https://wa.me/79030156403" target="_blank" rel="noopener" data-i="ok"></a></div>
+</div>
+</section>
+
+<section class="ticket hidden" id="done" aria-live="polite">
+<div class="stub">
+<div class="check" aria-hidden="true">✓</div>
+<div class="lbl" data-i="sent"></div>
+<p style="margin:0 0 16px"><span data-i="sentTxt"></span> <a href="https://wa.me/79030156403">+7 903 015-64-03</a></p>
+<button class="alt" type="button" onclick="location.reload()" data-i="newReq"></button>
+</div>
+</section>
+
+<section class="ticket" style="margin-top:16px">
+<div class="stub">
+<h2 class="h2" data-i="convH"></h2>
+<p class="note" data-i="convHint"></p>
+<div class="field"><div class="phone"><span>₽</span><input id="cr" inputmode="decimal" placeholder="100" aria-label="RUB"></div></div>
+<div class="field"><div class="phone"><span>TMT</span><input id="ct" inputmode="decimal" placeholder="19" aria-label="TMT"></div></div>
+<p class="note" style="margin:0" id="convRate"></p>
+</div>
+</section>
+
+<ol class="steps">
+<li><b data-i="s1b"></b> <span data-i="s1t"></span></li>
+<li><b data-i="s2b"></b> <span data-i="s2t"></span></li>
+<li><b data-i="s3b"></b> <span data-i="s3t"></span></li>
+</ol>
+</div>
+
+<footer data-i="foot"></footer>
+<a class="wa" href="https://wa.me/79030156403" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M12 2.5a9.5 9.5 0 0 0-8.2 14.3L2.5 21.5l4.8-1.3A9.5 9.5 0 1 0 12 2.5z"/><circle cx="8.5" cy="12" r="1.3" fill="#25d366"/><circle cx="12" cy="12" r="1.3" fill="#25d366"/><circle cx="15.5" cy="12" r="1.3" fill="#25d366"/></svg></a>
+</main>
+
+<script>
+// Номер WhatsApp: международный формат без "+" и пробелов
+var WA_NUMBER = "79030156403";
+// Курс: за 100 рублей даём столько манат
+var TMT_PER_100_RUB = 19;
+
+var T = {
+ru:{title:"Пополнение Tmcell",lead:"Введите номер и сумму в манатах. Сразу увидите, сколько заплатить в рублях.",tabTop:"Пополнение",tabConv:"Конвертор",phoneLbl:"Номер Tmcell",amtLbl:"Сумма пополнения, манат",other:"Другая сумма",pay:"Вы платите",goBtn:"Продолжить",errPhone:"Введите 8 цифр номера, например 65 123456.",errAmt:"Укажите сумму пополнения.",chk:"Проверьте данные",back:"Изменить",ok:"Подтвердить",nofix:"Ошибочное пополнение вернуть нельзя.",sent:"Заявка отправлена",sentTxt:"Дождитесь ответа в WhatsApp: мы пришлём реквизиты. Если чат не открылся, напишите нам:",newReq:"Новая заявка",s1b:"Отправьте заявку.",s1t:"Откроется WhatsApp с готовым сообщением.",s2b:"Оплатите.",s2t:"Мы пришлём реквизиты и сумму к оплате.",s3b:"Получите пополнение.",s3t:"После оплаты баланс пополняется, мы подтверждаем в чате.",foot:"Независимый сервис, не является официальным сайтом Tmcell, Wi-Fi или Belet Film.",c1:"Без регистрации",c2:"Ответ в WhatsApp",ttl:"Пополнение {s}",wfLbl:"Номер договора или логин Wi-Fi",bfLbl:"Номер телефона или аккаунт Belet Film",idPh:"Например: 123456",errId:"Введите номер или логин.",c3:"100 ₽ = 19 TMT",rate:"Курс: 100 ₽ = 19 TMT.",exact:"Точную сумму подтвердим в WhatsApp.",enter:"Укажите сумму пополнения.",about:"К оплате около",convH:"Конвертор: рубли и манаты",convHint:"Введите сумму в любом поле, второе посчитается само."},
+tk:{title:"Tmcell hasabyny dolduryş",lead:"Telefon belgiňizi we manat mukdaryny giriziň. Näçe rubl tölemelidigini derrew görersiňiz.",tabTop:"Doldurmak",tabConv:"Konwertor",phoneLbl:"Tmcell telefon belgisi",amtLbl:"Dolduryljak mukdar, manat",other:"Başga mukdar",pay:"Tölemeli",goBtn:"Dowam et",errPhone:"8 sanly belgi giriziň, meselem 65 123456.",errAmt:"Dolduryljak mukdary giriziň.",chk:"Maglumatlary barlaň",back:"Üýtget",ok:"Tassykla",nofix:"Ýalňyş dolduryşy yzyna gaýtaryp bolmaýar.",sent:"Haýyş iberildi",sentTxt:"WhatsApp-da jogaba garaşyň: töleg maglumatlaryny ibereris. Çat açylmasa, bize ýazyň:",newReq:"Täze haýyş",s1b:"Haýyş iberiň.",s1t:"WhatsApp taýyn habar bilen açylar.",s2b:"Töläň.",s2t:"Rekwizitleri we töleg mukdaryny ibereris.",s3b:"Dolduryş alyň.",s3t:"Töleg gelenden soň balans dolýar, çatda tassyklarys.",foot:"Garaşsyz hyzmat, Tmcell, Wi-Fi we Belet Film-iň resmi sajty däl.",c1:"Hasaba durmak gerek däl",c2:"WhatsApp-da jogap",ttl:"{s} hasabyny dolduryş",wfLbl:"Wi-Fi şertnama belgisi ýa-da login",bfLbl:"Belet Film telefon belgisi ýa-da hasaby",idPh:"Meselem: 123456",errId:"Belgini ýa-da logini giriziň.",c3:"100 ₽ = 19 TMT",rate:"Nyrh: 100 ₽ = 19 TMT.",exact:"Takyk mukdary WhatsApp-da tassyklarys.",enter:"Dolduryljak mukdary giriziň.",about:"Tölemeli takmynan",convH:"Konwertor: rubl we manat",convHint:"Islendik meýdana mukdar ýazyň, beýlekisi awtomatiki hasaplanýar."},
+en:{title:"Tmcell top-up",lead:"Enter the number and the amount in manat. You will instantly see how much to pay in rubles.",tabTop:"Top-up",tabConv:"Converter",phoneLbl:"Tmcell number",amtLbl:"Top-up amount, manat",other:"Other amount",pay:"You pay",goBtn:"Continue",errPhone:"Enter 8 digits of the number, e.g. 65 123456.",errAmt:"Enter the top-up amount.",chk:"Check the details",back:"Edit",ok:"Confirm",nofix:"A top-up to a wrong number cannot be reversed.",sent:"Request sent",sentTxt:"Wait for a reply in WhatsApp: we will send the payment details. If the chat did not open, message us:",newReq:"New request",s1b:"Send a request.",s1t:"WhatsApp opens with a ready message.",s2b:"Pay.",s2t:"We send the payment details and the amount.",s3b:"Get the top-up.",s3t:"After payment the balance is topped up and we confirm in the chat.",foot:"Independent service, not the official website of Tmcell, Wi-Fi or Belet Film.",c1:"No sign-up",c2:"Reply in WhatsApp",ttl:"{s} top-up",wfLbl:"Wi-Fi contract number or login",bfLbl:"Belet Film phone number or account",idPh:"e.g. 123456",errId:"Enter the number or login.",c3:"100 ₽ = 19 TMT",rate:"Rate: 100 ₽ = 19 TMT.",exact:"We confirm the exact amount in WhatsApp.",enter:"Enter the top-up amount.",about:"To pay about",convH:"Converter: rubles and manat",convHint:"Type an amount in either field, the other updates automatically."}
+};
+
+var $ = function(id){ return document.getElementById(id); };
+var SV = {tm:{name:"Tmcell"},wf:{name:"Wi-Fi"},bf:{name:"Belet Film"}};
+var lang = "tk", service = "tm", amount = 20, shown = 0, raf = 0, pendingMsg = "";
+var btns = document.querySelectorAll(".amounts button");
+var cu = $("cu"), ph = $("ph"), er = $("er"), rubEl = $("rub");
+var fmt = function(n){ return n.toLocaleString(lang === "en" ? "en-US" : "ru-RU"); };
+var calc = function(a){ return Math.ceil(a * 100 / TMT_PER_100_RUB); };
+var f2 = function(n){ return String(parseFloat(n.toFixed(2))); };
+var num = function(s){ return parseFloat(String(s).replace(",", ".")) || 0; };
+
+function show(n){ rubEl.innerHTML = fmt(n) + "<small>₽</small>"; }
+function render(){
+  var tg = amount > 0 ? calc(amount) : 0, from = shown, t0 = performance.now();
+  cancelAnimationFrame(raf);
+  rubEl.classList.remove("bump"); void rubEl.offsetWidth; rubEl.classList.add("bump");
+  $("nt").textContent = amount > 0 ? amount + " TMT = " + fmt(tg) + " ₽. " + T[lang].rate + " " + T[lang].exact : T[lang].enter;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { shown = tg; show(tg); return; }
+  (function step(t){
+    var p = Math.min(1, (t - t0) / 350), e = 1 - Math.pow(1 - p, 3);
+    shown = Math.round(from + (tg - from) * e);
+    show(shown);
+    if (p < 1) raf = requestAnimationFrame(step);
+  })(t0);
+}
+function apply(){
+  var d = T[lang];
+  document.documentElement.lang = lang === "tk" ? "tk" : lang;
+  document.title = d.title;
+  document.querySelectorAll("[data-i]").forEach(function(el){ el.textContent = d[el.dataset.i]; });
+  document.querySelectorAll("[data-ph]").forEach(function(el){ el.placeholder = d[el.dataset.ph]; el.setAttribute("aria-label", d[el.dataset.ph]); });
+  document.querySelectorAll(".lang button").forEach(function(b){ b.setAttribute("aria-pressed", String(b.dataset.l === lang)); });
+  $("convRate").textContent = d.rate;
+  applyService();
+  render();
+}
+document.querySelectorAll(".lang button").forEach(function(b){
+  b.addEventListener("click", function(){ lang = b.dataset.l; er.textContent = ""; apply(); });
+});
+
+function applyService(){
+  var d = T[lang], tm = service === "tm";
+  document.querySelectorAll(".svc button").forEach(function(b){ b.setAttribute("aria-pressed", String(b.dataset.s === service)); });
+  var ttl = d.ttl.replace("{s}", SV[service].name);
+  document.querySelector("h1").textContent = ttl; document.title = ttl;
+  $("pl").textContent = tm ? d.phoneLbl : (service === "wf" ? d.wfLbl : d.bfLbl);
+  $("pf").style.display = tm ? "" : "none";
+  ph.maxLength = tm ? 9 : 40; ph.inputMode = tm ? "numeric" : "text";
+  ph.placeholder = tm ? "65 123456" : d.idPh;
+}
+document.querySelectorAll(".svc button").forEach(function(b){
+  b.addEventListener("click", function(){ service = b.dataset.s; ph.value = ""; er.textContent = ""; applyService(); });
+});
+function pick(a){
+  amount = a;
+  btns.forEach(function(b){ b.setAttribute("aria-pressed", String(Number(b.dataset.a) === a && !cu.value)); });
+  render();
+}
+btns.forEach(function(b){ b.addEventListener("click", function(){ cu.value = ""; pick(Number(b.dataset.a)); }); });
+cu.addEventListener("input", function(){
+  cu.value = cu.value.replace(/\D/g, "");
+  amount = Number(cu.value) || 0;
+  btns.forEach(function(b){ b.setAttribute("aria-pressed", "false"); });
+  render();
+});
+ph.addEventListener("input", function(){ if (service === "tm") ph.value = ph.value.replace(/[^\d ]/g, ""); });
+
+$("go").addEventListener("click", function(){
+  var d = ph.value.replace(/\D/g, ""), idv = ph.value.trim();
+  if (service === "tm" ? d.length !== 8 : idv.length < 3) { er.textContent = service === "tm" ? T[lang].errPhone : T[lang].errId; ph.focus(); return; }
+  if (!amount || amount < 1) { er.textContent = T[lang].errAmt; return; }
+  er.textContent = "";
+  var n = service === "tm" ? "+993 " + d.slice(0,2) + " " + d.slice(2) : idv, rub = fmt(calc(amount));
+  pendingMsg = "Здравствуйте! Хочу пополнить Tmcell.\nНомер: " + n + "\nСумма: " + amount + " TMT\nК оплате: около " + rub + " ₽";
+  pendingMsg = pendingMsg.replace("Tmcell", SV[service].name);
+  $("sum").textContent = SV[service].name + " · " + n + " · " + amount + " TMT";
+  $("sum2").textContent = T[lang].about + " " + rub + " ₽.";
+  $("ok").href = "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(pendingMsg) + "&z=1";
+  $("form").classList.add("hidden");
+  $("conf").classList.remove("hidden");
+});
+$("back").addEventListener("click", function(){ $("conf").classList.add("hidden"); $("form").classList.remove("hidden"); });
+function confetti(){
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  var host = $("done"), cols = ["#ffd23f","#0a55a8","#25d366","#ff6b6b","#ffffff"];
+  for (var i = 0; i < 28; i++) {
+    var s = document.createElement("span");
+    s.className = "conf";
+    s.style.left = Math.random() * 100 + "%";
+    s.style.background = cols[i % cols.length];
+    s.style.animationDelay = (Math.random() * 0.4) + "s";
+    s.style.animationDuration = (1.4 + Math.random() * 1.2) + "s";
+    host.appendChild(s);
+    setTimeout(function(el){ el.remove(); }.bind(null, s), 3200);
+  }
+}
+$("ok").addEventListener("click", function(){ $("conf").classList.add("hidden"); $("done").classList.remove("hidden"); confetti(); });
+
+// Отдельный конвертор
+var cr = $("cr"), ct = $("ct");
+cr.addEventListener("input", function(){
+  cr.value = cr.value.replace(/[^\d.,]/g, "");
+  var v = num(cr.value); ct.value = v ? f2(v * TMT_PER_100_RUB / 100) : "";
+});
+ct.addEventListener("input", function(){
+  ct.value = ct.value.replace(/[^\d.,]/g, "");
+  var v = num(ct.value); cr.value = v ? f2(v * 100 / TMT_PER_100_RUB) : "";
+});
+
+apply();
+</script>
+</body>
+</html>
